@@ -15,7 +15,7 @@ import org.rambots.lib.math.Conversions.falconToDegrees
 import org.rambots.lib.math.Conversions.rotationsToMeters
 import org.rambots.lib.math.Conversions.MPSToRPS
 
-class SwerveModule(val config: SwerveModuleConfiguration) {
+class SwerveModule(private val config: SwerveModuleConfiguration) {
 
     private val absoluteEncoder = CANcoder(config.steerEncoderCANId)
     private val driveMotor = TalonFX(config.driveMotorCANId)
