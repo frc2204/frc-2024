@@ -10,7 +10,7 @@ enum class SwerveModuleSettings(
     override val steerEncoderOffset: Rotation2d,
     override val simulationEncoderOffset: Rotation2d
 ): SwerveModuleConfiguration {
-    // values to be updated
+    /** values to be updated */
     FRONT_LEFT(0, 0, 0, 0.0.degrees, 0.0.degrees),
     FRONT_RIGHT(0, 0, 0, 0.0.degrees, 0.0.degrees),
     BACK_LEFT(0, 0, 0, 0.0.degrees, 0.0.degrees),

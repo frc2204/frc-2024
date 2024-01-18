@@ -29,7 +29,7 @@ class SwerveModule(private val config: SwerveModuleConfiguration) {
     private val angleOffset = if (Robot.real) config.steerEncoderOffset else config.simulationEncoderOffset
 
     /* help to optimize turns */
-    private lateinit var lastAngle: Rotation2d
+    private var lastAngle: Rotation2d
 
     /* drive motor control requests */
     private val driveDutyCycle = DutyCycleOut(0.0)
@@ -110,7 +110,6 @@ class SwerveModule(private val config: SwerveModuleConfiguration) {
             /* angle of module */
             Rotation2d.fromRotations(steerMotor.position.value)
         )
-
     }
 
     /*
