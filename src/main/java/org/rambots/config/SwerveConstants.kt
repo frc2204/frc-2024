@@ -5,6 +5,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue
 import com.ctre.phoenix6.signals.SensorDirectionValue
 import edu.wpi.first.math.VecBuilder
 import edu.wpi.first.math.Vector
+import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics
 import edu.wpi.first.math.numbers.N3
@@ -97,4 +98,17 @@ object SwerveConstants {
 
     val STATE_STANDARD_DEVIATIONS: Vector<N3> = VecBuilder.fill(0.1, 0.1, 0.1)
     val VISION_STANDARD_DEVIATIONS: Vector<N3> = VecBuilder.fill(0.1, 0.1, 0.1)
+
+    val MAX_OMEGA: Rotation2d = Rotation2d.fromRotations(1.0)
+    object Controls {
+        const val STICK_DEADBAND = 0.1
+
+        const val DRIVE_STICK_SLEW_RATE = 3.0
+        const val ROTATION_STICK_SLEW_RATE = 3.0
+
+        const val DRIVE_POWER = 0.95
+        const val ROTATIONAL_POWER = 0.8
+
+        const val DRIVE_BABY_POWER = 0.25
+    }
 }
