@@ -3,6 +3,11 @@ package org.rambots.config
 import com.ctre.phoenix6.signals.InvertedValue
 import com.ctre.phoenix6.signals.NeutralModeValue
 import com.ctre.phoenix6.signals.SensorDirectionValue
+import edu.wpi.first.math.VecBuilder
+import edu.wpi.first.math.Vector
+import edu.wpi.first.math.geometry.Translation2d
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics
+import edu.wpi.first.math.numbers.N3
 import edu.wpi.first.math.util.Units
 import org.rambots.lib.swerve.util.MotorFeedForwardBuilder
 
@@ -69,4 +74,27 @@ object SwerveConstants {
     private val WHEEL_RADIUS = Units.inchesToMeters(2.0)
     val WHEEL_CIRCUMFERENCE = 2 * Math.PI * WHEEL_RADIUS
     val MAX_SPEED = Units.feetToMeters(15.13)
+
+    const val INVERTED_GYRO = false
+
+    /** The wheelbase is the distance between the front and back wheels on the same side of the robot. */
+    private val WHEEL_BASE = Units.inchesToMeters(23.25)
+
+    /** The track width is the distance between the left and right wheels on the same side of the robot. */
+    private val TRACK_WIDTH = Units.inchesToMeters(23.25)
+
+    private val FRONT_LEFT_LOCATION = Translation2d(WHEEL_BASE / 2, TRACK_WIDTH / 2)
+    private val FRONT_RIGHT_LOCATION = Translation2d(WHEEL_BASE / 2, -TRACK_WIDTH / 2)
+    private val BACK_LEFT_LOCATION = Translation2d(-WHEEL_BASE / 2, TRACK_WIDTH / 2)
+    private val BACK_RIGHT_LOCATION = Translation2d(-WHEEL_BASE / 2, -TRACK_WIDTH / 2)
+
+    val KINEMATICS = SwerveDriveKinematics(
+        FRONT_LEFT_LOCATION,
+        FRONT_RIGHT_LOCATION,
+        BACK_LEFT_LOCATION,
+        BACK_RIGHT_LOCATION
+    )
+
+    val STATE_STANDARD_DEVIATIONS: Vector<N3> = VecBuilder.fill(0.1, 0.1, 0.1)
+    val VISION_STANDARD_DEVIATIONS: Vector<N3> = VecBuilder.fill(0.1, 0.1, 0.1)
 }

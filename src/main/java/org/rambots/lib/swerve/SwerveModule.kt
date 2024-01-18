@@ -6,14 +6,17 @@ import com.ctre.phoenix6.controls.VelocityVoltage
 import com.ctre.phoenix6.hardware.CANcoder
 import com.ctre.phoenix6.hardware.TalonFX
 import edu.wpi.first.math.geometry.Rotation2d
+import edu.wpi.first.math.kinematics.SwerveModulePosition
 import edu.wpi.first.math.kinematics.SwerveModuleState
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import org.rambots.Robot
 import org.rambots.config.SwerveConstants
+import org.rambots.config.SwerveConstants.WHEEL_CIRCUMFERENCE
 import org.rambots.lib.math.Conversions.degreesToFalcon
 import org.rambots.lib.math.Conversions.falconToDegrees
 import org.rambots.lib.math.Conversions.rotationsToMeters
 import org.rambots.lib.math.Conversions.MPSToRPS
+import org.rambots.lib.math.Conversions.falconToMeters
 
 class SwerveModule(private val config: SwerveModuleConfiguration) {
 
@@ -51,7 +54,7 @@ class SwerveModule(private val config: SwerveModuleConfiguration) {
             // sets position to 0
             driveMotor.configurator.setPosition(0.0)
         }
-        lastAngle = angle()
+        lastAngle = angle
     }
 
     fun setDesiredState(desiredState: SwerveModuleState, isOpenLoop: Boolean) {
@@ -82,9 +85,9 @@ class SwerveModule(private val config: SwerveModuleConfiguration) {
         }
     }
 
-    private fun angle(): Rotation2d {
-        return Rotation2d.fromDegrees(falconToDegrees(steerMotor.position.value, SwerveConstants.STEER_GEAR_RATIO))
-    }
+    val angle: Rotation2d
+        get() = Rotation2d.fromDegrees(falconToDegrees(steerMotor.position.value, SwerveConstants.STEER_GEAR_RATIO))
+
 
     /*
     * Returns:
@@ -93,9 +96,21 @@ class SwerveModule(private val config: SwerveModuleConfiguration) {
     */
     fun getState(): SwerveModuleState {
         return SwerveModuleState(
-            rotationsToMeters(driveMotor.velocity.value, SwerveConstants.WHEEL_CIRCUMFERENCE),
+            /* speed of module */
+            rotationsToMeters(driveMotor.velocity.value, WHEEL_CIRCUMFERENCE),
+            /* angle of module */
             Rotation2d.fromRotations(steerMotor.position.value)
         )
+    }
+
+    fun getPosition(): SwerveModulePosition {
+        return SwerveModulePosition(
+            /* distance measured by wheel of module */
+            rotationsToMeters(driveMotor.position.value, WHEEL_CIRCUMFERENCE),
+            /* angle of module */
+            Rotation2d.fromRotations(steerMotor.position.value)
+        )
+
     }
 
     /*
@@ -104,7 +119,7 @@ class SwerveModule(private val config: SwerveModuleConfiguration) {
     private fun getCANcoder(): Rotation2d {
         return Rotation2d.fromDegrees(absoluteEncoder.absolutePosition.value)
     }
-    private fun resetToAbsolute() {
+    fun resetToAbsolute() {
         val absolutePosition = degreesToFalcon(getCANcoder().degrees - config.steerEncoderOffset.degrees, SwerveConstants.STEER_GEAR_RATIO)
         steerMotor.setPosition(absolutePosition)
     }

@@ -55,4 +55,14 @@ object Conversions {
     fun degreesToFalcon(degrees: Double, gearRatio: Double): Double {
         return degrees / (360.0 / (gearRatio * 2048.0))
     }
+
+    /**
+     * @param positionCounts Falcon Position Counts
+     * @param circumference Circumference of Wheel
+     * @param gearRatio Gear Ratio between Falcon and Wheel
+     * @return Meters
+     */
+    fun falconToMeters(positionCounts: Double, circumference: Double, gearRatio: Double): Double {
+        return positionCounts * (circumference / (gearRatio * 2048.0))
+    }
 }
