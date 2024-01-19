@@ -27,7 +27,7 @@ object RobotContainer {
     private val secondaryJoystick = Joystick(1)
     private val ps5Controller = PS5Controller(2)
     init {
-        ps5Controller.leftX
+
         /* sets swerve subsystem's default command as swerve teleop */
         SwerveSubsystem.defaultCommand = SwerveTeleop(
             { ps5Controller.leftY * DRIVE_BABY_POWER},
