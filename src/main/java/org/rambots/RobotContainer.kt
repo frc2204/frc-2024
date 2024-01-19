@@ -1,6 +1,7 @@
 package org.rambots
 
 import edu.wpi.first.wpilibj.Joystick
+import edu.wpi.first.wpilibj.PS5Controller
 import edu.wpi.first.wpilibj.XboxController
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.button.Trigger
@@ -22,25 +23,25 @@ import org.rambots.subsystems.SwerveSubsystem
  * directly reference the (single instance of the) object.
  */
 object RobotContainer {
-
     private val primaryJoystick = Joystick(0)
     private val secondaryJoystick = Joystick(1)
-    private val xboxController = XboxController(2)
+    private val ps5Controller = PS5Controller(2)
     init {
-        configureBindings()
-
+        ps5Controller.leftX
         /* sets swerve subsystem's default command as swerve teleop */
         SwerveSubsystem.defaultCommand = SwerveTeleop(
-            { primaryJoystick.y * DRIVE_POWER  + xboxController.getRawAxis(1) * DRIVE_BABY_POWER},
-            { primaryJoystick.x * DRIVE_POWER  + xboxController.getRawAxis(0) * DRIVE_BABY_POWER},
-            { secondaryJoystick.x * ROTATIONAL_POWER },
+            { ps5Controller.leftY * DRIVE_BABY_POWER},
+            { ps5Controller.leftX * DRIVE_BABY_POWER},
+            { ps5Controller.rightX * ROTATIONAL_POWER },
             { false }
         )
+
+        configureBindings()
     }
 
     /** Use this method to define your `trigger->command` mappings. */
     private fun configureBindings() {
-        Trigger { secondaryJoystick.trigger }.onTrue(SwerveSubsystem.zeroGyro())
+        Trigger { ps5Controller.triangleButtonPressed }.onTrue(SwerveSubsystem.zeroGyro())
     }
 
     fun getAutonomousCommand(): Command? {
