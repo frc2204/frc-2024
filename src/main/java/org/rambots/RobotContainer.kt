@@ -30,8 +30,8 @@ object RobotContainer {
 
         /* sets swerve subsystem's default command as swerve teleop */
         SwerveSubsystem.defaultCommand = SwerveTeleop(
-            { ps5Controller.leftY * DRIVE_BABY_POWER},
-            { ps5Controller.leftX * DRIVE_BABY_POWER},
+            { ps5Controller.leftY * DRIVE_BABY_POWER },
+            { ps5Controller.leftX * DRIVE_BABY_POWER },
             { ps5Controller.rightX * ROTATIONAL_POWER },
             { false }
         )
