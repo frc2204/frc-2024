@@ -2,12 +2,10 @@ package org.rambots
 
 import edu.wpi.first.wpilibj.Joystick
 import edu.wpi.first.wpilibj.PS5Controller
-import edu.wpi.first.wpilibj.XboxController
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import org.rambots.commands.SwerveTeleop
 import org.rambots.config.SwerveConstants.Controls.DRIVE_BABY_POWER
-import org.rambots.config.SwerveConstants.Controls.DRIVE_POWER
 import org.rambots.config.SwerveConstants.Controls.ROTATIONAL_POWER
 import org.rambots.subsystems.SwerveSubsystem
 
@@ -26,6 +24,7 @@ object RobotContainer {
     private val primaryJoystick = Joystick(0)
     private val secondaryJoystick = Joystick(1)
     private val ps5Controller = PS5Controller(2)
+
     init {
 
         /* sets swerve subsystem's default command as swerve teleop */

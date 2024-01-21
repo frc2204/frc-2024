@@ -25,6 +25,7 @@ import org.rambots.lib.swerve.SwerveModule
 
 object SwerveSubsystem : SubsystemBase() {
     private val IMU = ADIS16470_IMU()
+
     /* simulation imu */
     private val adis16470ImuSim = ADIS16470_IMUSim(IMU)
 
@@ -52,12 +53,12 @@ object SwerveSubsystem : SubsystemBase() {
     /* autonomous */
     var swerveModuleStates
         /* getter returns an array of SwerveModuleState with individual swerve state (speed, angle) */
-        get() = swerveModules.map {it.getState()}.toTypedArray()
+        get() = swerveModules.map { it.getState() }.toTypedArray()
         set(value) {
             /* renormalizes speed of each swerve module if any individual speed is above the specified maximum */
             SwerveDriveKinematics.desaturateWheelSpeeds(value, MAX_SPEED)
             /* set desired state for each module */
-            swerveModules.forEachIndexed {index, module -> module.setDesiredState(value[index], false)}
+            swerveModules.forEachIndexed { index, module -> module.setDesiredState(value[index], false) }
         }
 
     init {
@@ -98,7 +99,7 @@ object SwerveSubsystem : SubsystemBase() {
         /* for each module, set the desired speed state with the new calculated states */
         swerveModules.forEachIndexed { index, module -> module.setDesiredState(swerveModuleStates[index], isOpenLoop) }
 
-        if(Robot.simulation) {
+        if (Robot.simulation) {
             IMU.setGyroAngleZ(gyroAngle + chassisSpeeds.omegaRadiansPerSecond * 0.02 * 180 / Math.PI)
         }
     }

@@ -22,6 +22,7 @@ object SwerveConstants {
 
     /* Steer Motor Neutral Mode and Inverts */
     val steerNeutralMode = NeutralModeValue.Coast
+
     /* CWP -> 1 */
     val steerMotorInvert = InvertedValue.Clockwise_Positive
 
@@ -64,6 +65,7 @@ object SwerveConstants {
     * Determines how much time to ramp from 0V output to 12V during open-loop modes.
     */
     const val OPEN_LOOP_RAMP = 0.25
+
     /*
     * Determines how much time to ramp from 0% output to 100% during closed-loop modes
     * Determines how much time to ramp from 0V output to 12V during closed-loop modes.
@@ -100,6 +102,7 @@ object SwerveConstants {
     val VISION_STANDARD_DEVIATIONS: Vector<N3> = VecBuilder.fill(0.1, 0.1, 0.1)
 
     val MAX_OMEGA: Rotation2d = Rotation2d.fromRotations(1.0)
+
     object Controls {
         const val STICK_DEADBAND = 0.1
 

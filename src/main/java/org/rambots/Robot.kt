@@ -19,8 +19,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler
  * the `Main.kt` file in the project. (If you use the IDE's Rename or Move refactorings when renaming the
  * object or package, it will get changed everywhere.)
  */
-object Robot : TimedRobot()
-{
+object Robot : TimedRobot() {
 
     val real = RobotBase.isReal()
     val simulation = !real
@@ -28,8 +27,7 @@ object Robot : TimedRobot()
     private var autonomousCommand: Command? = null
 
 
-    override fun robotInit()
-    {
+    override fun robotInit() {
         // Report the use of the Kotlin Language for "FRC Usage Report" statistics
         HAL.report(tResourceType.kResourceType_Language, tInstances.kLanguage_Kotlin, 0, WPILibVersion.Version)
         // Access the RobotContainer object so that it is initialized. This will perform all our
@@ -39,61 +37,50 @@ object Robot : TimedRobot()
     }
 
 
-    override fun robotPeriodic()
-    {
+    override fun robotPeriodic() {
         CommandScheduler.getInstance().run()
     }
 
-    override fun disabledInit()
-    {
+    override fun disabledInit() {
 
     }
 
-    override fun disabledPeriodic()
-    {
+    override fun disabledPeriodic() {
 
     }
 
-    override fun autonomousInit()
-    {
+    override fun autonomousInit() {
         autonomousCommand = RobotContainer.getAutonomousCommand()
         autonomousCommand?.schedule()
     }
 
-    override fun autonomousPeriodic()
-    {
+    override fun autonomousPeriodic() {
 
     }
 
-    override fun teleopInit()
-    {
+    override fun teleopInit() {
         autonomousCommand?.cancel()
     }
 
     /** This method is called periodically during operator control.  */
-    override fun teleopPeriodic()
-    {
+    override fun teleopPeriodic() {
 
     }
 
-    override fun testInit()
-    {
+    override fun testInit() {
         // Cancels all running commands at the start of test mode.
         CommandScheduler.getInstance().cancelAll()
     }
 
-    override fun testPeriodic()
-    {
+    override fun testPeriodic() {
 
     }
 
-    override fun simulationInit()
-    {
+    override fun simulationInit() {
 
     }
 
-    override fun simulationPeriodic()
-    {
+    override fun simulationPeriodic() {
 
     }
 }

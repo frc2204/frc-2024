@@ -17,7 +17,7 @@ class SwerveTeleop(
     private val strafe: () -> Double,
     private val rotation: () -> Double,
     private val robotCentric: () -> Boolean,
-): Command() {
+) : Command() {
     init {
         addRequirements(SwerveSubsystem)
     }

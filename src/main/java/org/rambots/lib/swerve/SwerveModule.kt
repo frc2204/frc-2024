@@ -12,11 +12,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import org.rambots.Robot
 import org.rambots.config.SwerveConstants
 import org.rambots.config.SwerveConstants.WHEEL_CIRCUMFERENCE
+import org.rambots.lib.math.Conversions.MPSToRPS
 import org.rambots.lib.math.Conversions.degreesToFalcon
 import org.rambots.lib.math.Conversions.falconToDegrees
 import org.rambots.lib.math.Conversions.rotationsToMeters
-import org.rambots.lib.math.Conversions.MPSToRPS
-import org.rambots.lib.math.Conversions.falconToMeters
 
 class SwerveModule(private val config: SwerveModuleConfiguration) {
 
@@ -39,20 +38,16 @@ class SwerveModule(private val config: SwerveModuleConfiguration) {
     private val anglePosition = PositionVoltage(0.0)
 
     init {
-        absoluteEncoder.apply {
-            absoluteEncoder.configurator.apply(SwerveCTREConfigurations.swerveCANcoderConfig)
-        }
+        absoluteEncoder.configurator.apply(SwerveCTREConfigurations.swerveCANcoderConfig)
 
         steerMotor.apply {
-            steerMotor.configurator.apply(SwerveCTREConfigurations.swerveSteerFalconConfig)
-            // resets values of steer motor
+            configurator.apply(SwerveCTREConfigurations.swerveSteerFalconConfig)
             resetToAbsolute()
         }
 
         driveMotor.apply {
-            driveMotor.configurator.apply(SwerveCTREConfigurations.swerveDriveKrakenConfig)
-            // sets position to 0
-            driveMotor.configurator.setPosition(0.0)
+            configurator.apply(SwerveCTREConfigurations.swerveDriveKrakenConfig)
+            configurator.setPosition(0.0)
         }
         lastAngle = angle
     }
@@ -77,9 +72,8 @@ class SwerveModule(private val config: SwerveModuleConfiguration) {
             /* proportion of supply voltage to apply in fractional units between -1 and +1 */
             driveDutyCycle.Output = desiredState.speedMetersPerSecond / SwerveConstants.MAX_SPEED
             driveMotor.setControl(driveDutyCycle)
-        }
-        else {
-            driveVelocity.Velocity = MPSToRPS(desiredState.speedMetersPerSecond, SwerveConstants.WHEEL_CIRCUMFERENCE)
+        } else {
+            driveVelocity.Velocity = MPSToRPS(desiredState.speedMetersPerSecond, WHEEL_CIRCUMFERENCE)
             driveVelocity.FeedForward = driveFeedForward.calculate(desiredState.speedMetersPerSecond)
             driveMotor.setControl(driveVelocity)
         }
@@ -118,8 +112,10 @@ class SwerveModule(private val config: SwerveModuleConfiguration) {
     private fun getCANcoder(): Rotation2d {
         return Rotation2d.fromDegrees(absoluteEncoder.absolutePosition.value)
     }
+
     fun resetToAbsolute() {
-        val absolutePosition = degreesToFalcon(getCANcoder().degrees - config.steerEncoderOffset.degrees, SwerveConstants.STEER_GEAR_RATIO)
+        val absolutePosition =
+            degreesToFalcon(getCANcoder().degrees - config.steerEncoderOffset.degrees, SwerveConstants.STEER_GEAR_RATIO)
         steerMotor.setPosition(absolutePosition)
     }
 }

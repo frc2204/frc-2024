@@ -1,5 +1,5 @@
 //LimelightHelpers v1.2.1 (March 1, 2023)
-package org.rambots
+package org.rambots.lib
 
 import com.fasterxml.jackson.annotation.JsonFormat
 import com.fasterxml.jackson.annotation.JsonProperty
