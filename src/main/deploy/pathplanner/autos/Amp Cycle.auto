@@ -1,0 +1,43 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.8393012850426425,
+      "y": 2.4671946302747707
+    },
+    "rotation": 54.1178627537958
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Amp"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Right Note"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Amp"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Left Park"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}

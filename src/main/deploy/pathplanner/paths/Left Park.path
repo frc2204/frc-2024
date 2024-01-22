@@ -3,41 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.0,
-        "y": 7.0
+        "x": 1.9994701885647073,
+        "y": 1.7916532434138215
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.0,
-        "y": 6.5
+        "x": 1.9554131415955147,
+        "y": 6.916956374163195
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 5.081196671652603,
-        "y": 4.880861414500607
+        "x": 4.936606653176752,
+        "y": 6.872899327192243
       },
       "prevControl": {
-        "x": 3.808834441801303,
-        "y": 5.49818981660748
-      },
-      "nextControl": {
-        "x": 6.790237913809161,
-        "y": 4.0516638209202345
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 6.902099855125636,
-        "y": 1.0825772114507195
-      },
-      "prevControl": {
-        "x": 3.5530584718576845,
-        "y": 1.2477845511246577
+        "x": 3.644266608747887,
+        "y": 6.755413868609491
       },
       "nextControl": null,
       "isLocked": false,
@@ -55,11 +39,11 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0,
+    "rotation": 180.0,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Park",
   "previewStartingState": null,
   "useDefaultConstraints": false
 }
