@@ -24,12 +24,17 @@ import org.rambots.config.SwerveConstants.VISION_STANDARD_DEVIATIONS
 import org.rambots.config.SwerveModuleSettings
 import org.rambots.lib.LimelightHelpers.getLatestResults
 import org.rambots.lib.swerve.SwerveModule
+import java.util.*
 
 object SwerveSubsystem : SubsystemBase() {
     private val IMU = ADIS16470_IMU()
 
     /* simulation imu */
     private val adis16470ImuSim = ADIS16470_IMUSim(IMU)
+
+    private var alliance: DriverStation.Alliance? = null
+
+    private var botPose: Pose2d? = null
 
     private val swerveModules = arrayOf(
         SwerveModule(SwerveModuleSettings.FRONT_LEFT),
@@ -119,6 +124,10 @@ object SwerveSubsystem : SubsystemBase() {
         swerveModules.forEach { it.resetToAbsolute() }
     }
 
+    fun setAlliance(alliance: DriverStation.Alliance) {
+        this.alliance = alliance
+    }
+
     override fun periodic() {
         /* updates estimated robot position on the field */
         poseEstimator.update(yaw, getModulePositions())
@@ -134,7 +143,13 @@ object SwerveSubsystem : SubsystemBase() {
         /* fetches json results dumb */
         val llresults = getLatestResults("")
         /* robot pose relative to field */
-        val botPose = llresults.targetingResults.botPose2d
+
+        /** to be optimized later */
+        botPose = if(alliance == DriverStation.Alliance.Red)
+            llresults.targetingResults.botPose2d_wpiRed
+        else
+            llresults.targetingResults.botPose2d_wpiBlue
+
         val timestampSeconds = Timer.getFPGATimestamp() - llresults.targetingResults.botpose[6] / 1000
 
         poseEstimator.addVisionMeasurement(botPose, timestampSeconds, VISION_STANDARD_DEVIATIONS)
