@@ -8,6 +8,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics
 import edu.wpi.first.math.kinematics.SwerveModulePosition
 import edu.wpi.first.wpilibj.ADIS16470_IMU
+import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.Timer
 import edu.wpi.first.wpilibj.simulation.ADIS16470_IMUSim
 import edu.wpi.first.wpilibj.smartdashboard.Field2d
@@ -21,6 +22,7 @@ import org.rambots.config.SwerveConstants.MAX_SPEED
 import org.rambots.config.SwerveConstants.STATE_STANDARD_DEVIATIONS
 import org.rambots.config.SwerveConstants.VISION_STANDARD_DEVIATIONS
 import org.rambots.config.SwerveModuleSettings
+import org.rambots.lib.LimelightHelpers.getLatestResults
 import org.rambots.lib.swerve.SwerveModule
 
 object SwerveSubsystem : SubsystemBase() {
@@ -126,5 +128,15 @@ object SwerveSubsystem : SubsystemBase() {
 
         SmartDashboard.putBoolean("Gyro Connected", IMU.isConnected)
         SmartDashboard.putNumber("Gyro", gyroAngle)
+
+        /** limelight */
+
+        /* fetches json results dumb */
+        val llresults = getLatestResults("")
+        /* robot pose relative to field */
+        val botPose = llresults.targetingResults.botPose2d
+        val timestampSeconds = Timer.getFPGATimestamp() - llresults.targetingResults.botpose[6] / 1000
+
+        poseEstimator.addVisionMeasurement(botPose, timestampSeconds, VISION_STANDARD_DEVIATIONS)
     }
 }
