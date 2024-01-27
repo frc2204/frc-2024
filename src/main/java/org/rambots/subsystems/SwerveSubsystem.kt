@@ -22,9 +22,11 @@ import org.rambots.config.SwerveConstants.MAX_SPEED
 import org.rambots.config.SwerveConstants.STATE_STANDARD_DEVIATIONS
 import org.rambots.config.SwerveConstants.VISION_STANDARD_DEVIATIONS
 import org.rambots.config.SwerveModuleSettings
+import org.rambots.lib.LimelightHelpers
+import org.rambots.lib.LimelightHelpers.getBotPose_wpiBlue
+import org.rambots.lib.LimelightHelpers.getBotPose_wpiRed
 import org.rambots.lib.LimelightHelpers.getLatestResults
 import org.rambots.lib.swerve.SwerveModule
-import java.util.*
 
 object SwerveSubsystem : SubsystemBase() {
     private val IMU = ADIS16470_IMU()
@@ -128,12 +130,17 @@ object SwerveSubsystem : SubsystemBase() {
         this.alliance = alliance
     }
 
+    fun limelightBotPoseArr(): DoubleArray {
+        return if (alliance == DriverStation.Alliance.Red)
+            getBotPose_wpiRed("")
+        else if (alliance == DriverStation.Alliance.Blue)
+            getBotPose_wpiBlue("")
+        else
+            DoubleArray(6)
+    }
     override fun periodic() {
         /* updates estimated robot position on the field */
         poseEstimator.update(yaw, getModulePositions())
-
-        /* sets robot pose to estimated pose */
-        field.robotPose = pose
 
         SmartDashboard.putBoolean("Gyro Connected", IMU.isConnected)
         SmartDashboard.putNumber("Gyro", gyroAngle)
@@ -142,16 +149,25 @@ object SwerveSubsystem : SubsystemBase() {
 
         /* fetches json results dumb */
         val llresults = getLatestResults("")
-        /* robot pose relative to field */
 
         /** to be optimized later */
-        botPose = if(alliance == DriverStation.Alliance.Red)
-            llresults.targetingResults.botPose2d_wpiRed
-        else
-            llresults.targetingResults.botPose2d_wpiBlue
 
-        val timestampSeconds = Timer.getFPGATimestamp() - llresults.targetingResults.botpose[6] / 1000
+        val botPoseArr = limelightBotPoseArr()
+
+        /* bot pose relative to alliance side */
+        botPose =
+            if(alliance == DriverStation.Alliance.Red) {
+                llresults.targetingResults.botPose2d_wpiRed
+            }
+            else {
+                llresults.targetingResults.botPose2d_wpiBlue
+            }
+
+        val timestampSeconds = Timer.getFPGATimestamp() - botPoseArr[6] / 1000
 
         poseEstimator.addVisionMeasurement(botPose, timestampSeconds, VISION_STANDARD_DEVIATIONS)
+
+        /* sets robot pose to estimated pose */
+        field.robotPose = pose
     }
 }
