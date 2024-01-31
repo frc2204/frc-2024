@@ -1,0 +1,43 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 2,
+      "y": 2
+    },
+    "rotation": 0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Start 3 to Speaker"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "3 start shoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Ring 3 Shoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Ring 8 Pickup"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}

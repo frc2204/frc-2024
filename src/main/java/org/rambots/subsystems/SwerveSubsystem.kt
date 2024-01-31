@@ -27,9 +27,11 @@ import org.rambots.lib.LimelightHelpers.getBotPose_wpiBlue
 import org.rambots.lib.LimelightHelpers.getBotPose_wpiRed
 import org.rambots.lib.LimelightHelpers.getLatestResults
 import org.rambots.lib.swerve.SwerveModule
+import javax.print.attribute.IntegerSyntax
 
 object SwerveSubsystem : SubsystemBase() {
     private val IMU = ADIS16470_IMU()
+    private var invert: Int = 1
 
     /* simulation imu */
     private val adis16470ImuSim = ADIS16470_IMUSim(IMU)
@@ -91,13 +93,13 @@ object SwerveSubsystem : SubsystemBase() {
         /* calculates chassis speeds based off field relativity */
         val chassisSpeeds = if (fieldRelative) {
             ChassisSpeeds.fromFieldRelativeSpeeds(
-                translation.x,
-                translation.y,
+                translation.x* invert,
+                translation.y* invert,
                 rotation,
                 yaw
             )
         } else {
-            ChassisSpeeds(translation.x, translation.y, rotation)
+            ChassisSpeeds(translation.x* invert, translation.y* invert, rotation)
         }
 
         /* converting calculated chassis speeds into individual module speed */
@@ -157,9 +159,11 @@ object SwerveSubsystem : SubsystemBase() {
         /* bot pose relative to alliance side */
         botPose =
             if(alliance == DriverStation.Alliance.Red) {
-                llresults.targetingResults.botPose2d_wpiRed
+                invert = -1;
+                llresults.targetingResults.botPose2d_wpiBlue
             }
             else {
+                invert = 0;
                 llresults.targetingResults.botPose2d_wpiBlue
             }
 
