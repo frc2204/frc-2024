@@ -14,11 +14,17 @@ object ArmSubsystem : SubsystemBase() {
      ArmMotor.restoreFactoryDefaults()
      ArmMotor.setSmartCurrentLimit(1,1,1)
      ArmMotor.setIdleMode(CANSparkBase.IdleMode.kBrake)
+     ArmMotorTwo.restoreFactoryDefaults()
+     ArmMotorTwo.setSmartCurrentLimit(4)
+     ArmMotorTwo.setIdleMode(CANSparkBase.IdleMode.kBrake)
  }
     fun up () {
         ArmMotor.setVoltage(0.1)
     }
     fun down(){
         ArmMotor.setVoltage(-0.1)
+    }
+    fun intakePosition(){
+
     }
 }
