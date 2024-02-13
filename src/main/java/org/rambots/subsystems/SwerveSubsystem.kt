@@ -31,7 +31,6 @@ import javax.print.attribute.IntegerSyntax
 
 object SwerveSubsystem : SubsystemBase() {
     private val IMU = ADIS16470_IMU()
-    private var invert: Int = 1
 
     /* simulation imu */
     private val adis16470ImuSim = ADIS16470_IMUSim(IMU)
@@ -60,6 +59,9 @@ object SwerveSubsystem : SubsystemBase() {
 
     /* Returns the estimated robot pose in meters */
     val pose: Pose2d get() = poseEstimator.estimatedPosition
+
+    /* inverting direction if red alliance */
+    private val invert: Int get() = if(alliance == DriverStation.Alliance.Red) -1 else 1
 
     /* autonomous */
     var swerveModuleStates
@@ -132,13 +134,12 @@ object SwerveSubsystem : SubsystemBase() {
         this.alliance = alliance
     }
 
-    fun limelightBotPoseArr(): DoubleArray {
-        return if (alliance == DriverStation.Alliance.Red)
-            getBotPose_wpiRed("")
-        else if (alliance == DriverStation.Alliance.Blue)
-            getBotPose_wpiBlue("")
-        else
-            DoubleArray(6)
+    private fun limelightBotPoseArr(): DoubleArray {
+        return when(alliance) {
+            DriverStation.Alliance.Red -> { getBotPose_wpiRed("") }
+            DriverStation.Alliance.Blue -> { getBotPose_wpiBlue("") }
+            else -> { DoubleArray(6) }
+        }
     }
     override fun periodic() {
         /* updates estimated robot position on the field */
@@ -157,15 +158,7 @@ object SwerveSubsystem : SubsystemBase() {
         val botPoseArr = limelightBotPoseArr()
 
         /* bot pose relative to alliance side */
-        botPose =
-            if(alliance == DriverStation.Alliance.Red) {
-                invert = -1;
-                llresults.targetingResults.botPose2d_wpiBlue
-            }
-            else {
-                invert = 0;
-                llresults.targetingResults.botPose2d_wpiBlue
-            }
+        botPose = llresults.targetingResults.botPose2d_wpiBlue
 
         val timestampSeconds = Timer.getFPGATimestamp() - botPoseArr[6] / 1000
 

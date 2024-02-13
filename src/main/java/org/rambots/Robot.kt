@@ -35,9 +35,6 @@ object Robot : TimedRobot() {
         // Access the RobotContainer object so that it is initialized. This will perform all our
         // button bindings, and put our autonomous chooser on the dashboard.
         RobotContainer
-
-        val alliance = DriverStation.getAlliance().get()
-        SwerveSubsystem.setAlliance(alliance)
     }
 
 
@@ -54,6 +51,9 @@ object Robot : TimedRobot() {
     }
 
     override fun autonomousInit() {
+        val alliance = DriverStation.getAlliance().get()
+        SwerveSubsystem.setAlliance(alliance)
+
         autonomousCommand = RobotContainer.getAutonomousCommand()
         autonomousCommand?.schedule()
     }
@@ -63,6 +63,9 @@ object Robot : TimedRobot() {
     }
 
     override fun teleopInit() {
+        val alliance = DriverStation.getAlliance().get()
+        SwerveSubsystem.setAlliance(alliance)
+
         autonomousCommand?.cancel()
     }
 
