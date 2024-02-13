@@ -3,11 +3,13 @@ package org.rambots
 import edu.wpi.first.hal.FRCNetComm.tInstances
 import edu.wpi.first.hal.FRCNetComm.tResourceType
 import edu.wpi.first.hal.HAL
+import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.RobotBase
 import edu.wpi.first.wpilibj.TimedRobot
 import edu.wpi.first.wpilibj.util.WPILibVersion
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.CommandScheduler
+import org.rambots.subsystems.SwerveSubsystem
 
 /**
  * The VM is configured to automatically run this object (which basically functions as a singleton class),
@@ -33,7 +35,6 @@ object Robot : TimedRobot() {
         // Access the RobotContainer object so that it is initialized. This will perform all our
         // button bindings, and put our autonomous chooser on the dashboard.
         RobotContainer
-
     }
 
 
@@ -50,6 +51,9 @@ object Robot : TimedRobot() {
     }
 
     override fun autonomousInit() {
+        val alliance = DriverStation.getAlliance().get()
+        SwerveSubsystem.setAlliance(alliance)
+
         autonomousCommand = RobotContainer.getAutonomousCommand()
         autonomousCommand?.schedule()
     }
@@ -59,6 +63,9 @@ object Robot : TimedRobot() {
     }
 
     override fun teleopInit() {
+        val alliance = DriverStation.getAlliance().get()
+        SwerveSubsystem.setAlliance(alliance)
+
         autonomousCommand?.cancel()
     }
 

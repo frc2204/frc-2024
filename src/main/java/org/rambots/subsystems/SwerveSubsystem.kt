@@ -8,6 +8,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics
 import edu.wpi.first.math.kinematics.SwerveModulePosition
 import edu.wpi.first.wpilibj.ADIS16470_IMU
+import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.Timer
 import edu.wpi.first.wpilibj.simulation.ADIS16470_IMUSim
 import edu.wpi.first.wpilibj.smartdashboard.Field2d
@@ -21,13 +22,22 @@ import org.rambots.config.SwerveConstants.MAX_SPEED
 import org.rambots.config.SwerveConstants.STATE_STANDARD_DEVIATIONS
 import org.rambots.config.SwerveConstants.VISION_STANDARD_DEVIATIONS
 import org.rambots.config.SwerveModuleSettings
+import org.rambots.lib.LimelightHelpers
+import org.rambots.lib.LimelightHelpers.getBotPose_wpiBlue
+import org.rambots.lib.LimelightHelpers.getBotPose_wpiRed
+import org.rambots.lib.LimelightHelpers.getLatestResults
 import org.rambots.lib.swerve.SwerveModule
+import javax.print.attribute.IntegerSyntax
 
 object SwerveSubsystem : SubsystemBase() {
     private val IMU = ADIS16470_IMU()
 
     /* simulation imu */
     private val adis16470ImuSim = ADIS16470_IMUSim(IMU)
+
+    private var alliance: DriverStation.Alliance? = null
+
+    private var botPose: Pose2d? = null
 
     private val swerveModules = arrayOf(
         SwerveModule(SwerveModuleSettings.FRONT_LEFT),
@@ -49,6 +59,9 @@ object SwerveSubsystem : SubsystemBase() {
 
     /* Returns the estimated robot pose in meters */
     val pose: Pose2d get() = poseEstimator.estimatedPosition
+
+    /* inverting direction if red alliance */
+    private val invert: Int get() = if(alliance == DriverStation.Alliance.Red) -1 else 1
 
     /* autonomous */
     var swerveModuleStates
@@ -82,13 +95,13 @@ object SwerveSubsystem : SubsystemBase() {
         /* calculates chassis speeds based off field relativity */
         val chassisSpeeds = if (fieldRelative) {
             ChassisSpeeds.fromFieldRelativeSpeeds(
-                translation.x,
-                translation.y,
+                translation.x* invert,
+                translation.y* invert,
                 rotation,
                 yaw
             )
         } else {
-            ChassisSpeeds(translation.x, translation.y, rotation)
+            ChassisSpeeds(translation.x* invert, translation.y* invert, rotation)
         }
 
         /* converting calculated chassis speeds into individual module speed */
@@ -117,14 +130,41 @@ object SwerveSubsystem : SubsystemBase() {
         swerveModules.forEach { it.resetToAbsolute() }
     }
 
+    fun setAlliance(alliance: DriverStation.Alliance) {
+        this.alliance = alliance
+    }
+
+    private fun limelightBotPoseArr(): DoubleArray {
+        return when(alliance) {
+            DriverStation.Alliance.Red -> { getBotPose_wpiRed("") }
+            DriverStation.Alliance.Blue -> { getBotPose_wpiBlue("") }
+            else -> { DoubleArray(6) }
+        }
+    }
     override fun periodic() {
         /* updates estimated robot position on the field */
         poseEstimator.update(yaw, getModulePositions())
 
-        /* sets robot pose to estimated pose */
-        field.robotPose = pose
-
         SmartDashboard.putBoolean("Gyro Connected", IMU.isConnected)
         SmartDashboard.putNumber("Gyro", gyroAngle)
+
+        /** limelight */
+
+        /* fetches json results dumb */
+        val llresults = getLatestResults("")
+
+        /** to be optimized later */
+
+        val botPoseArr = limelightBotPoseArr()
+
+        /* bot pose relative to alliance side */
+        botPose = llresults.targetingResults.botPose2d_wpiBlue
+
+        val timestampSeconds = Timer.getFPGATimestamp() - botPoseArr[6] / 1000
+
+        poseEstimator.addVisionMeasurement(botPose, timestampSeconds, VISION_STANDARD_DEVIATIONS)
+
+        /* sets robot pose to estimated pose */
+        field.robotPose = pose
     }
 }
