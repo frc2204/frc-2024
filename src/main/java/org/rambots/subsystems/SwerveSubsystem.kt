@@ -153,8 +153,9 @@ object SwerveSubsystem : SubsystemBase() {
         /* fetches json results dumb */
         val llresults = getLatestResults("")
 
-        /** to be optimized later */
-
+        /**
+         * limelightBotPoseArr() should return null on default, handle the null return here later
+         */
         val botPoseArr = limelightBotPoseArr()
 
         /* bot pose relative to alliance side */
