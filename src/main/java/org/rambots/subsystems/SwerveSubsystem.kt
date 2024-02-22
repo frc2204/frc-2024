@@ -95,13 +95,13 @@ object SwerveSubsystem : SubsystemBase() {
         /* calculates chassis speeds based off field relativity */
         val chassisSpeeds = if (fieldRelative) {
             ChassisSpeeds.fromFieldRelativeSpeeds(
-                translation.x* invert,
-                translation.y* invert,
+                translation.x * invert,
+                translation.y * invert,
                 rotation,
                 yaw
             )
         } else {
-            ChassisSpeeds(translation.x* invert, translation.y* invert, rotation)
+            ChassisSpeeds(translation.x * invert, translation.y * invert, rotation)
         }
 
         /* converting calculated chassis speeds into individual module speed */
