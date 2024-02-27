@@ -11,10 +11,10 @@ enum class SwerveModuleSettings(
     override val simulationEncoderOffset: Rotation2d
 ) : SwerveModuleConfiguration {
     /** values to be updated */
-    FRONT_LEFT(1, 2, 3, 0.0.degrees, 0.0.degrees),
-    FRONT_RIGHT(4, 5, 6, 0.0.degrees, 0.0.degrees),
-    BACK_LEFT(10, 11, 12, 0.0.degrees, 0.0.degrees),
-    BACK_RIGHT(7, 8, 9, 0.0.degrees, 0.0.degrees),
+    FRONT_LEFT(3, 2, 1, 0.0.degrees, 0.0.degrees),
+    FRONT_RIGHT(12, 11, 10, 0.0.degrees, 0.0.degrees),
+    BACK_LEFT(6, 5, 4, 0.0.degrees, 0.0.degrees),
+    BACK_RIGHT(9, 8, 7, 0.0.degrees, 0.0.degrees),
 }
 
 /* Double extension property. Allows to convert a double to a rotation 2d object. */
