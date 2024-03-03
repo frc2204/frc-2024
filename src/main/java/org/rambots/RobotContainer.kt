@@ -65,7 +65,7 @@ object RobotContainer {
             Constants.Mode.REAL -> {
                 // Real robot, instantiate hardware IO implementations
                 drive = Drive(
-                    GyroIOPigeon2(true),
+                    GyroIONavX2(),
                     ModuleIOTalonFX(moduleConfigs[0]),
                     ModuleIOTalonFX(moduleConfigs[1]),
                     ModuleIOTalonFX(moduleConfigs[2]),

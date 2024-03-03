@@ -1,0 +1,172 @@
+{
+  "hubs": [
+    {
+      "x": 1912,
+      "y": -7,
+      "width": 1936,
+      "height": 1048,
+      "state": {
+        "sidebar": {
+          "width": 411,
+          "expanded": [
+            "/AdvantageKit/AprilTagVision/Inst0/estimatedPose",
+            "/AdvantageKit/RealOutputs/AprilTagVision/Inst0",
+            "/AdvantageKit/RealOutputs/AprilTagVision/TagPoses",
+            "/AdvantageKit/RealOutputs/AprilTagVision/TagPoses/5",
+            "/SmartDashboard/VisionSystemSim-main/Sim Field",
+            "/SmartDashboard/VisionSystemSim-main/Sim Field/Robot",
+            "/AdvantageKit/RealOutputs/SwerveStates/SetpointsOptimized/3",
+            "/AdvantageKit/RealOutputs/SwerveStates/SetpointsOptimized/3/angle",
+            "/PathPlanner/HotReload",
+            "/CameraPublisher",
+            "/SmartDashboard/Auto Choices/options",
+            "/AdvantageKit",
+            "/AdvantageKit/RealOutputs/Drive",
+            "/AdvantageKit/RealOutputs/Odometry",
+            "/SmartDashboard",
+            "/AdvantageKit/RealOutputs/SwerveStates/Setpoints",
+            "/AdvantageKit/Drive",
+            "/AdvantageKit/Drive/Gyro",
+            "/AdvantageKit/Drive/Gyro/YawPosition",
+            "/AdvantageKit/Drive/Module3",
+            "/AdvantageKit/RealOutputs"
+          ]
+        },
+        "tabs": {
+          "selected": 2,
+          "tabs": [
+            {
+              "type": 0,
+              "path": "../docs/tabs/3D-FIELD.md"
+            },
+            {
+              "type": 9,
+              "uuid": "0dlg2hne50yuivilq6ny4jhky9jm7dvb",
+              "fields": [
+                {
+                  "key": "NT:/AdvantageKit/RealOutputs/SwerveStates/Setpoints",
+                  "sourceTypeIndex": 1,
+                  "sourceType": "SwerveModuleState[]"
+                },
+                null,
+                null
+              ],
+              "listFields": [],
+              "options": {
+                "maxSpeed": 4.5,
+                "rotationUnits": "radians",
+                "arrangement": "0,1,2,3",
+                "sizeLeftRight": 0.65,
+                "sizeFrontBack": 0.65,
+                "forwardDirection": "up"
+              },
+              "configHidden": false,
+              "visualizer": null,
+              "title": "Swerve"
+            },
+            {
+              "type": 6,
+              "uuid": "19hz2501vbin3h8zp49utke8z70shieg",
+              "fields": [],
+              "listFields": [
+                [],
+                [
+                  {
+                    "type": "Robot",
+                    "key": "NT:/AdvantageKit/RealOutputs/Odometry/PoseEstimation",
+                    "sourceTypeIndex": 1,
+                    "sourceType": "Pose2d"
+                  }
+                ]
+              ],
+              "options": {
+                "field": "2024 Field",
+                "alliance": "blue",
+                "robot": "2024 KitBot",
+                "unitDistance": "meters",
+                "unitRotation": "degrees"
+              },
+              "configHidden": false,
+              "visualizer": {
+                "cameraIndex": -1,
+                "orbitFov": 50,
+                "cameraPosition": [
+                  7.960180612671198,
+                  6.660526637776816,
+                  5.938596988110903
+                ],
+                "cameraTarget": [
+                  2.631471835702966,
+                  -0.10382561190326713,
+                  -0.4995247538744311
+                ]
+              },
+              "title": "3D Field"
+            },
+            {
+              "type": 5,
+              "uuid": "6p06uj3msyaf732qgz6y105odkfzcsmr",
+              "fields": [],
+              "listFields": [
+                [
+                  {
+                    "type": "Robot",
+                    "key": "NT:/AdvantageKit/RealOutputs/Odometry/PoseEstimation",
+                    "sourceTypeIndex": 1,
+                    "sourceType": "Pose2d"
+                  }
+                ]
+              ],
+              "options": {
+                "game": "2024 Field",
+                "unitDistance": "meters",
+                "unitRotation": "degrees",
+                "origin": "right",
+                "size": 0.75,
+                "allianceBumpers": "auto",
+                "allianceOrigin": "blue",
+                "orientation": "blue left, red right"
+              },
+              "configHidden": false,
+              "visualizer": null,
+              "title": "Odometry"
+            },
+            {
+              "type": 1,
+              "legendHeight": 0.3,
+              "legends": {
+                "left": {
+                  "lockedRange": null,
+                  "unitConversion": {
+                    "type": null,
+                    "factor": 1
+                  },
+                  "fields": []
+                },
+                "discrete": {
+                  "fields": []
+                },
+                "right": {
+                  "lockedRange": null,
+                  "unitConversion": {
+                    "type": null,
+                    "factor": 1
+                  },
+                  "fields": []
+                }
+              },
+              "title": "Line Graph"
+            },
+            {
+              "type": 3,
+              "field": "NT:/AdvantageKit/RealOutputs/Console",
+              "title": "Console"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "satellites": [],
+  "version": "3.2.0"
+}

@@ -62,7 +62,6 @@ public class Drive extends SubsystemBase {
     private final GyroIOInputsAutoLogged gyroInputs = new GyroIOInputsAutoLogged();
     private final Module[] modules = new Module[4]; // FL, FR, BL, BR
     private final SysIdRoutine sysId;
-    private SwerveDriveKinematics kinematics = new SwerveDriveKinematics(moduleTranslations);
     private Rotation2d rawGyroRotation = new Rotation2d();
     private SwerveModulePosition[] lastModulePositions = // For delta tracking
             new SwerveModulePosition[]{
@@ -168,15 +167,15 @@ public class Drive extends SubsystemBase {
                 module.stop();
             }
         }
+
         // Log empty setpoint states when disabled
         if (DriverStation.isDisabled()) {
-            Logger.recordOutput("SwerveStates/Setpoints", new SwerveModuleState[]{});
-            Logger.recordOutput("SwerveStates/SetpointsOptimized", new SwerveModuleState[]{});
+            Logger.recordOutput("SwerveStates/Setpoints");
+            Logger.recordOutput("SwerveStates/SetpointsOptimized");
         }
 
         // Update odometry
-        double[] sampleTimestamps =
-                modules[0].getOdometryTimestamps(); // All signals are sampled together
+        double[] sampleTimestamps = modules[0].getOdometryTimestamps(); // All signals are sampled together
         int sampleCount = sampleTimestamps.length;
         for (int i = 0; i < sampleCount; i++) {
             // Read wheel positions and deltas from each module
@@ -206,6 +205,11 @@ public class Drive extends SubsystemBase {
             poseEstimator.updateWithTime(sampleTimestamps[i], rawGyroRotation, modulePositions);
             odometryDrive.updateWithTime(sampleTimestamps[i], rawGyroRotation, modulePositions);
         }
+
+        // Logging
+        Logger.recordOutput("SwerveStates/Measured", getModuleStates());
+        Logger.recordOutput("Odometry/PoseEstimation", getPose());
+        Logger.recordOutput("Odometry/Drive", getDrive());
     }
 
     /**
@@ -273,7 +277,6 @@ public class Drive extends SubsystemBase {
     /**
      * Returns the module states (turn angles and drive velocities) for all of the modules.
      */
-    @AutoLogOutput(key = "SwerveStates/Measured")
     private SwerveModuleState[] getModuleStates() {
         SwerveModuleState[] states = new SwerveModuleState[4];
         for (int i = 0; i < 4; i++) {
@@ -296,7 +299,6 @@ public class Drive extends SubsystemBase {
     /**
      * Returns the current pose estimation.
      */
-    @AutoLogOutput(key = "Odometry/PoseEstimation")
     public Pose2d getPose() {
         return poseEstimator.getEstimatedPosition();
     }
@@ -313,7 +315,6 @@ public class Drive extends SubsystemBase {
     /**
      * Returns the current odometry pose.
      */
-    @AutoLogOutput(key = "Odometry/Drive")
     public Pose2d getDrive() {
         return odometryDrive.getEstimatedPosition();
     }

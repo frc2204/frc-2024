@@ -33,7 +33,6 @@ public final class DriveConstants {
             switch (Constants.getRobot()) {
                 default -> 0.01;
             };
-    public static final int gyroID = 13;
     // Turn to "" for no canbus name
     public static final String canbus = "*";
     public static final ModuleConstants moduleConstants =
@@ -71,11 +70,11 @@ public final class DriveConstants {
             switch (Constants.getRobot()) {
                 default -> new DrivetrainConfig(
                         Units.inchesToMeters(2.0),
-                        Units.inchesToMeters(26.0),
-                        Units.inchesToMeters(26.0),
-                        Units.feetToMeters(12.16),
+                        Units.inchesToMeters(21.251),
+                        Units.inchesToMeters(21.251),
+                        Units.feetToMeters(14.21),
                         Units.feetToMeters(21.32),
-                        7.93,
+                        12.93,
                         29.89);
             };
     public static final Translation2d[] moduleTranslations =
@@ -89,8 +88,7 @@ public final class DriveConstants {
                     new Translation2d(
                             -drivetrainConfig.trackwidthX() / 2.0, -drivetrainConfig.trackwidthY() / 2.0)
             };
-    public static final SwerveDriveKinematics kinematics =
-            new SwerveDriveKinematics(moduleTranslations);
+    public static final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(moduleTranslations);
     public static ModuleConfig[] moduleConfigs =
             switch (Constants.getRobot()) {
                 case COMPBOT -> new ModuleConfig[]{
