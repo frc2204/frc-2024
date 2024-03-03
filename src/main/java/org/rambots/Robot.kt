@@ -55,9 +55,11 @@ object Robot : LoggedRobot() {
                 Logger.addDataReceiver(WPILOGWriter())
                 Logger.addDataReceiver(NT4Publisher())
             }
+
             Constants.Mode.SIM -> {
                 Logger.addDataReceiver(NT4Publisher())
             }
+
             Constants.Mode.REPLAY -> {
                 setUseTiming(false) // Run as fast as possible
                 val logPath = LogFileUtil.findReplayLog()

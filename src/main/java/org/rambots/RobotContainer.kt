@@ -44,7 +44,7 @@ import java.util.function.Consumer
  * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
  * subsystems, commands, and button mappings) should be declared here.
  */
-object  RobotContainer {
+object RobotContainer {
     // Subsystems
     private var drive: Drive
     private var flywheel: Flywheel

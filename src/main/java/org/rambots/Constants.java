@@ -25,48 +25,56 @@ import org.rambots.util.Alert;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-  public static final int loopPeriodMs = 20;
-  private static RobotType robotType = RobotType.SIMBOT;
-  public static final boolean tuningMode = true;
-  public static final boolean characterizationMode = false;
+    public static final int loopPeriodMs = 20;
+    public static final boolean tuningMode = true;
+    public static final boolean characterizationMode = false;
+    private static RobotType robotType = RobotType.SIMBOT;
 
-  public static RobotType getRobot() {
-    if (RobotBase.isReal() && robotType == RobotType.SIMBOT) {
-      new Alert("Invalid Robot Selected, using COMPBOT as default", Alert.AlertType.ERROR)
-          .set(true);
-      robotType = RobotType.COMPBOT;
+    public static RobotType getRobot() {
+        if (RobotBase.isReal() && robotType == RobotType.SIMBOT) {
+            new Alert("Invalid Robot Selected, using COMPBOT as default", Alert.AlertType.ERROR)
+                    .set(true);
+            robotType = RobotType.COMPBOT;
+        }
+        return robotType;
     }
-    return robotType;
-  }
 
-  public static Mode getMode() {
-    return switch (getRobot()) {
-      case COMPBOT -> RobotBase.isReal() ? Mode.REAL : Mode.REPLAY;
-      case SIMBOT -> Mode.SIM;
-    };
-  }
-
-  public enum Mode {
-    /** Running on a real robot. */
-    REAL,
-
-    /** Running a physics simulator. */
-    SIM,
-
-    /** Replaying from a log file. */
-    REPLAY
-  }
-
-  public enum RobotType {
-    SIMBOT,
-    COMPBOT
-  }
-
-  /** Checks whether the robot the correct robot is selected when deploying. */
-  public static void main(String... args) {
-    if (robotType == RobotType.SIMBOT) {
-      System.err.println("Cannot deploy, invalid robot selected: " + robotType.toString());
-      System.exit(1);
+    public static Mode getMode() {
+        return switch (getRobot()) {
+            case COMPBOT -> RobotBase.isReal() ? Mode.REAL : Mode.REPLAY;
+            case SIMBOT -> Mode.SIM;
+        };
     }
-  }
+
+    /**
+     * Checks whether the robot the correct robot is selected when deploying.
+     */
+    public static void main(String... args) {
+        if (robotType == RobotType.SIMBOT) {
+            System.err.println("Cannot deploy, invalid robot selected: " + robotType.toString());
+            System.exit(1);
+        }
+    }
+
+    public enum Mode {
+        /**
+         * Running on a real robot.
+         */
+        REAL,
+
+        /**
+         * Running a physics simulator.
+         */
+        SIM,
+
+        /**
+         * Replaying from a log file.
+         */
+        REPLAY
+    }
+
+    public enum RobotType {
+        SIMBOT,
+        COMPBOT
+    }
 }

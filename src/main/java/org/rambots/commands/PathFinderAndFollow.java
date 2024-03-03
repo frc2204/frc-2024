@@ -10,62 +10,67 @@ import com.pathplanner.lib.path.PathPlannerPath;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import java.util.function.Supplier;
 import org.rambots.subsystems.drive.DriveController;
 
-/** A command that runs pathfindThenFollowPath based on the current drive mode. */
+import java.util.function.Supplier;
+
+/**
+ * A command that runs pathfindThenFollowPath based on the current drive mode.
+ */
 public class PathFinderAndFollow extends Command {
-  private final Supplier<DriveController.DriveModeType> driveModeSupplier;
-  private Command scoreCommand;
-  private Command pathRun;
-  private DriveController.DriveModeType driveMode;
+    private final Supplier<DriveController.DriveModeType> driveModeSupplier;
+    private Command scoreCommand;
+    private Command pathRun;
+    private DriveController.DriveModeType driveMode;
 
-  /**
-   * Creates a new PathFinderAndFollow command.
-   *
-   * @param driveModeSupplier a supplier for the drive mode type
-   */
-  public PathFinderAndFollow(Supplier<DriveController.DriveModeType> driveModeSupplier) {
-    this.driveModeSupplier = driveModeSupplier;
-  }
-
-  @Override
-  public void initialize() {
-    runNewAutonPath();
-  }
-
-  @Override
-  public void execute() {
-    DriveController.DriveModeType currentDriveMode = driveModeSupplier.get();
-    if (driveMode != currentDriveMode) {
-      scoreCommand.cancel();
-      runNewAutonPath();
+    /**
+     * Creates a new PathFinderAndFollow command.
+     *
+     * @param driveModeSupplier a supplier for the drive mode type
+     */
+    public PathFinderAndFollow(Supplier<DriveController.DriveModeType> driveModeSupplier) {
+        this.driveModeSupplier = driveModeSupplier;
     }
-  }
 
-  @Override
-  public void end(boolean interrupted) {
-    super.end(interrupted);
-    scoreCommand.cancel();
-  }
+    @Override
+    public void initialize() {
+        runNewAutonPath();
+    }
 
-  @Override
-  public boolean isFinished() {
-    return pathRun.isFinished();
-  }
+    @Override
+    public void execute() {
+        DriveController.DriveModeType currentDriveMode = driveModeSupplier.get();
+        if (driveMode != currentDriveMode) {
+            scoreCommand.cancel();
+            runNewAutonPath();
+        }
+    }
 
-  /** Runs a new autonomous path based on the current drive mode. */
-  public void runNewAutonPath() {
-    driveMode = driveModeSupplier.get();
-    String pathName =
-        driveMode == DriveController.DriveModeType.SPEAKER
-            ? "Speaker Placement Path"
-            : "Amp Placement Path";
-    PathPlannerPath ampPath = PathPlannerPath.fromPathFile(pathName);
-    PathConstraints constraints =
-        new PathConstraints(3.0, 4.0, Units.degreesToRadians(540), Units.degreesToRadians(720));
-    pathRun = AutoBuilder.pathfindThenFollowPath(ampPath, constraints, 0.0);
-    scoreCommand = Commands.sequence(pathRun);
-    scoreCommand.schedule();
-  }
+    @Override
+    public void end(boolean interrupted) {
+        super.end(interrupted);
+        scoreCommand.cancel();
+    }
+
+    @Override
+    public boolean isFinished() {
+        return pathRun.isFinished();
+    }
+
+    /**
+     * Runs a new autonomous path based on the current drive mode.
+     */
+    public void runNewAutonPath() {
+        driveMode = driveModeSupplier.get();
+        String pathName =
+                driveMode == DriveController.DriveModeType.SPEAKER
+                        ? "Speaker Placement Path"
+                        : "Amp Placement Path";
+        PathPlannerPath ampPath = PathPlannerPath.fromPathFile(pathName);
+        PathConstraints constraints =
+                new PathConstraints(3.0, 4.0, Units.degreesToRadians(540), Units.degreesToRadians(720));
+        pathRun = AutoBuilder.pathfindThenFollowPath(ampPath, constraints, 0.0);
+        scoreCommand = Commands.sequence(pathRun);
+        scoreCommand.schedule();
+    }
 }
