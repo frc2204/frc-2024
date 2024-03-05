@@ -43,6 +43,7 @@ import org.littletonrobotics.junction.Logger;
 import org.rambots.util.VisionHelpers;
 
 import java.util.List;
+import java.util.Queue;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -97,7 +98,6 @@ public class Drive extends SubsystemBase {
 
         // Start threads (no-op for each if no signals have been created)
         PhoenixOdometryThread.getInstance().start();
-        SparkMaxOdometryThread.getInstance().start();
 
         // Configure AutoBuilder for PathPlanner
         AutoBuilder.configureHolonomic(

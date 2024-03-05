@@ -52,7 +52,7 @@ object Robot : LoggedRobot() {
 
         when (Constants.getMode()) {
             Constants.Mode.REAL -> {
-                Logger.addDataReceiver(WPILOGWriter())
+//                Logger.addDataReceiver(WPILOGWriter())
                 Logger.addDataReceiver(NT4Publisher())
             }
 

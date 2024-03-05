@@ -21,19 +21,13 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser
 import org.rambots.commands.DriveCommands
 import org.rambots.commands.DriveToPoint
-import org.rambots.commands.MultiDistanceShot
 import org.rambots.commands.PathFinderAndFollow
 import org.rambots.subsystems.drive.*
 import org.rambots.subsystems.drive.DriveConstants.moduleConfigs
-import org.rambots.subsystems.flywheel.Flywheel
-import org.rambots.subsystems.flywheel.FlywheelIO
-import org.rambots.subsystems.flywheel.FlywheelIOSim
-import org.rambots.subsystems.flywheel.FlywheelIOTalonFX
 import org.rambots.subsystems.vision.AprilTagVision
 import org.rambots.subsystems.vision.AprilTagVisionIO
 import org.rambots.subsystems.vision.AprilTagVisionIOLimelight
 import org.rambots.subsystems.vision.AprilTagVisionIOPhotonVisionSIM
-import org.rambots.util.FieldConstants
 import org.rambots.util.VisionHelpers.TimestampedVisionUpdate
 import java.util.function.Consumer
 
@@ -47,7 +41,7 @@ import java.util.function.Consumer
 object RobotContainer {
     // Subsystems
     private var drive: Drive
-    private var flywheel: Flywheel
+//    private var flywheel: Flywheel
     private var aprilTagVision: AprilTagVision
     private val driveMode = DriveController()
 
@@ -65,7 +59,7 @@ object RobotContainer {
             Constants.Mode.REAL -> {
                 // Real robot, instantiate hardware IO implementations
                 drive = Drive(
-                    GyroIONavX2(),
+                    GyroIO_ADIS(),
                     ModuleIOTalonFX(moduleConfigs[0]),
                     ModuleIOTalonFX(moduleConfigs[1]),
                     ModuleIOTalonFX(moduleConfigs[2]),
@@ -79,7 +73,7 @@ object RobotContainer {
                 // new ModuleIOTalonFX(1),
                 // new ModuleIOTalonFX(2),
                 // new ModuleIOTalonFX(3));
-                flywheel = Flywheel(FlywheelIOTalonFX())
+//                flywheel = Flywheel(FlywheelIOTalonFX())
                 aprilTagVision = AprilTagVision(AprilTagVisionIOLimelight("limelight"))
             }
 
@@ -93,7 +87,7 @@ object RobotContainer {
                         ModuleIOSim(),
                         ModuleIOSim()
                     )
-                flywheel = Flywheel(FlywheelIOSim())
+//                flywheel = Flywheel(FlywheelIOSim())
                 aprilTagVision =
                     AprilTagVision(
                         AprilTagVisionIOPhotonVisionSIM(
@@ -111,7 +105,7 @@ object RobotContainer {
                         object : ModuleIO {},
                         object : ModuleIO {},
                         object : ModuleIO {})
-                flywheel = Flywheel(object : FlywheelIO {})
+//                flywheel = Flywheel(object : FlywheelIO {})
                 aprilTagVision = AprilTagVision(object : AprilTagVisionIO {})
             }
         }
@@ -202,14 +196,14 @@ object RobotContainer {
                     drive, Pose2d(Translation2d(2.954, 3.621), Rotation2d.fromRadians(2.617))
                 )
             )
-
-        controller
-            .povUp()
-            .whileTrue(
-                MultiDistanceShot(
-                    { drive!!.pose }, FieldConstants.Speaker.centerSpeakerOpening, flywheel
-                )
-            )
+//
+//        controller
+//            .povUp()
+//            .whileTrue(
+//                MultiDistanceShot(
+//                    { drive!!.pose }, FieldConstants.Speaker.centerSpeakerOpening, flywheel
+//                )
+//            )
 
         // controller
         //     .b()

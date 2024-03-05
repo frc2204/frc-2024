@@ -21,10 +21,12 @@ import org.littletonrobotics.junction.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.OptionalDouble;
 import java.util.Queue;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.function.Supplier;
 
 import static org.rambots.subsystems.drive.DriveConstants.odometryFrequency;
 
@@ -42,7 +44,9 @@ public class PhoenixOdometryThread extends Thread {
             new ReentrantLock(); // Prevents conflicts when registering signals
     private final List<Queue<Double>> queues = new ArrayList<>();
     private final List<Queue<Double>> timestampQueues = new ArrayList<>();
-    private BaseStatusSignal[] signals = new BaseStatusSignal[0];
+    private BaseStatusSignal[] ctreSignals = new BaseStatusSignal[0];
+    private List<Supplier<OptionalDouble>> otherSignals = new ArrayList<>();
+    private final List<Queue<Double>> otherQueues = new ArrayList<>();
     private boolean isCANFD = false;
 
     private PhoenixOdometryThread() {
@@ -70,13 +74,25 @@ public class PhoenixOdometryThread extends Thread {
         Drive.odometryLock.lock();
         try {
             isCANFD = CANBus.isNetworkFD(device.getNetwork());
-            BaseStatusSignal[] newSignals = new BaseStatusSignal[signals.length + 1];
-            System.arraycopy(signals, 0, newSignals, 0, signals.length);
-            newSignals[signals.length] = signal;
-            signals = newSignals;
+            BaseStatusSignal[] newSignals = new BaseStatusSignal[ctreSignals.length + 1];
+            System.arraycopy(ctreSignals, 0, newSignals, 0, ctreSignals.length);
+            newSignals[ctreSignals.length] = signal;
+            ctreSignals = newSignals;
             queues.add(queue);
         } finally {
             signalsLock.unlock();
+            Drive.odometryLock.unlock();
+        }
+        return queue;
+    }
+
+    public Queue<Double> registerSignal(Supplier<OptionalDouble> signal) {
+        Queue<Double> queue = new ArrayBlockingQueue<>(10);
+        Drive.odometryLock.lock();
+        try {
+            otherSignals.add(signal);
+            otherQueues.add(queue);
+        } finally {
             Drive.odometryLock.unlock();
         }
         return queue;
@@ -100,14 +116,14 @@ public class PhoenixOdometryThread extends Thread {
             signalsLock.lock();
             try {
                 if (isCANFD) {
-                    BaseStatusSignal.waitForAll(2.0 / odometryFrequency, signals);
+                    BaseStatusSignal.waitForAll(2.0 / odometryFrequency, ctreSignals);
                 } else {
                     // "waitForAll" does not support blocking on multiple
                     // signals with a bus that is not CAN FD, regardless
                     // of Pro licensing. No reasoning for this behavior
                     // is provided by the documentation.
                     Thread.sleep((long) (1000.0 / odometryFrequency));
-                    if (signals.length > 0) BaseStatusSignal.refreshAll(signals);
+                    if (ctreSignals.length > 0) BaseStatusSignal.refreshAll(ctreSignals);
                 }
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -120,17 +136,36 @@ public class PhoenixOdometryThread extends Thread {
             try {
                 double timestamp = Logger.getRealTimestamp() / 1e6;
                 double totalLatency = 0.0;
-                for (BaseStatusSignal signal : signals) {
+                for (BaseStatusSignal signal : ctreSignals) {
                     totalLatency += signal.getTimestamp().getLatency();
                 }
-                if (signals.length > 0) {
-                    timestamp -= totalLatency / signals.length;
+                if (ctreSignals.length > 0) {
+                    timestamp -= totalLatency / ctreSignals.length;
                 }
-                for (int i = 0; i < signals.length; i++) {
-                    queues.get(i).offer(signals[i].getValueAsDouble());
+                for (int i = 0; i < ctreSignals.length; i++) {
+                    queues.get(i).offer(ctreSignals[i].getValueAsDouble());
                 }
-                for (int i = 0; i < timestampQueues.size(); i++) {
-                    timestampQueues.get(i).offer(timestamp);
+
+                double[] otherValues = new double[otherSignals.size()];
+                boolean isValid = true;
+                for (int i = 0; i < otherSignals.size(); i++) {
+                    OptionalDouble value = otherSignals.get(i).get();
+                    if (value.isPresent()) {
+                        otherValues[i] = value.getAsDouble();
+                    } else {
+                        isValid = false;
+                        break;
+                    }
+                }
+                if (isValid) {
+                    for (int i = 0; i < otherQueues.size(); i++) {
+                        otherQueues.get(i).offer(otherValues[i]);
+                    }
+
+                }
+
+                for (Queue<Double> timestampQueue : timestampQueues) {
+                    timestampQueue.offer(timestamp);
                 }
             } finally {
                 Drive.odometryLock.unlock();
