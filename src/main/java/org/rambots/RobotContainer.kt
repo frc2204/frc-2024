@@ -14,14 +14,14 @@ package org.rambots
 
 import com.pathplanner.lib.auto.AutoBuilder
 import edu.wpi.first.math.geometry.*
+import edu.wpi.first.wpilibj.PS5Controller
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
+import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser
-import org.rambots.commands.DriveCommands
-import org.rambots.commands.DriveToPoint
-import org.rambots.commands.PathFinderAndFollow
+import org.rambots.commands.*
 import org.rambots.subsystems.drive.*
 import org.rambots.subsystems.drive.DriveConstants.moduleConfigs
 import org.rambots.subsystems.vision.AprilTagVision
@@ -46,7 +46,7 @@ object RobotContainer {
     private val driveController = DriveController()
 
     // Controller
-    private val controller = CommandXboxController(0)
+    private val controller = CommandPS5Controller(0)
 
     // Dashboard inputs
     private val autoChooser: LoggedDashboardChooser<Command>
@@ -147,11 +147,9 @@ object RobotContainer {
         // flywheel.sysIdDynamic(SysIdRoutine.Direction.kReverse));
 
         // Configure the button bindings
-        aprilTagVision.setDataInterfaces(Consumer { visionData: List<TimestampedVisionUpdate?>? ->
-            drive.addVisionData(
-                visionData
-            )
-        })
+        aprilTagVision.setDataInterfaces { visionData: List<TimestampedVisionUpdate?>? ->
+            drive.addVisionData(visionData)
+        }
         driveController.setPoseSupplier { drive.pose }
         driveController.disableHeadingControl()
         configureButtonBindings()
@@ -162,41 +160,37 @@ object RobotContainer {
      * instantiating a [GenericHID] or one of its subclasses ([ ] or [XboxController]), and then passing it to a [ ].
      */
     private fun configureButtonBindings() {
-        drive.defaultCommand = DriveCommands.joystickDrive(
-            drive,
-            driveController,
-            { -controller.leftY },
-            { -controller.leftX },
-            { -controller.rightX })
+        drive.defaultCommand = DriveCommands.joystickDrive(drive, driveController, { -controller.leftY }, { -controller.leftX }, { -controller.rightX })
 
-        controller.leftBumper().whileTrue(Commands.runOnce({ driveController.toggleDriveMode() }))
+        controller.L1().whileTrue(AmpScoring())
+        controller.R2().whileTrue(SourceIntake())
 
-        controller.a().whileTrue(PathFinderAndFollow(driveController.driveModeType))
+//        controller.a().whileTrue(PathFinderAndFollow(driveController.driveModeType))
 
-        controller
-            .b()
-            .whileTrue(
-                Commands.startEnd(
-                    { driveController.enableHeadingControl() }, { driveController.disableHeadingControl() })
-            )
-
-        controller
-            .y()
-            .whileTrue(
-                Commands.runOnce(
-                    {
-                        drive.setAutoStartPose(
-                            Pose2d(Translation2d(4.0, 5.0), Rotation2d.fromDegrees(0.0))
-                        )
-                    })
-            )
-        controller
-            .povDown()
-            .whileTrue(
-                DriveToPoint(
-                    drive, Pose2d(Translation2d(2.954, 3.621), Rotation2d.fromRadians(2.617))
-                )
-            )
+//        controller
+//            .b()
+//            .whileTrue(
+//                Commands.startEnd(
+//                    { driveController.enableHeadingControl() }, { driveController.disableHeadingControl() })
+//            )
+//
+//        controller
+//            .y()
+//            .whileTrue(
+//                Commands.runOnce(
+//                    {
+//                        drive.setAutoStartPose(
+//                            Pose2d(Translation2d(4.0, 5.0), Rotation2d.fromDegrees(0.0))
+//                        )
+//                    })
+//            )
+//        controller
+//            .povDown()
+//            .whileTrue(
+//                DriveToPoint(
+//                    drive, Pose2d(Translation2d(2.954, 3.621), Rotation2d.fromRadians(2.617))
+//                )
+//            )
 //
 //        controller
 //            .povUp()

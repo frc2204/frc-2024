@@ -5,9 +5,8 @@ import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
 import org.rambots.auto.AutoConstants
 
-class AmpScoring: Command() {
-
-    private val pathRun get() = AutoBuilder.pathfindToPose(AutoConstants.ampScorePose, AutoConstants.pathConstraints)
+class SourceIntake: Command() {
+    private val pathRun get() = AutoBuilder.pathfindToPose(AutoConstants.sourceDirectIntake.left, AutoConstants.pathConstraints)
     private var scoreCommand = Commands.sequence(pathRun)
 
     override fun initialize() {
@@ -24,5 +23,4 @@ class AmpScoring: Command() {
     override fun isFinished(): Boolean {
         return scoreCommand.isFinished
     }
-
 }
