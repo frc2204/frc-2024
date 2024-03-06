@@ -88,31 +88,20 @@ public class ModuleIOTalonFX implements ModuleIO {
         timestampQueue = PhoenixOdometryThread.getInstance().makeTimestampQueue();
 
         drivePosition = driveTalon.getPosition();
-        drivePositionQueue =
-                PhoenixOdometryThread.getInstance().registerSignal(driveTalon, driveTalon.getPosition());
+        drivePositionQueue = PhoenixOdometryThread.getInstance().registerSignal(driveTalon, driveTalon.getPosition());
         driveVelocity = driveTalon.getVelocity();
         driveAppliedVolts = driveTalon.getMotorVoltage();
         driveCurrent = driveTalon.getStatorCurrent();
 
         turnAbsolutePosition = cancoder.getAbsolutePosition();
         turnPosition = turnTalon.getPosition();
-        turnPositionQueue =
-                PhoenixOdometryThread.getInstance().registerSignal(turnTalon, turnTalon.getPosition());
+        turnPositionQueue = PhoenixOdometryThread.getInstance().registerSignal(turnTalon, turnTalon.getPosition());
         turnVelocity = turnTalon.getVelocity();
         turnAppliedVolts = turnTalon.getMotorVoltage();
         turnCurrent = turnTalon.getStatorCurrent();
 
-        BaseStatusSignal.setUpdateFrequencyForAll(
-                DriveConstants.odometryFrequency, drivePosition, turnPosition);
-        BaseStatusSignal.setUpdateFrequencyForAll(
-                50.0,
-                driveVelocity,
-                driveAppliedVolts,
-                driveCurrent,
-                turnAbsolutePosition,
-                turnVelocity,
-                turnAppliedVolts,
-                turnCurrent);
+        BaseStatusSignal.setUpdateFrequencyForAll(DriveConstants.odometryFrequency, drivePosition, turnPosition);
+        BaseStatusSignal.setUpdateFrequencyForAll(50.0, driveVelocity, driveAppliedVolts, driveCurrent, turnAbsolutePosition, turnVelocity, turnAppliedVolts, turnCurrent);
         driveTalon.optimizeBusUtilization();
         turnTalon.optimizeBusUtilization();
     }

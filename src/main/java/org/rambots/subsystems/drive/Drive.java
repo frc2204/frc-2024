@@ -38,12 +38,10 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 import org.rambots.util.VisionHelpers;
 
 import java.util.List;
-import java.util.Queue;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -107,9 +105,9 @@ public class Drive extends SubsystemBase {
                 this::runVelocity,
                 new HolonomicPathFollowerConfig(
                         new PIDConstants(
-                                PPtranslationConstants.kP, PPtranslationConstants.kI, PPtranslationConstants.kD),
+                                PPTranslationConstants.kP, PPTranslationConstants.kI, PPTranslationConstants.kD),
                         new PIDConstants(
-                                PProtationConstants.kP, PProtationConstants.kI, PProtationConstants.kD),
+                                PPRotationConstants.kP, PPRotationConstants.kI, PPRotationConstants.kD),
                         drivetrainConfig.maxLinearVelocity(),
                         drivetrainConfig.driveBaseRadius(),
                         new ReplanningConfig()),

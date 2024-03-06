@@ -3,9 +3,9 @@
   "startingPose": {
     "position": {
       "x": 2.0,
-      "y": 7.0
+      "y": 6.0
     },
-    "rotation": 180.0
+    "rotation": 0
   },
   "command": {
     "type": "sequential",
@@ -14,7 +14,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Example Path"
+            "pathName": "1m Test"
           }
         }
       ]

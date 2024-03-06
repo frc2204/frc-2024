@@ -56,12 +56,12 @@ public final class DriveConstants {
                         SwerveXReductions.OldGen736.reduction,
                         SwerveXReductions.TURN.reduction);
             };
-    public static final PIDConstants PPtranslationConstants =
+    public static final PIDConstants PPTranslationConstants =
             switch (Constants.getRobot()) {
                 case COMPBOT -> new PIDConstants(10, 0.0, 0.0);
                 case SIMBOT -> new PIDConstants(10, 0.0, 0.0);
             };
-    public static final PIDConstants PProtationConstants =
+    public static final PIDConstants PPRotationConstants =
             switch (Constants.getRobot()) {
                 case COMPBOT -> new PIDConstants(10, 0.0, 0.0);
                 case SIMBOT -> new PIDConstants(10, 0.0, 0.0);
@@ -77,17 +77,13 @@ public final class DriveConstants {
                         12.93,
                         29.89);
             };
-    public static final Translation2d[] moduleTranslations =
-            new Translation2d[]{
-                    new Translation2d(
-                            drivetrainConfig.trackwidthX() / 2.0, drivetrainConfig.trackwidthY() / 2.0),
-                    new Translation2d(
-                            drivetrainConfig.trackwidthX() / 2.0, -drivetrainConfig.trackwidthY() / 2.0),
-                    new Translation2d(
-                            -drivetrainConfig.trackwidthX() / 2.0, drivetrainConfig.trackwidthY() / 2.0),
-                    new Translation2d(
-                            -drivetrainConfig.trackwidthX() / 2.0, -drivetrainConfig.trackwidthY() / 2.0)
-            };
+    public static final Translation2d[] moduleTranslations = new Translation2d[]{
+            new Translation2d(drivetrainConfig.trackwidthX() / 2.0, drivetrainConfig.trackwidthY() / 2.0),
+            new Translation2d(drivetrainConfig.trackwidthX() / 2.0, -drivetrainConfig.trackwidthY() / 2.0),
+            new Translation2d(-drivetrainConfig.trackwidthX() / 2.0, drivetrainConfig.trackwidthY() / 2.0),
+            new Translation2d(-drivetrainConfig.trackwidthX() / 2.0, -drivetrainConfig.trackwidthY() / 2.0)
+    };
+
     public static final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(moduleTranslations);
     public static ModuleConfig[] moduleConfigs =
             switch (Constants.getRobot()) {

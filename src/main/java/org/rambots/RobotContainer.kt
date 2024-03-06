@@ -43,7 +43,7 @@ object RobotContainer {
     private var drive: Drive
 //    private var flywheel: Flywheel
     private var aprilTagVision: AprilTagVision
-    private val driveMode = DriveController()
+    private val driveController = DriveController()
 
     // Controller
     private val controller = CommandXboxController(0)
@@ -93,7 +93,7 @@ object RobotContainer {
                         AprilTagVisionIOPhotonVisionSIM(
                             "photonCamera1",
                             Transform3d(Translation3d(0.5, 0.0, 0.5), Rotation3d(0.0, 0.0, 0.0))
-                        ) { drive.getDrive() })
+                        ) { drive.drive })
             }
 
             else -> {
@@ -152,8 +152,8 @@ object RobotContainer {
                 visionData
             )
         })
-        driveMode.setPoseSupplier { drive.pose }
-        driveMode.disableHeadingControl()
+        driveController.setPoseSupplier { drive.pose }
+        driveController.disableHeadingControl()
         configureButtonBindings()
     }
 
@@ -164,19 +164,20 @@ object RobotContainer {
     private fun configureButtonBindings() {
         drive.defaultCommand = DriveCommands.joystickDrive(
             drive,
-            driveMode,
+            driveController,
             { -controller.leftY },
             { -controller.leftX },
             { -controller.rightX })
-        controller.leftBumper().whileTrue(Commands.runOnce({ driveMode.toggleDriveMode() }))
 
-        controller.a().whileTrue(PathFinderAndFollow(driveMode.driveModeType))
+        controller.leftBumper().whileTrue(Commands.runOnce({ driveController.toggleDriveMode() }))
+
+        controller.a().whileTrue(PathFinderAndFollow(driveController.driveModeType))
 
         controller
             .b()
             .whileTrue(
                 Commands.startEnd(
-                    { driveMode.enableHeadingControl() }, { driveMode.disableHeadingControl() })
+                    { driveController.enableHeadingControl() }, { driveController.disableHeadingControl() })
             )
 
         controller
@@ -184,7 +185,7 @@ object RobotContainer {
             .whileTrue(
                 Commands.runOnce(
                     {
-                        drive!!.setAutoStartPose(
+                        drive.setAutoStartPose(
                             Pose2d(Translation2d(4.0, 5.0), Rotation2d.fromDegrees(0.0))
                         )
                     })

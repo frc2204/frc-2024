@@ -31,13 +31,12 @@ public class AprilTagVisionIOLimelight implements AprilTagVisionIO {
      * @param identifier The identifier of the Limelight camera.
      */
     public AprilTagVisionIOLimelight(String identifier) {
+        limelightName = identifier;
+
         NetworkTable limelightTable = NetworkTableInstance.getDefault().getTable(identifier);
         LimelightHelpers.setPipelineIndex(limelightName, 0);
 
-        observationSubscriber =
-                limelightTable
-                        .getStringTopic("json")
-                        .subscribe("", PubSubOption.keepDuplicates(true), PubSubOption.sendAll(true));
+        observationSubscriber = limelightTable.getStringTopic("json").subscribe("", PubSubOption.keepDuplicates(true), PubSubOption.sendAll(true));
     }
 
     /**
@@ -47,42 +46,38 @@ public class AprilTagVisionIOLimelight implements AprilTagVisionIO {
      */
     @Override
     public void updateInputs(AprilTagVisionIOInputs inputs) {
-        TimestampedString[] queue =
-                observationSubscriber.readQueue(); // Reads the queue of timestamped strings
-        ArrayList<VisionHelpers.PoseEstimate> poseEstimates =
-                new ArrayList<>(); // Creates an empty ArrayList to store pose estimates
+        TimestampedString[] queue = observationSubscriber.readQueue(); // Reads the queue of timestamped strings
+        ArrayList<VisionHelpers.PoseEstimate> poseEstimates = new ArrayList<>(); // Creates an empty ArrayList to store pose estimates
 
         // Iterates over each timestamped string in the queue
         for (int i = 0; i < Math.min(queue.length, 3); i++) {
             TimestampedString timestampedString = queue[i];
-            double timestamp = timestampedString.timestamp / 1e6; // Converts the timestamp to seconds
-            LimelightHelpers.Results results =
-                    LimelightHelpers.parseJsonDump(timestampedString.value)
-                            .targetingResults; // Parses the JSON dump and retrieves the targeting results
-            Optional<Alliance> allianceOptional =
-                    DriverStation.getAlliance(); // Retrieves the alliance information from the DriverStation
+
+            // Converts the timestamp to seconds
+            double timestamp = timestampedString.timestamp / 1e6;
+
+            // Parses the JSON dump and retrieves the targeting results
+            LimelightHelpers.Results results = LimelightHelpers.parseJsonDump(timestampedString.value).targetingResults;
+
+            // Retrieves the alliance information from the DriverStation
+            Optional<Alliance> allianceOptional = DriverStation.getAlliance();
 
             // Checks if there are no targets or if the alliance information is not present
             if (results.targets_Fiducials.length == 0 || !allianceOptional.isPresent()) {
                 continue; // Skips to the next iteration of the loop
             }
 
-            double latencyMS =
-                    results.latency_capture
-                            + results.latency_pipeline; // Calculates the total latency in milliseconds
-            Pose3d poseEstimation =
-                    results.getBotPose3d_wpiBlue(); // Retrieves the pose estimation for the robot
+            double latencyMS = results.latency_capture + results.latency_pipeline; // Calculates the total latency in milliseconds
+            Pose3d poseEstimation = results.getBotPose3d_wpiBlue(); // Retrieves the pose estimation for the robot
             double averageTagDistance = 0.0; // Initializes the average tag distance to 0.0
             timestamp -= (latencyMS / 1e3); // Adjusts the timestamp by subtracting the latency in seconds
 
-            int[] tagIDs =
-                    new int[results.targets_Fiducials.length]; // Creates an array to store the tag IDs
+            int[] tagIDs = new int[results.targets_Fiducials.length]; // Creates an array to store the tag IDs
 
             // Iterates over each target in the targeting results
             for (int aprilTags = 0; aprilTags < results.targets_Fiducials.length; aprilTags++) {
-                tagIDs[aprilTags] =
-                        (int)
-                                results.targets_Fiducials[aprilTags].fiducialID; // Retrieves and stores the tag ID
+                // Retrieves and stores the tag ID
+                tagIDs[aprilTags] = (int) results.targets_Fiducials[aprilTags].fiducialID;
                 averageTagDistance +=
                         results
                                 .targets_Fiducials[aprilTags]
@@ -92,16 +87,16 @@ public class AprilTagVisionIOLimelight implements AprilTagVisionIO {
             }
 
             averageTagDistance /= tagIDs.length; // Calculates the average tag distance
-            poseEstimates.add(
-                    new VisionHelpers.PoseEstimate(
-                            poseEstimation,
-                            timestamp,
-                            averageTagDistance,
-                            tagIDs)); // Creates a new PoseEstimate object and adds it to the poseEstimates
+            poseEstimates.add(new VisionHelpers.PoseEstimate(
+                    poseEstimation,
+                    timestamp,
+                    averageTagDistance,
+                    tagIDs
+            )); // Creates a new PoseEstimate object and adds it to the poseEstimates
             // ArrayList
         }
 
-        inputs.poseEstimates =
-                poseEstimates; // Assigns the poseEstimates ArrayList to the inputs.poseEstimates variable
+        // Assigns the poseEstimates ArrayList to the inputs.poseEstimates variable
+        inputs.poseEstimates = poseEstimates;
     }
 }
