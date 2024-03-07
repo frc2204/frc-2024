@@ -1,37 +1,45 @@
 package org.rambots.commands
 
 import edu.wpi.first.wpilibj2.command.Command
+import org.rambots.config.LookUpTable
+import org.rambots.config.Table
 import org.rambots.subsystems.ArmSubsystem
 import org.rambots.subsystems.SwerveSubsystem
 import org.rambots.subsystems.AutoAimSubsystem
 import org.rambots.subsystems.ShooterSubsystem
+import org.rambots.subsystems.drive.Drive
+import org.rambots.util.FieldConstants
+import kotlin.math.pow
+import kotlin.math.sqrt
 
-class AutoAim : Command() {
+class AutoAim(driveSubsystem: Drive) : Command() {
+    val drive = driveSubsystem
+    var topPower = 0.0
+    var bottomPower = 0.0
+    var feedPower = 0.0
+    private var desiredAngle = 0.0
+    var armEncoderValue = 0.0
+    var wristEncoderValue = 0.0
+
     init {
-        addRequirements(SwerveSubsystem,AutoAimSubsystem,ShooterSubsystem)
+        addRequirements(driveSubsystem, AutoAimSubsystem,ShooterSubsystem)
     }
 
     override fun initialize() {
-        SwerveSubsystem.drive(
-            SwerveSubsystem.pose.translation-AutoAimSubsystem.desiredPose.translation,
-            AutoAimSubsystem.desiredPose.rotation.radians,
-            true, true
-        )
-        ArmSubsystem.setArmPosition(AutoAimSubsystem.armEncoderValue)
-        ArmSubsystem.setWristPosition(AutoAimSubsystem.wristEncoderValue)
+        val current = drive.pose
+        val speaker = FieldConstants.Speaker.centerSpeakerOpening.translation
+        var distance = (speaker.y - current.y).pow(2) + (speaker.x - current.x).pow(2)
+        distance = sqrt(distance)
+
+        val table = LookUpTable.getTable(distance.toInt())
+        topPower = table.getTopPower()
+        bottomPower = table.getBottomPower()
+        feedPower = table.getFeedPower()
+        desiredAngle = table.getAngle()
     }
 
     override fun execute() {
-        if(SwerveSubsystem.pose==AutoAimSubsystem.desiredPose &&
-            ArmSubsystem.getArmPosition()==AutoAimSubsystem.armEncoderValue &&
-            ArmSubsystem.getWristPosition()==AutoAimSubsystem.wristEncoderValue
-        ) {
-            ShooterSubsystem.shoot(
-                AutoAimSubsystem.topPower,
-                AutoAimSubsystem.bottomPower,
-                AutoAimSubsystem.feedPower
-            )
-        }
+
     }
 
     override fun isFinished(): Boolean {

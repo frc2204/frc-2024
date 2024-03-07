@@ -164,6 +164,7 @@ object RobotContainer {
 
         controller.L1().whileTrue(AmpScoring())
         controller.R2().whileTrue(SourceIntake())
+        controller.circle().onTrue(AutoAim(drive))
 
 //        controller.a().whileTrue(PathFinderAndFollow(driveController.driveModeType))
 
