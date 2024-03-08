@@ -20,6 +20,7 @@ object ArmSubsystem : SubsystemBase() {
             restoreFactoryDefaults()
             setSmartCurrentLimit(10)
             idleMode = CANSparkBase.IdleMode.kBrake
+            inverted = true
 
             pidController.apply {
                 p = ArmConstants.ArmKP

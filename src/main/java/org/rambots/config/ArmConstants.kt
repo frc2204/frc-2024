@@ -5,7 +5,7 @@ object ArmConstants {
     const val ArmMotorOneCANID = 13
     const val ArmMotorTwoCANID = 14
     const val WristMotorCANID = 2
-    const val ArmKP = 1.0
+    const val ArmKP = 0.02
     const val ArmKI = 0.0
     const val ArmKD = 0.0
     const val WristKP = 1.0
