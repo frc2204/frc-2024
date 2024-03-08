@@ -18,7 +18,7 @@ class Climb : Command() {
             elevatorSubsystem.extend(),
             WaitCommand(1.0),
             elevatorSubsystem.retract()
-        )
+        ).schedule()
     }
 
     override fun isFinished(): Boolean {
