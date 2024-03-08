@@ -42,9 +42,7 @@ object ArmSubsystem : SubsystemBase() {
     }
 
     override fun periodic() {
-        /* debug */
         SmartDashboard.putNumber("Arm Position", motorOne.encoder.position)
-//        SmartDashboard.putNumber("Wrist Position", wristMotor.encoder.position)
     }
 
     /* moves arm to intake position */
