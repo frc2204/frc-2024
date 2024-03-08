@@ -52,6 +52,9 @@ object ElevatorSubsystem : SubsystemBase() {
     fun retract(): Command = runOnce{
         motorOne.pidController.setReference(0.0,CANSparkBase.ControlType.kPosition)
     }
+    fun elevatorIntakePosition(): Command = runOnce{
+        motorOne.pidController.setReference(0.0,CANSparkBase.ControlType.kPosition)
+    }
     override fun periodic() {
         SmartDashboard.putNumber("Position", position)
     }
