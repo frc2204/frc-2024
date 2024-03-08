@@ -12,9 +12,7 @@ import org.rambots.util.FieldConstants
 import kotlin.math.pow
 import kotlin.math.sqrt
 
-class AutoAim(driveSubsystem: Drive, driveController: DriveController) : Command() {
-    val drive = driveSubsystem
-    val driveController = driveController
+class AutoAim(private val drive : Drive, private val driveController: DriveController) : Command() {
     private var topPower = 0.0
     private var bottomPower = 0.0
     private var feedPower = 0.0
@@ -23,7 +21,7 @@ class AutoAim(driveSubsystem: Drive, driveController: DriveController) : Command
     var wristEncoderValue = 0.0
 
     init {
-        addRequirements(driveSubsystem, AutoAimSubsystem,ShooterSubsystem)
+        addRequirements(drive, AutoAimSubsystem,ShooterSubsystem)
     }
 
     override fun initialize() {

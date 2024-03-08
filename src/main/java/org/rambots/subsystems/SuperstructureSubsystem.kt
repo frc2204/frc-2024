@@ -1,15 +1,16 @@
 package org.rambots.subsystems
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup
+import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.WaitCommand
 
-object SuperstructureSubsystem {
+object SuperstructureSubsystem: SubsystemBase() {
     fun intake() {
         SequentialCommandGroup(
             ElevatorSubsystem.elevatorIntakePosition(),
             ArmSubsystem.armIntakePosition(),
             WristSubsystem.wristIntakePosition()
-        )
+        ).schedule()
     }
 
     fun climb() {

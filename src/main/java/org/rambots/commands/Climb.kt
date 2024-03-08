@@ -3,22 +3,16 @@ package org.rambots.commands
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup
 import edu.wpi.first.wpilibj2.command.WaitCommand
-import org.rambots.subsystems.ElevatorSubsystem
+import org.rambots.subsystems.SuperstructureSubsystem
 
 class Climb : Command() {
-    private val elevatorSubsystem = ElevatorSubsystem
-
     init {
         // each subsystem used by the command must be passed into the addRequirements() method
-        addRequirements(elevatorSubsystem)
+        addRequirements(SuperstructureSubsystem)
     }
 
     override fun initialize() {
-        SequentialCommandGroup(
-            elevatorSubsystem.extend(),
-            WaitCommand(1.0),
-            elevatorSubsystem.retract()
-        ).schedule()
+        SuperstructureSubsystem.climb()
     }
 
     override fun isFinished(): Boolean {
