@@ -7,12 +7,14 @@ import org.rambots.subsystems.ArmSubsystem
 import org.rambots.subsystems.AutoAimSubsystem
 import org.rambots.subsystems.ShooterSubsystem
 import org.rambots.subsystems.drive.Drive
+import org.rambots.subsystems.drive.DriveController
 import org.rambots.util.FieldConstants
 import kotlin.math.pow
 import kotlin.math.sqrt
 
-class AutoAim(driveSubsystem: Drive) : Command() {
+class AutoAim(driveSubsystem: Drive, driveController: DriveController) : Command() {
     val drive = driveSubsystem
+    val driveController = driveController
     private var topPower = 0.0
     private var bottomPower = 0.0
     private var feedPower = 0.0
@@ -35,14 +37,17 @@ class AutoAim(driveSubsystem: Drive) : Command() {
         bottomPower = table.getBottomPower()
         feedPower = table.getFeedPower()
         desiredAngle = table.getAngle()
+
+        driveController.setDriveMode(DriveController.DriveModeType.SPEAKER)
+        driveController.enableHeadingControl()
     }
 
     override fun execute() {
-
     }
 
     override fun isFinished(): Boolean {
-        return false
+        driveController.disableHeadingControl()
+        return true
     }
 
 
