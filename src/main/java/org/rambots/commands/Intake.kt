@@ -16,7 +16,7 @@ class Intake : Command() {
             ArmSubsystem.armIntakePosition(),
             ArmSubsystem.wristIntakePosition(),
             IntakeSubsystem.intakeRoll(),
-        )
+        ).schedule()
     }
 
     override fun isFinished(): Boolean {

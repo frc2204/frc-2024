@@ -40,7 +40,7 @@ object ElevatorSubsystem : SubsystemBase() {
     }
 
     init {
-        motorTwo.follow(motorOne)
+        motorTwo.follow(motorOne, true)
     }
 
     private val position

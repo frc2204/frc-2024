@@ -50,7 +50,7 @@ object ArmSubsystem : SubsystemBase() {
                 d = ArmConstants.WristKD
             }
         }
-        motorTwo.follow(motorOne)
+        motorTwo.follow(motorOne, true)
     }
 
     override fun periodic() {

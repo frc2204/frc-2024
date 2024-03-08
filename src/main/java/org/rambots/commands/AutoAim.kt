@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj2.command.Command
 import org.rambots.config.LookUpTable
 import org.rambots.config.Table
 import org.rambots.subsystems.ArmSubsystem
-import org.rambots.subsystems.SwerveSubsystem
 import org.rambots.subsystems.AutoAimSubsystem
 import org.rambots.subsystems.ShooterSubsystem
 import org.rambots.subsystems.drive.Drive
@@ -14,9 +13,9 @@ import kotlin.math.sqrt
 
 class AutoAim(driveSubsystem: Drive) : Command() {
     val drive = driveSubsystem
-    var topPower = 0.0
-    var bottomPower = 0.0
-    var feedPower = 0.0
+    private var topPower = 0.0
+    private var bottomPower = 0.0
+    private var feedPower = 0.0
     private var desiredAngle = 0.0
     var armEncoderValue = 0.0
     var wristEncoderValue = 0.0
