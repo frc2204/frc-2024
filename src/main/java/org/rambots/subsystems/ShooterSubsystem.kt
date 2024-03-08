@@ -44,13 +44,13 @@ object ShooterSubsystem : SubsystemBase() {
         }
     }
     fun shoot(){
-        topMotor.set(0.5)
-        bottomMotor.set(0.5)
-        feedMotor.set(0.2)
+        topMotor.pidController.setReference(0.5,CANSparkBase.ControlType.kVelocity)
+        bottomMotor.pidController.setReference(0.5,CANSparkBase.ControlType.kVelocity)
+        feedMotor.pidController.setReference(0.2, CANSparkBase.ControlType.kVelocity)
     }
     fun shoot(topPower:Double,bottomPower:Double,feedPower:Double){
-        topMotor.set(topPower)
-        bottomMotor.set(bottomPower)
-        feedMotor.set(feedPower)
+        topMotor.pidController.setReference(topPower,CANSparkBase.ControlType.kVelocity)
+        bottomMotor.pidController.setReference(bottomPower,CANSparkBase.ControlType.kVelocity)
+        feedMotor.pidController.setReference(feedPower,CANSparkBase.ControlType.kVelocity)
     }
 }
