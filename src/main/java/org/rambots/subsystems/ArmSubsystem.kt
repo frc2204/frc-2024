@@ -14,7 +14,6 @@ object ArmSubsystem : SubsystemBase() {
     /* motor initialization: neos and cansparkmax */
     private val motorOne = CANSparkMax(ArmConstants.ArmMotorOneCANID, CANSparkLowLevel.MotorType.kBrushless)
     private val motorTwo = CANSparkMax(ArmConstants.ArmMotorTwoCANID, CANSparkLowLevel.MotorType.kBrushless)
-    private val wristMotor = CANSparkMax(ArmConstants.WristMotorCANID, CANSparkLowLevel.MotorType.kBrushless)
 
     init {
         motorOne.apply {
@@ -39,17 +38,6 @@ object ArmSubsystem : SubsystemBase() {
                 d = ArmConstants.ArmKD
             }
         }
-        wristMotor.apply {
-            restoreFactoryDefaults()
-            setSmartCurrentLimit(5)
-            idleMode = CANSparkBase.IdleMode.kBrake
-
-            pidController.apply {
-                p = ArmConstants.WristKP
-                i = ArmConstants.WristKI
-                d = ArmConstants.WristKD
-            }
-        }
         motorTwo.follow(motorOne, true)
     }
 
@@ -61,34 +49,23 @@ object ArmSubsystem : SubsystemBase() {
 
     /* moves arm to intake position */
     fun armIntakePosition(): Command = runOnce {
-        motorOne.pidController.setReference(ArmConstants.ArmIntakePosition, CANSparkBase.ControlType.kPosition)
-    }
-
-    /* moves wrist to intake position */
-    fun wristIntakePosition(): Command = runOnce {
-        wristMotor.pidController.setReference(ArmConstants.WristIntakePosition, CANSparkBase.ControlType.kPosition)
+        motorOne.pidController.setReference(ArmConstants.ArmIntakePosition, ControlType.kPosition)
     }
 
     fun armClimbPosition(): Command = runOnce {
-        motorOne.pidController.setReference(ArmConstants.ArmClimbPosition, CANSparkBase.ControlType.kPosition)
+        motorOne.pidController.setReference(ArmConstants.ArmClimbPosition, ControlType.kPosition)
     }
 
     fun armHomePosition(): Command = runOnce {
-        motorOne.pidController.setReference(ArmConstants.ArmIntakePosition, CANSparkBase.ControlType.kPosition)
+        motorOne.pidController.setReference(ArmConstants.ArmIntakePosition, ControlType.kPosition)
     }
 
     fun getArmPosition(): Double {
         return motorOne.encoder.position
     }
-    fun getWristPosition(): Double{
-        return wristMotor.encoder.position
-    }
 
     fun setArmPosition(value: Double) {
         motorOne.pidController.setReference(value,ControlType.kPosition)
-    }
-    fun setWristPosition(value: Double){
-        wristMotor.pidController.setReference(value,ControlType.kPosition)
     }
 
     private fun resetEncoder() {
