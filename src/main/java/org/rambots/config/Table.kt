@@ -1,18 +1,18 @@
 package org.rambots.config
 
-class Table(topPower:Double, bottomPower:Double, feedPower:Double, angle:Double) {
-    private val tP = topPower
-    private val bP = bottomPower
-    private val fP = feedPower
+class Table(topVelocity:Double, bottomVelocity:Double, feedVelocity:Double, angle:Double) {
+    private val tP = topVelocity
+    private val bP = bottomVelocity
+    private val fP = feedVelocity
     private val angle = angle
 
-    fun getTopPower():Double{
+    fun getTopVelocity():Double{
         return tP
     }
-    fun getBottomPower():Double{
+    fun getBottomVelocity():Double{
         return bP
     }
-    fun getFeedPower():Double{
+    fun getFeedVelocity():Double{
         return fP
     }
     fun getAngle():Double{

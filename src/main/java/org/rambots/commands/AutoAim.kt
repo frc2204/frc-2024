@@ -31,9 +31,9 @@ class AutoAim(private val drive : Drive, private val driveController: DriveContr
         distance = sqrt(distance)
 
         val table = LookUpTable.getTable(distance.toInt())
-        topPower = table.getTopPower()
-        bottomPower = table.getBottomPower()
-        feedPower = table.getFeedPower()
+        topPower = table.getTopVelocity()
+        bottomPower = table.getBottomVelocity()
+        feedPower = table.getFeedVelocity()
         desiredAngle = table.getAngle()
 
         driveController.setDriveMode(DriveController.DriveModeType.SPEAKER)
