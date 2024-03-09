@@ -4,6 +4,8 @@ object ArmConstants {
     /** Arm Configuration */
     const val ArmMotorOneCANID = 13
     const val ArmMotorTwoCANID = 14
+
+    /** Arm PID */
     const val ArmKP = 0.02
     const val ArmKI = 0.0
     const val ArmKD = 0.0
@@ -11,7 +13,9 @@ object ArmConstants {
     /** Elevator Configuration */
     const val ElevatorMotorOneCANID = 15
     const val ElevatorMotorTwoCANID = 16
-    const val ElevatorKP = 1.0
+
+    /** Elevator PID */
+    const val ElevatorKP = 0.2
     const val ElevatorKI = 0.0
     const val ElevatorKD = 0.0
 
@@ -33,7 +37,7 @@ object ArmConstants {
     const val WristCANID = 21
 
     /** Wrist PID */
-    const val WristKP = 1.0
+    const val WristKP = 0.2
     const val WristKI = 0.0
     const val WristKD = 0.0
 
