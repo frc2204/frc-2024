@@ -9,7 +9,8 @@ object SuperstructureSubsystem: SubsystemBase() {
         SequentialCommandGroup(
             ElevatorSubsystem.elevatorIntakePosition(),
             ArmSubsystem.armIntakePosition(),
-            WristSubsystem.wristIntakePosition()
+            WristSubsystem.wristIntakePosition(),
+            IntakeSubsystem.intakeRoll()
         ).schedule()
     }
 

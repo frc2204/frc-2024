@@ -13,9 +13,9 @@ object ShooterSubsystem : SubsystemBase() {
         idleMode = CANSparkBase.IdleMode.kBrake
         apply{
             pidController.apply {
-                p = 1.0
+                p = 0.00035
                 i = 0.0
-                d = 0.0
+                d = 0.15
             }
         }
     }
@@ -25,32 +25,18 @@ object ShooterSubsystem : SubsystemBase() {
         idleMode = CANSparkBase.IdleMode.kBrake
         apply{
             pidController.apply {
-                p = 1.0
+                p = 0.00035
                 i = 0.0
-                d = 0.0
-            }
-        }
-    }
-    private val feedMotor = with(CANSparkMax(18,CANSparkLowLevel.MotorType.kBrushless)){
-        restoreFactoryDefaults()
-        setSmartCurrentLimit(4)
-        idleMode = CANSparkBase.IdleMode.kBrake
-        apply{
-            pidController.apply {
-                p = 0.0
-                i = 0.0
-                d = 0.0
+                d = 0.15
             }
         }
     }
     fun shoot(){
-        topMotor.pidController.setReference(0.5,CANSparkBase.ControlType.kVelocity)
-        bottomMotor.pidController.setReference(0.5,CANSparkBase.ControlType.kVelocity)
-        feedMotor.pidController.setReference(0.2, CANSparkBase.ControlType.kVelocity)
+        topMotor.pidController.setReference(4000.0,CANSparkBase.ControlType.kVelocity)
+        bottomMotor.pidController.setReference(4000.0,CANSparkBase.ControlType.kVelocity)
     }
-    fun shoot(topVelocity: Double, bottomVelocity: Double, feedVelocity: Double){
-        topMotor.pidController.setReference(topVelocity,CANSparkBase.ControlType.kVelocity)
-        bottomMotor.pidController.setReference(bottomVelocity,CANSparkBase.ControlType.kVelocity)
-        feedMotor.pidController.setReference(feedVelocity,CANSparkBase.ControlType.kVelocity)
+    fun shoot(topVelocity: Double, bottomVelocity: Double, feedVelocity: Double) {
+        topMotor.pidController.setReference(topVelocity, CANSparkBase.ControlType.kVelocity)
+        bottomMotor.pidController.setReference(bottomVelocity, CANSparkBase.ControlType.kVelocity)
     }
 }

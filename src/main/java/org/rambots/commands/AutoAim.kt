@@ -2,7 +2,6 @@ package org.rambots.commands
 
 import edu.wpi.first.wpilibj2.command.Command
 import org.rambots.config.LookUpTable
-import org.rambots.subsystems.AutoAimSubsystem
 import org.rambots.subsystems.ShooterSubsystem
 import org.rambots.subsystems.drive.Drive
 import org.rambots.subsystems.drive.DriveController
@@ -19,7 +18,7 @@ class AutoAim(private val drive : Drive, private val driveController: DriveContr
     var wristEncoderValue = 0.0
 
     init {
-        addRequirements(drive, AutoAimSubsystem,ShooterSubsystem)
+        addRequirements(drive,ShooterSubsystem)
     }
 
     override fun initialize() {
