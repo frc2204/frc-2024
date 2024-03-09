@@ -48,9 +48,9 @@ object ShooterSubsystem : SubsystemBase() {
         bottomMotor.pidController.setReference(0.5,CANSparkBase.ControlType.kVelocity)
         feedMotor.pidController.setReference(0.2, CANSparkBase.ControlType.kVelocity)
     }
-    fun shoot(topPower:Double,bottomPower:Double,feedPower:Double){
-        topMotor.pidController.setReference(topPower,CANSparkBase.ControlType.kVelocity)
-        bottomMotor.pidController.setReference(bottomPower,CANSparkBase.ControlType.kVelocity)
-        feedMotor.pidController.setReference(feedPower,CANSparkBase.ControlType.kVelocity)
+    fun shoot(topVelocity: Double, bottomVelocity: Double, feedVelocity: Double){
+        topMotor.pidController.setReference(topVelocity,CANSparkBase.ControlType.kVelocity)
+        bottomMotor.pidController.setReference(bottomVelocity,CANSparkBase.ControlType.kVelocity)
+        feedMotor.pidController.setReference(feedVelocity,CANSparkBase.ControlType.kVelocity)
     }
 }
