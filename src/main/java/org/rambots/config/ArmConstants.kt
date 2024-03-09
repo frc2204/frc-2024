@@ -26,8 +26,8 @@ object ArmConstants {
     const val IntakeCurrent = 20
 
     /** Intake Positions */
-    const val ArmIntakePosition = 1.0
-    const val WristIntakePosition = 1.0
+    const val ArmIntakePosition = 0.0
+    const val WristIntakePosition = -63.0
     const val ElevatorIntakePosition = -50.0
 
     /** Climb Positions */
