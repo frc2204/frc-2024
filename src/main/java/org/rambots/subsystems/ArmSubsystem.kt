@@ -4,9 +4,9 @@ import com.revrobotics.CANSparkBase
 import com.revrobotics.CANSparkBase.ControlType
 import com.revrobotics.CANSparkLowLevel
 import com.revrobotics.CANSparkMax
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase
+import org.littletonrobotics.junction.Logger
 import org.rambots.config.ArmConstants
 
 
@@ -44,7 +44,8 @@ object ArmSubsystem : SubsystemBase() {
     }
 
     override fun periodic() {
-        SmartDashboard.putNumber("Arm Position", motorOne.encoder.position)
+        Logger.recordOutput("Arm/Position", getArmPosition())
+
     }
 
     /* moves arm to intake position */
@@ -60,7 +61,7 @@ object ArmSubsystem : SubsystemBase() {
         motorOne.pidController.setReference(ArmConstants.ArmIntakePosition, ControlType.kPosition)
     }
 
-    fun getArmPosition(): Double {
+    private fun getArmPosition(): Double {
         return motorOne.encoder.position
     }
 
