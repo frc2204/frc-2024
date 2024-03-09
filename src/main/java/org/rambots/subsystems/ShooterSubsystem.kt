@@ -4,6 +4,7 @@ import com.revrobotics.CANSparkBase
 import com.revrobotics.CANSparkLowLevel
 import com.revrobotics.CANSparkMax
 import edu.wpi.first.wpilibj2.command.SubsystemBase
+import org.littletonrobotics.junction.Logger
 import java.lang.NullPointerException
 
 object ShooterSubsystem : SubsystemBase() {
@@ -38,5 +39,10 @@ object ShooterSubsystem : SubsystemBase() {
     fun shoot(topVelocity: Double, bottomVelocity: Double) {
         topMotor.pidController.setReference(topVelocity, CANSparkBase.ControlType.kVelocity)
         bottomMotor.pidController.setReference(bottomVelocity, CANSparkBase.ControlType.kVelocity)
+    }
+
+    override fun periodic() {
+        Logger.recordOutput("Top Motor Velocity", topMotor.encoder.velocity)
+        Logger.recordOutput("Bottom Motor Velocity", bottomMotor.encoder.velocity)
     }
 }

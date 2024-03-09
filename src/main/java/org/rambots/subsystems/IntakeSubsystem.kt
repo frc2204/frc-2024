@@ -5,6 +5,7 @@ import com.revrobotics.CANSparkLowLevel
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import com.revrobotics.CANSparkMax
 import edu.wpi.first.wpilibj2.command.Command
+import org.littletonrobotics.junction.Logger
 import org.rambots.config.ArmConstants
 
 object IntakeSubsystem : SubsystemBase() {
@@ -47,5 +48,10 @@ object IntakeSubsystem : SubsystemBase() {
     }
     fun getMotor():CANSparkMax{
         return topMotor
+    }
+
+    override fun periodic() {
+        Logger.recordOutput("Top Motor Intake Percentage", topMotor.encoder.velocity)
+        Logger.recordOutput("Bottom Motor Intake Percentage", bottomMotor.encoder.velocity)
     }
 }

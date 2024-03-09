@@ -6,6 +6,7 @@ import com.revrobotics.CANSparkMax
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import org.littletonrobotics.junction.Logger
 import org.rambots.config.ArmConstants
 
 object WristSubsystem : SubsystemBase() {
@@ -34,6 +35,6 @@ object WristSubsystem : SubsystemBase() {
     }
 
     override fun periodic() {
-        SmartDashboard.putNumber("Wrist Position", wristMotor.encoder.position)
+        Logger.recordOutput("Wrist Position", wristMotor.encoder.position)
     }
 }
