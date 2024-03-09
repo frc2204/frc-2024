@@ -23,6 +23,7 @@ object ArmConstants {
     const val IntakeMotorCANID = 15
     const val IntakeKP = 1.0
     const val IntakePower = -0.2
+    const val IntakeCurrent = 20
 
     /** Intake Positions */
     const val ArmIntakePosition = 1.0

@@ -2,6 +2,7 @@ package org.rambots.commands
 
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup
+import org.rambots.config.ArmConstants
 import org.rambots.subsystems.ArmSubsystem
 import org.rambots.subsystems.IntakeSubsystem
 import org.rambots.subsystems.SuperstructureSubsystem
@@ -17,7 +18,12 @@ class Intake : Command() {
     }
 
     override fun isFinished(): Boolean {
-        return true
+        if(IntakeSubsystem.getMotor().outputCurrent> ArmConstants.IntakeCurrent){
+            IntakeSubsystem.stop()
+            return true
+        } else {
+            return false
+        }
     }
 
     override fun end(interrupted: Boolean) {}

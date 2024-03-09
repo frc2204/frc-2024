@@ -41,4 +41,11 @@ object IntakeSubsystem : SubsystemBase() {
         topMotor.set(topPower)
         bottomMotor.set(bottomPower)
     }
+    fun stop(){
+        topMotor.stopMotor()
+        bottomMotor.stopMotor()
+    }
+    fun getMotor():CANSparkMax{
+        return topMotor
+    }
 }
