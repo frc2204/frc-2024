@@ -43,8 +43,8 @@ class AutoAim(private val drive : Drive, private val driveController: DriveContr
         driveController.enableHeadingControl()
 
         SequentialCommandGroup(
-            IntakeSubsystem.feed(feedPower, feedPower),
-            ShooterSubsystem.shoot(topVelocity, bottomVelocity)
+            ShooterSubsystem.shoot(topVelocity, bottomVelocity),
+            IntakeSubsystem.feed(feedPower, feedPower)
         ).schedule()
     }
 

@@ -18,11 +18,11 @@ class Intake : Command() {
     }
 
     override fun isFinished(): Boolean {
-        if(IntakeSubsystem.getMotor().outputCurrent> ArmConstants.IntakeCurrent){
+        return if(IntakeSubsystem.getMotor().outputCurrent >= ArmConstants.IntakeCurrent){
             IntakeSubsystem.stop()
-            return true
+            true
         } else {
-            return false
+            false
         }
     }
 
