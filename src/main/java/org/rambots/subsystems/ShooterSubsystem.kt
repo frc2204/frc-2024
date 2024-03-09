@@ -16,9 +16,9 @@ object ShooterSubsystem : SubsystemBase() {
         idleMode = CANSparkBase.IdleMode.kBrake
         apply{
             pidController.apply {
-                p = 0.00035
+                p = ArmConstants.ShooterKP
                 i = 0.0
-                d = 0.15
+                d = ArmConstants.ShooterKD
             }
         }
     }
@@ -28,9 +28,9 @@ object ShooterSubsystem : SubsystemBase() {
         idleMode = CANSparkBase.IdleMode.kBrake
         apply{
             pidController.apply {
-                p = 0.00035
+                p = ArmConstants.ShooterKP
                 i = 0.0
-                d = 0.15
+                d = ArmConstants.ShooterKD
             }
         }
     }

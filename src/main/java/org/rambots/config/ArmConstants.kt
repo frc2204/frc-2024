@@ -18,13 +18,16 @@ object ArmConstants {
     /** Intake Configuration */
     const val IntakeMotorOneCANID = 17
     const val IntakeMotorTwoCANID = 18
-    const val IntakeKP = 1.0
     const val IntakePower = -0.2
     const val IntakeCurrent = 20
 
     /** Shooter Configuration */
     const val TopShooterCANID = 19
     const val BottomShooterCANID = 20
+
+    /** Shooter PID */
+    const val ShooterKP = 0.00035
+    const val ShooterKD = 0.15
 
     /** Wrist Configuration */
     const val WristCANID = 21
