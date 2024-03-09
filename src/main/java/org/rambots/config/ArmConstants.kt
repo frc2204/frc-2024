@@ -4,26 +4,35 @@ object ArmConstants {
     /** Arm Configuration */
     const val ArmMotorOneCANID = 13
     const val ArmMotorTwoCANID = 14
-    const val WristMotorCANID = 2
     const val ArmKP = 0.02
     const val ArmKI = 0.0
     const val ArmKD = 0.0
-    const val WristKP = 1.0
-    const val WristKI = 0.0
-    const val WristKD = 0.0
 
     /** Elevator Configuration */
-    const val ElevatorMotorOneCANID = 3
-    const val ElevatorMotorTwoCANID = 4
+    const val ElevatorMotorOneCANID = 15
+    const val ElevatorMotorTwoCANID = 16
     const val ElevatorKP = 1.0
     const val ElevatorKI = 0.0
     const val ElevatorKD = 0.0
 
     /** Intake Configuration */
-    const val IntakeMotorCANID = 15
+    const val IntakeMotorOneCANID = 17
+    const val IntakeMotorTwoCANID = 18
     const val IntakeKP = 1.0
     const val IntakePower = -0.2
     const val IntakeCurrent = 20
+
+    /** Shooter Configuration */
+    const val TopShooterCANID = 19
+    const val BottomShooterCANID = 20
+
+    /** Wrist Configuration */
+    const val WristCANID = 21
+
+    /** Wrist PID */
+    const val WristKP = 1.0
+    const val WristKI = 0.0
+    const val WristKD = 0.0
 
     /** Intake Positions */
     const val ArmIntakePosition = 0.0

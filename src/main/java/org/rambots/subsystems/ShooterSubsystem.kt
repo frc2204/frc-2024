@@ -6,10 +6,11 @@ import com.revrobotics.CANSparkMax
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import org.littletonrobotics.junction.Logger
+import org.rambots.config.ArmConstants
 import java.lang.NullPointerException
 
 object ShooterSubsystem : SubsystemBase() {
-    private val topMotor= with(CANSparkMax(16,CANSparkLowLevel.MotorType.kBrushless)){
+    private val topMotor= with(CANSparkMax(ArmConstants.TopShooterCANID,CANSparkLowLevel.MotorType.kBrushless)){
         restoreFactoryDefaults()
         setSmartCurrentLimit(4)
         idleMode = CANSparkBase.IdleMode.kBrake
@@ -21,7 +22,7 @@ object ShooterSubsystem : SubsystemBase() {
             }
         }
     }
-    private val bottomMotor = with(CANSparkMax(17,CANSparkLowLevel.MotorType.kBrushless)){
+    private val bottomMotor = with(CANSparkMax(ArmConstants.BottomShooterCANID,CANSparkLowLevel.MotorType.kBrushless)){
         restoreFactoryDefaults()
         setSmartCurrentLimit(4)
         idleMode = CANSparkBase.IdleMode.kBrake

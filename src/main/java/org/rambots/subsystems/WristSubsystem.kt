@@ -10,7 +10,7 @@ import org.littletonrobotics.junction.Logger
 import org.rambots.config.ArmConstants
 
 object WristSubsystem : SubsystemBase() {
-    private val wristMotor = CANSparkMax(ArmConstants.WristMotorCANID, CANSparkLowLevel.MotorType.kBrushless)
+    private val wristMotor = CANSparkMax(ArmConstants.WristCANID, CANSparkLowLevel.MotorType.kBrushless)
     init{
         wristMotor.apply {
             restoreFactoryDefaults()

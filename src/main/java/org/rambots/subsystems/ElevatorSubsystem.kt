@@ -11,9 +11,6 @@ import org.littletonrobotics.junction.Logger
 import org.rambots.config.ArmConstants
 
 object ElevatorSubsystem : SubsystemBase() {
-    private val table = NetworkTableInstance.getDefault().getTable("")
-    val x : NetworkTableEntry = table.getEntry("ty")
-
     private val motorOne = with(CANSparkMax(ArmConstants.ElevatorMotorOneCANID, CANSparkLowLevel.MotorType.kBrushless)) {
         restoreFactoryDefaults()
         setSmartCurrentLimit(5)

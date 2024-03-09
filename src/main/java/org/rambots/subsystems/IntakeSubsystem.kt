@@ -9,7 +9,7 @@ import org.littletonrobotics.junction.Logger
 import org.rambots.config.ArmConstants
 
 object IntakeSubsystem : SubsystemBase() {
-    private val topMotor = with(CANSparkMax(ArmConstants.IntakeMotorCANID,CANSparkLowLevel.MotorType.kBrushless)){
+    private val topMotor = with(CANSparkMax(ArmConstants.IntakeMotorOneCANID,CANSparkLowLevel.MotorType.kBrushless)){
         restoreFactoryDefaults()
         setSmartCurrentLimit(4)
         idleMode = CANSparkBase.IdleMode.kBrake
@@ -21,7 +21,7 @@ object IntakeSubsystem : SubsystemBase() {
             }
         }
     }
-    private val bottomMotor = with(CANSparkMax(18,CANSparkLowLevel.MotorType.kBrushless)){
+    private val bottomMotor = with(CANSparkMax(ArmConstants.IntakeMotorTwoCANID,CANSparkLowLevel.MotorType.kBrushless)){
         restoreFactoryDefaults()
         setSmartCurrentLimit(4)
         idleMode = CANSparkBase.IdleMode.kBrake
