@@ -35,6 +35,6 @@ object WristSubsystem : SubsystemBase() {
     }
 
     override fun periodic() {
-        Logger.recordOutput("Wrist Position", wristMotor.encoder.position)
+        Logger.recordOutput("Wrist/Position", wristMotor.encoder.position)
     }
 }

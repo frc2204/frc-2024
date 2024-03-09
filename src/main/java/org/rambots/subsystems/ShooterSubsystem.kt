@@ -42,7 +42,7 @@ object ShooterSubsystem : SubsystemBase() {
     }
 
     override fun periodic() {
-        Logger.recordOutput("Top Motor Velocity", topMotor.encoder.velocity)
-        Logger.recordOutput("Bottom Motor Velocity", bottomMotor.encoder.velocity)
+        Logger.recordOutput("Top Shooter/Velocity", topMotor.encoder.velocity)
+        Logger.recordOutput("Bottom Shooter/Velocity", bottomMotor.encoder.velocity)
     }
 }

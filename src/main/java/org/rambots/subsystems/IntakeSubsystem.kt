@@ -51,7 +51,7 @@ object IntakeSubsystem : SubsystemBase() {
     }
 
     override fun periodic() {
-        Logger.recordOutput("Top Motor Intake Percentage", topMotor.encoder.velocity)
-        Logger.recordOutput("Bottom Motor Intake Percentage", bottomMotor.encoder.velocity)
+        Logger.recordOutput("Top Intake/Percentage", topMotor.encoder.velocity)
+        Logger.recordOutput("Bottom Intake/Percentage", bottomMotor.encoder.velocity)
     }
 }
