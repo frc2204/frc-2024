@@ -18,6 +18,7 @@ object ElevatorSubsystem : SubsystemBase() {
         restoreFactoryDefaults()
         setSmartCurrentLimit(5)
         idleMode = CANSparkBase.IdleMode.kBrake
+        inverted = true
         apply {
             pidController.apply {
                 p = ArmConstants.ElevatorKP
@@ -47,13 +48,13 @@ object ElevatorSubsystem : SubsystemBase() {
         get() = motorOne.encoder.position
 
     fun extend(): Command = runOnce{
-        motorOne.pidController.setReference(0.0,CANSparkBase.ControlType.kPosition)
+        motorOne.pidController.setReference(ArmConstants.ElevatorClimbPosition,CANSparkBase.ControlType.kPosition)
     }
     fun retract(): Command = runOnce{
-        motorOne.pidController.setReference(0.0,CANSparkBase.ControlType.kPosition)
+        motorOne.pidController.setReference(ArmConstants.ElevatorRetractPosition,CANSparkBase.ControlType.kPosition)
     }
     fun elevatorIntakePosition(): Command = runOnce{
-        motorOne.pidController.setReference(0.0,CANSparkBase.ControlType.kPosition)
+        motorOne.pidController.setReference(ArmConstants.ElevatorIntakePosition,CANSparkBase.ControlType.kPosition)
     }
     override fun periodic() {
         SmartDashboard.putNumber("Position", position)

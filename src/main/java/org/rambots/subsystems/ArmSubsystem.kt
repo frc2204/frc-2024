@@ -26,6 +26,7 @@ object ArmSubsystem : SubsystemBase() {
                 i = ArmConstants.ArmKI
                 d = ArmConstants.ArmKD
             }
+            inverted = true
         }
         motorTwo.apply {
             restoreFactoryDefaults()

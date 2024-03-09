@@ -27,9 +27,12 @@ object ArmConstants {
     /** Intake Positions */
     const val ArmIntakePosition = 1.0
     const val WristIntakePosition = 1.0
+    const val ElevatorIntakePosition = -50.0
 
     /** Climb Positions */
     const val ArmClimbPosition = -70.0
+    const val ElevatorClimbPosition = -70.0
+    const val ElevatorRetractPosition = 0.0
 
     /** Manual Arm Controls */
     // place holders

@@ -2,8 +2,6 @@ package org.rambots.commands
 
 import edu.wpi.first.wpilibj2.command.Command
 import org.rambots.config.LookUpTable
-import org.rambots.config.Table
-import org.rambots.subsystems.ArmSubsystem
 import org.rambots.subsystems.AutoAimSubsystem
 import org.rambots.subsystems.ShooterSubsystem
 import org.rambots.subsystems.drive.Drive
@@ -13,9 +11,9 @@ import kotlin.math.pow
 import kotlin.math.sqrt
 
 class AutoAim(private val drive : Drive, private val driveController: DriveController) : Command() {
-    private var topPower = 0.0
-    private var bottomPower = 0.0
-    private var feedPower = 0.0
+    private var topVelocity = 0.0
+    private var bottomVelocity = 0.0
+    private var feedVelocity = 0.0
     private var desiredAngle = 0.0
     var armEncoderValue = 0.0
     var wristEncoderValue = 0.0
@@ -31,9 +29,9 @@ class AutoAim(private val drive : Drive, private val driveController: DriveContr
         distance = sqrt(distance)
 
         val table = LookUpTable.getTable(distance.toInt())
-        topPower = table.getTopVelocity()
-        bottomPower = table.getBottomVelocity()
-        feedPower = table.getFeedVelocity()
+        topVelocity = table.getTopVelocity()
+        bottomVelocity = table.getBottomVelocity()
+        feedVelocity = table.getFeedVelocity()
         desiredAngle = table.getAngle()
 
         driveController.setDriveMode(DriveController.DriveModeType.SPEAKER)
@@ -41,6 +39,7 @@ class AutoAim(private val drive : Drive, private val driveController: DriveContr
     }
 
     override fun execute() {
+
     }
 
     override fun isFinished(): Boolean {
