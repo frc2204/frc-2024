@@ -64,7 +64,7 @@ object ArmSubsystem : SubsystemBase() {
         return motorOne.encoder.position
     }
 
-    fun setArmPosition(value: Double) {
+    fun setArmPosition(value: Double): Command = runOnce {
         motorOne.pidController.setReference(value,ControlType.kPosition)
     }
 

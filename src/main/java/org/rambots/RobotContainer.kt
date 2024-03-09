@@ -22,6 +22,8 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser
 import org.rambots.commands.*
+import org.rambots.config.ArmConstants
+import org.rambots.subsystems.ArmSubsystem
 import org.rambots.subsystems.drive.*
 import org.rambots.subsystems.drive.DriveConstants.moduleConfigs
 import org.rambots.subsystems.vision.AprilTagVision
@@ -161,6 +163,7 @@ object RobotContainer {
      */
     private fun configureButtonBindings() {
         drive.defaultCommand = DriveCommands.joystickDrive(drive, driveController, { -controller.leftY }, { -controller.leftX }, { -controller.rightX })
+        ArmSubsystem.defaultCommand = ArmSubsystem.setArmPosition(ArmConstants.ArmIdlePosition)
 
         controller.L1().whileTrue(AmpScoring())
         controller.R2().whileTrue(SourceIntake())

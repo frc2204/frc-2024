@@ -38,6 +38,7 @@ object ArmConstants {
     // place holders
     const val MaximumAngle = 90
     const val MinimumAngle = 30
+    const val ArmIdlePosition = -45.0
 
     /** Limelight */
     const val LimelightMountAngleDegrees = 25.0
