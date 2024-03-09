@@ -3,6 +3,7 @@ package org.rambots.subsystems
 import com.revrobotics.CANSparkBase
 import com.revrobotics.CANSparkLowLevel
 import com.revrobotics.CANSparkMax
+import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import org.littletonrobotics.junction.Logger
 import java.lang.NullPointerException
@@ -36,7 +37,7 @@ object ShooterSubsystem : SubsystemBase() {
         topMotor.pidController.setReference(4000.0,CANSparkBase.ControlType.kVelocity)
         bottomMotor.pidController.setReference(4000.0,CANSparkBase.ControlType.kVelocity)
     }
-    fun shoot(topVelocity: Double, bottomVelocity: Double) {
+    fun shoot(topVelocity: Double, bottomVelocity: Double): Command = runOnce {
         topMotor.pidController.setReference(topVelocity, CANSparkBase.ControlType.kVelocity)
         bottomMotor.pidController.setReference(bottomVelocity, CANSparkBase.ControlType.kVelocity)
     }

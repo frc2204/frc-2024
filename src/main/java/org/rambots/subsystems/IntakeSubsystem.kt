@@ -38,7 +38,7 @@ object IntakeSubsystem : SubsystemBase() {
         topMotor.set(ArmConstants.IntakePower)
         bottomMotor.set(ArmConstants.IntakePower)
     }
-    fun feed(topPower: Double, bottomPower:Double){
+    fun feed(topPower: Double, bottomPower:Double): Command = runOnce {
         topMotor.set(topPower)
         bottomMotor.set(bottomPower)
     }
