@@ -12,7 +12,7 @@ import java.lang.NullPointerException
 object ShooterSubsystem : SubsystemBase() {
     private val topMotor= with(CANSparkMax(ArmConstants.TopShooterCANID,CANSparkLowLevel.MotorType.kBrushless)){
         restoreFactoryDefaults()
-        setSmartCurrentLimit(4)
+        setSmartCurrentLimit(15)
         idleMode = CANSparkBase.IdleMode.kBrake
         apply{
             pidController.apply {
@@ -24,7 +24,7 @@ object ShooterSubsystem : SubsystemBase() {
     }
     private val bottomMotor = with(CANSparkMax(ArmConstants.BottomShooterCANID,CANSparkLowLevel.MotorType.kBrushless)){
         restoreFactoryDefaults()
-        setSmartCurrentLimit(4)
+        setSmartCurrentLimit(15)
         idleMode = CANSparkBase.IdleMode.kBrake
         apply{
             pidController.apply {
@@ -35,8 +35,8 @@ object ShooterSubsystem : SubsystemBase() {
         }
     }
     fun shoot(){
-        topMotor.pidController.setReference(4000.0,CANSparkBase.ControlType.kVelocity)
-        bottomMotor.pidController.setReference(4000.0,CANSparkBase.ControlType.kVelocity)
+        topMotor.pidController.setReference(1000.0,CANSparkBase.ControlType.kVelocity)
+        bottomMotor.pidController.setReference(1000.0,CANSparkBase.ControlType.kVelocity)
     }
     fun shoot(topVelocity: Double, bottomVelocity: Double): Command = runOnce {
         topMotor.pidController.setReference(topVelocity, CANSparkBase.ControlType.kVelocity)
