@@ -22,6 +22,8 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser
 import org.rambots.commands.*
+import org.rambots.subsystems.ArmSubsystem
+import org.rambots.subsystems.ElevatorSubsystem
 import org.rambots.subsystems.drive.*
 import org.rambots.subsystems.drive.DriveConstants.moduleConfigs
 import org.rambots.subsystems.vision.AprilTagVision
@@ -30,6 +32,7 @@ import org.rambots.subsystems.vision.AprilTagVisionIOLimelight
 import org.rambots.subsystems.vision.AprilTagVisionIOPhotonVisionSIM
 import org.rambots.util.VisionHelpers.TimestampedVisionUpdate
 import java.util.function.Consumer
+import kotlin.math.pow
 
 
 /**
@@ -74,7 +77,7 @@ object RobotContainer {
                 // new ModuleIOTalonFX(2),
                 // new ModuleIOTalonFX(3));
 //                flywheel = Flywheel(FlywheelIOTalonFX())
-                aprilTagVision = AprilTagVision(AprilTagVisionIOLimelight("limelight"))
+                aprilTagVision = AprilTagVision(AprilTagVisionIOLimelight("limelight-three"))
             }
 
             Constants.Mode.SIM -> {
@@ -160,10 +163,24 @@ object RobotContainer {
      * instantiating a [GenericHID] or one of its subclasses ([ ] or [XboxController]), and then passing it to a [ ].
      */
     private fun configureButtonBindings() {
-        drive.defaultCommand = DriveCommands.joystickDrive(drive, driveController, { -controller.leftY }, { -controller.leftX }, { -controller.rightX })
+        drive.defaultCommand = DriveCommands.joystickDrive(
+            drive,
+            driveController,
+            { (-controller.leftY).pow(3.0) },
+            { (-controller.leftX).pow(3.0) },
+            { -controller.rightX }
+        )
+        ArmSubsystem.defaultCommand = ArmPositionCommand { ArmSubsystem.desiredPosition }
+        ElevatorSubsystem.defaultCommand = ElevatorPositionCommand { ElevatorSubsystem.desiredPosition }
 
         controller.L1().whileTrue(AmpScoring())
         controller.R2().whileTrue(SourceIntake())
+
+        controller.square().whileTrue(ArmPositionCommand { -70.0 })
+        controller.circle().whileTrue(ArmPositionCommand { 0.0 })
+
+        controller.povUp().whileTrue(ElevatorPositionCommand { 0.0 })
+        controller.povDown().whileTrue(ElevatorPositionCommand { -70.0 })
 
 //        controller.a().whileTrue(PathFinderAndFollow(driveController.driveModeType))
 

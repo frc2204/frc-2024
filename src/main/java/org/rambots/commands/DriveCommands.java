@@ -45,7 +45,7 @@ public class DriveCommands {
             DoubleSupplier xSupplier,
             DoubleSupplier ySupplier,
             DoubleSupplier omegaSupplier) {
-        return Commands.run(
+        return Commands.runOnce(
                 () -> {
                     // Apply deadband
                     double linearMagnitude =
