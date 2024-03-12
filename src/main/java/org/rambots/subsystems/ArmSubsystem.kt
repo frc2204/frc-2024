@@ -32,10 +32,14 @@ object ArmSubsystem : SubsystemBase() {
         setSmartCurrentLimit(40)
     }
 
-    private val follower = CANSparkMax(ARM_NEO_FOLLOWER_ID, CANSparkLowLevel.MotorType.kBrushless)
+    private val follower = CANSparkMax(ARM_NEO_FOLLOWER_ID, CANSparkLowLevel.MotorType.kBrushless).apply {
+        restoreFactoryDefaults()
+
+        idleMode = CANSparkBase.IdleMode.kBrake
+        setSmartCurrentLimit(40)
+    }
 
     init {
-        follower.restoreFactoryDefaults()
         follower.follow(leader, true)
     }
 

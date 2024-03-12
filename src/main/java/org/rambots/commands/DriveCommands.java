@@ -39,27 +39,16 @@ public class DriveCommands {
     /**
      * Field relative drive command using two joysticks (controlling linear and angular velocities).
      */
-    public static Command joystickDrive(
-            Drive drive,
-            DriveController driveMode,
-            DoubleSupplier xSupplier,
-            DoubleSupplier ySupplier,
-            DoubleSupplier omegaSupplier) {
+    public static Command joystickDrive(Drive drive, DriveController driveMode, DoubleSupplier xSupplier, DoubleSupplier ySupplier, DoubleSupplier omegaSupplier) {
         return Commands.runOnce(
                 () -> {
                     // Apply deadband
-                    double linearMagnitude =
-                            MathUtil.applyDeadband(
-                                    Math.hypot(xSupplier.getAsDouble(), ySupplier.getAsDouble()), DEADBAND);
-                    Rotation2d linearDirection =
-                            new Rotation2d(xSupplier.getAsDouble(), ySupplier.getAsDouble());
+                    double linearMagnitude = MathUtil.applyDeadband(Math.hypot(xSupplier.getAsDouble(), ySupplier.getAsDouble()), DEADBAND);
+                    Rotation2d linearDirection = new Rotation2d(xSupplier.getAsDouble(), ySupplier.getAsDouble());
                     double omega = MathUtil.applyDeadband(omegaSupplier.getAsDouble(), DEADBAND);
                     if (driveMode.isHeadingControlled()) {
                         final var targetAngle = driveMode.getHeadingAngle();
-                        omega =
-                                Drive.getThetaController()
-                                        .calculate(
-                                                drive.getPose().getRotation().getRadians(), targetAngle.get().getRadians());
+                        omega = Drive.getThetaController().calculate(drive.getPose().getRotation().getRadians(), targetAngle.get().getRadians());
                         if (Drive.getThetaController().atGoal()) {
                             omega = 0;
                         }
@@ -71,19 +60,12 @@ public class DriveCommands {
                     omega = Math.copySign(omega * omega, omega);
 
                     // Calcaulate new linear velocity
-                    Translation2d linearVelocity =
-                            new Pose2d(new Translation2d(), linearDirection)
-                                    .transformBy(new Transform2d(linearMagnitude, 0.0, new Rotation2d()))
-                                    .getTranslation();
+                    Translation2d linearVelocity = new Pose2d(new Translation2d(), linearDirection).transformBy(new Transform2d(linearMagnitude, 0.0, new Rotation2d())).getTranslation();
 
                     // Convert to field relative speeds & send command
-                    boolean isFlipped =
-                            DriverStation.getAlliance().isPresent()
-                                    && DriverStation.getAlliance().get() == Alliance.Red;
+                    boolean isFlipped = DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red;
                     drive.runVelocity(
-                            ChassisSpeeds.fromFieldRelativeSpeeds(
-                                    linearVelocity.getX() * drivetrainConfig.maxLinearVelocity(),
-                                    linearVelocity.getY() * drivetrainConfig.maxLinearVelocity(),
+                            ChassisSpeeds.fromFieldRelativeSpeeds(linearVelocity.getX() * drivetrainConfig.maxLinearVelocity(), linearVelocity.getY() * drivetrainConfig.maxLinearVelocity(),
                                     omega * drivetrainConfig.maxAngularVelocity(),
                                     isFlipped
                                             ? drive.getRotation().plus(new Rotation2d(Math.PI))

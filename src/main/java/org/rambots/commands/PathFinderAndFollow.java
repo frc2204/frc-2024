@@ -18,6 +18,7 @@ import java.util.function.Supplier;
  * A command that runs pathfindThenFollowPath based on the current drive mode.
  */
 public class PathFinderAndFollow extends Command {
+
     private final Supplier<DriveController.DriveModeType> driveModeSupplier;
     private Command scoreCommand;
     private Command pathRun;

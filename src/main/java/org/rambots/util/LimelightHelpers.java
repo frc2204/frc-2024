@@ -126,9 +126,6 @@ public class LimelightHelpers {
         return getLimelightNTString(limelightName, "json");
     }
 
-    /////
-    /////
-
     /**
      * Switch to getBotPose
      *

@@ -35,12 +35,18 @@ object ElevatorSubsystem : SubsystemBase() {
         setSmartCurrentLimit(40)
     }
 
-    private val follower = CANSparkMax(ELEVATOR_FOLLOWER_ID, CANSparkLowLevel.MotorType.kBrushless)
+    private val follower = CANSparkMax(ELEVATOR_FOLLOWER_ID, CANSparkLowLevel.MotorType.kBrushless).apply {
+        restoreFactoryDefaults()
+
+        idleMode = CANSparkBase.IdleMode.kBrake
+        setSmartCurrentLimit(40)
+    }
+
 
     init {
-        follower.restoreFactoryDefaults()
         follower.follow(leader, true)
     }
+
 
     override fun periodic() {
         Logger.recordOutput("Elevator/DesiredPosition", desiredPosition)

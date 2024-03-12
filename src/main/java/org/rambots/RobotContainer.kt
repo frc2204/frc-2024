@@ -14,16 +14,15 @@ package org.rambots
 
 import com.pathplanner.lib.auto.AutoBuilder
 import edu.wpi.first.math.geometry.*
-import edu.wpi.first.wpilibj.PS5Controller
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup
+import edu.wpi.first.wpilibj2.command.Subsystem
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser
 import org.rambots.commands.*
-import org.rambots.subsystems.ArmSubsystem
-import org.rambots.subsystems.ElevatorSubsystem
+import org.rambots.subsystems.*
 import org.rambots.subsystems.drive.*
 import org.rambots.subsystems.drive.DriveConstants.moduleConfigs
 import org.rambots.subsystems.vision.AprilTagVision
@@ -31,8 +30,6 @@ import org.rambots.subsystems.vision.AprilTagVisionIO
 import org.rambots.subsystems.vision.AprilTagVisionIOLimelight
 import org.rambots.subsystems.vision.AprilTagVisionIOPhotonVisionSIM
 import org.rambots.util.VisionHelpers.TimestampedVisionUpdate
-import java.util.function.Consumer
-import kotlin.math.pow
 
 
 /**
@@ -166,21 +163,56 @@ object RobotContainer {
         drive.defaultCommand = DriveCommands.joystickDrive(
             drive,
             driveController,
-            { (-controller.leftY).pow(3.0) },
-            { (-controller.leftX).pow(3.0) },
+            { -controller.leftY },
+            { -controller.leftX },
             { -controller.rightX }
         )
         ArmSubsystem.defaultCommand = ArmPositionCommand { ArmSubsystem.desiredPosition }
         ElevatorSubsystem.defaultCommand = ElevatorPositionCommand { ElevatorSubsystem.desiredPosition }
+        WristSubsystem.defaultCommand = WristPositionCommand { WristSubsystem.desiredPosition }
 
-        controller.L1().whileTrue(AmpScoring())
-        controller.R2().whileTrue(SourceIntake())
 
-        controller.square().whileTrue(ArmPositionCommand { -70.0 })
-        controller.circle().whileTrue(ArmPositionCommand { 0.0 })
+//        controller.L1().whileTrue(AmpScoring())
+//        controller.R2().whileTrue(SourceIntake())
+//
+//        controller.square().whileTrue(ArmPositionCommand { -70.0 })
+//        controller.circle().whileTrue(ArmPositionCommand { 0.0 })
 
-        controller.povUp().whileTrue(ElevatorPositionCommand { 0.0 })
-        controller.povDown().whileTrue(ElevatorPositionCommand { -70.0 })
+//        controller.povUp().whileTrue(ElevatorPositionCommand { 0.0 })
+//        controller.povDown().whileTrue(ElevatorPositionCommand { -48.0 })
+//
+//        controller.povLeft().whileTrue(WristPositionCommand { -125.0 })
+//        controller.povRight().whileTrue(WristPositionCommand { 0.0 })
+
+//        controller.cross().whileTrue(Commands.startEnd({ ShooterSubsystem.intake() }, { ShooterSubsystem.stopIntake()}, ShooterSubsystem ))
+//        controller.circle().whileTrue(Commands.startEnd({ShooterSubsystem.shoot(3000.0, 3000.0)}, {ShooterSubsystem.stopShooter()}, ShooterSubsystem))
+
+        controller.L2().onTrue(SuperStructure.intakeCommand)
+        controller.L2().onFalse(SuperStructure.homeCommandFromIntake)
+
+        controller.circle().onTrue(Commands.runOnce({ ShooterSubsystem.shoot(6000.0, 6000.0) }, ShooterSubsystem))
+        controller.circle().onFalse(Commands.runOnce({ ShooterSubsystem.stopShooter() }, ShooterSubsystem))
+
+        controller.square().onTrue(Commands.runOnce({ ShooterSubsystem.intake() }, ShooterSubsystem))
+        controller.square().onFalse(Commands.runOnce({ ShooterSubsystem.stopIntake() }, ShooterSubsystem))
+
+        controller.povUp().whileTrue(Commands.runOnce({ WristSubsystem.desiredPosition++}))
+        controller.povDown().whileTrue(Commands.runOnce({ WristSubsystem.desiredPosition--}))
+
+
+//        controller.R2().whileTrue(
+//            Commands.startEnd(
+//                {
+//                    ShooterSubsystem.shoot(7000.0, 7000.0)
+//                    ShooterSubsystem.intake()
+//                },
+//                {
+//                    ShooterSubsystem.stopShooter()
+//                    ShooterSubsystem.stopIntake()
+//                },
+//                ShooterSubsystem
+//            )
+//        )
 
 //        controller.a().whileTrue(PathFinderAndFollow(driveController.driveModeType))
 

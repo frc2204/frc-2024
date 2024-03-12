@@ -19,6 +19,7 @@ import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.hardware.ParentDevice;
 import org.littletonrobotics.junction.Logger;
 
+import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.OptionalDouble;

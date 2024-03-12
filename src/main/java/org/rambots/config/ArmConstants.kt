@@ -7,9 +7,10 @@ object ArmConstants {
     const val ARM_NEO_LEADER_ID = 13
     const val ARM_NEO_FOLLOWER_ID = 14
 
+    const val ARM_ACCEPTABLE_ERROR = 0.5
+
     val ARM_PID = PIDConstants(0.02, 0.0, 0.0)
 
-    val ARM_ACCEPTABLE_ERROR = 0.5
 
 
 

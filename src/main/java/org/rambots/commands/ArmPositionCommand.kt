@@ -1,14 +1,11 @@
 package org.rambots.commands
 
 import edu.wpi.first.wpilibj2.command.Command
-import org.rambots.config.ArmConstants.ARM_ACCEPTABLE_ERROR
 import org.rambots.subsystems.ArmSubsystem
-import org.rambots.util.CommandUtils.generateErrorRange
 
-class ArmPositionCommand(private val angle: () -> Double, private val finishState: () -> Double) : Command() {
+class ArmPositionCommand(private val angle: () -> Double, private val finishCondition: (position: Double) -> Boolean) : Command() {
 
-    constructor(angle: () -> Double) : this(angle, angle)
-    constructor(angle: Double) : this ({angle})
+    constructor(angle: () -> Double) : this(angle, { true })
 
     init {
         addRequirements(ArmSubsystem)
@@ -23,7 +20,7 @@ class ArmPositionCommand(private val angle: () -> Double, private val finishStat
     }
 
     override fun isFinished(): Boolean {
-        return generateErrorRange(ArmSubsystem.position, ARM_ACCEPTABLE_ERROR).contains(finishState.invoke())
+        return finishCondition.invoke(ArmSubsystem.position)
     }
 
 }
