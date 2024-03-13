@@ -3,8 +3,11 @@ package org.rambots.subsystems
 import com.revrobotics.CANSparkBase
 import com.revrobotics.CANSparkLowLevel
 import com.revrobotics.CANSparkMax
+import edu.wpi.first.wpilibj.DigitalInput
+import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger
+import org.rambots.Robot
 import org.rambots.config.ArmConstants.ARM_PID
 import org.rambots.config.WristConstants.WRIST_ID
 import org.rambots.config.WristConstants.WRIST_PID
@@ -13,6 +16,9 @@ object WristSubsystem : SubsystemBase() {
 
     var offset = 0.0
     var desiredPosition = 0.0 + offset
+
+    private val limitSwitch = DigitalInput(3)
+
     var position
         get() = motor.encoder.position
         set(value) {
@@ -32,12 +38,20 @@ object WristSubsystem : SubsystemBase() {
         setSmartCurrentLimit(40)
     }
 
+    private fun stop() {
+        motor.stopMotor()
+    }
+
     override fun periodic() {
         Logger.recordOutput("Wrist/DesiredPosition", desiredPosition)
         Logger.recordOutput("Wrist/Offset", offset)
         Logger.recordOutput("Wrist/Position", motor.encoder.position)
         Logger.recordOutput("Wrist/Velocity", motor.encoder.velocity)
         Logger.recordOutput("Wrist/Current", motor.outputCurrent)
+
+
+        if(Robot.isDisabled && limitSwitch.get())
+            motor.encoder.position = 0.0
     }
 
 }
