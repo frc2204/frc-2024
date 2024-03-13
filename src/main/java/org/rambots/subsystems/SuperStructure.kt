@@ -42,4 +42,10 @@ object SuperStructure {
         Commands.runOnce({ ShooterSubsystem.stopIntake() }, ShooterSubsystem),
         homeCommand
     )
+    val climb get() = SequentialCommandGroup(
+        ArmPositionCommand({ -70.0 } , { it < -50 }),
+        ElevatorPositionCommand({ -70.0 } , { it < -60 }),
+        WaitCommand(1.0),
+        ElevatorPositionCommand { 0.0 }
+    )
 }
