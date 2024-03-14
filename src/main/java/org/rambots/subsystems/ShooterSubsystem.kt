@@ -37,6 +37,7 @@ object ShooterSubsystem : SubsystemBase() {
             d = SHOOTER_PID.kD
         }
     }
+
     val shooterBottom = CANSparkMax(SHOOTER_BOTTOM_ID, CANSparkLowLevel.MotorType.kBrushless).apply {
         restoreFactoryDefaults()
 
@@ -61,7 +62,7 @@ object ShooterSubsystem : SubsystemBase() {
         idleMode = CANSparkBase.IdleMode.kBrake
     }
 
-    val intakeCurrent get() = intakeTopLead.outputCurrent
+    private val intakeCurrent get() = intakeTopLead.outputCurrent
 
     val intakeStalling get() = intakeCurrent > INTAKE_STALL_CURRENT
 

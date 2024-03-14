@@ -41,6 +41,8 @@ public class AprilTagVision extends SubsystemBase {
     };
     private Map<Integer, Double> lastFrameTimes = new HashMap<>();
     private Map<Integer, Double> lastTagDetectionTimes = new HashMap<>();
+    private boolean hasSeenTarget = false;
+    private boolean isTargetVisible = false;
 
     public AprilTagVision(AprilTagVisionIO... io) {
         System.out.println("[Init] Creating AprilTagVision");
@@ -74,6 +76,14 @@ public class AprilTagVision extends SubsystemBase {
         sendResultsToPoseEstimator(visionUpdates);
     }
 
+    public boolean hasSeenTarget() {
+        return hasSeenTarget;
+    }
+
+    public boolean isTargetVisible() {
+        return isTargetVisible;
+    }
+
     /**
      * Process the pose estimates and generate vision updates.
      *
@@ -81,8 +91,11 @@ public class AprilTagVision extends SubsystemBase {
      */
     private List<VisionHelpers.TimestampedVisionUpdate> processPoseEstimates() {
         List<VisionHelpers.TimestampedVisionUpdate> visionUpdates = new ArrayList<>();
+        isTargetVisible = false;
         for (int instanceIndex = 0; instanceIndex < io.length; instanceIndex++) {
             for (VisionHelpers.PoseEstimate poseEstimates : inputs[instanceIndex].poseEstimates) {
+                isTargetVisible = true;
+                hasSeenTarget = true;
                 if (shouldSkipPoseEstimate(poseEstimates)) {
                     continue;
                 }

@@ -16,8 +16,6 @@ import com.pathplanner.lib.auto.AutoBuilder
 import edu.wpi.first.math.geometry.*
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup
-import edu.wpi.first.wpilibj2.command.Subsystem
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser
@@ -41,7 +39,6 @@ import org.rambots.util.VisionHelpers.TimestampedVisionUpdate
 object RobotContainer {
     // Subsystems
     private var drive: Drive
-//    private var flywheel: Flywheel
     private var aprilTagVision: AprilTagVision
     private val driveController = DriveController()
 
@@ -51,10 +48,16 @@ object RobotContainer {
     // Dashboard inputs
     private val autoChooser: LoggedDashboardChooser<Command>
 
+    val hasLocalized get() = aprilTagVision.hasSeenTarget()
+    val hasActiveTag get() = aprilTagVision.isTargetVisible
+
     //   private final LoggedTunableNumber flywheelSpeedInput =
     //       new LoggedTunableNumber("Flywheel Speed", 1500.0);
     /** The container for the robot. Contains subsystems, OI devices, and commands.  */
     init {
+
+        LightingSubsystem
+
         when (Constants.getMode()) {
             Constants.Mode.REAL -> {
                 // Real robot, instantiate hardware IO implementations

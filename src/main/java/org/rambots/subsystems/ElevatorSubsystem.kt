@@ -51,9 +51,13 @@ object ElevatorSubsystem : SubsystemBase() {
     override fun periodic() {
         Logger.recordOutput("Elevator/DesiredPosition", desiredPosition)
         Logger.recordOutput("Elevator/Offset", offset)
-        Logger.recordOutput("Elevator/Position", leader.encoder.position)
-        Logger.recordOutput("Elevator/Velocity", leader.encoder.velocity)
-        Logger.recordOutput("Elevator/Current", leader.outputCurrent)
+        Logger.recordOutput("Elevator/Leader/Position", leader.encoder.position)
+        Logger.recordOutput("Elevator/Leader/Velocity", leader.encoder.velocity)
+        Logger.recordOutput("Elevator/Leader/Current", leader.outputCurrent)
+
+        Logger.recordOutput("Elevator/Follower/Position", follower.encoder.position)
+        Logger.recordOutput("Elevator/Follower/Velocity", follower.encoder.velocity)
+        Logger.recordOutput("Elevator/Follower/Current", follower.outputCurrent)
     }
 
 }

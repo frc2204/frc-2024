@@ -8,6 +8,7 @@ import org.rambots.commands.ArmPositionCommand
 import org.rambots.commands.ElevatorPositionCommand
 import org.rambots.commands.ShooterCommand
 import org.rambots.commands.WristPositionCommand
+import org.rambots.subsystems.lighting.BlinkinPattern
 
 object SuperStructure {
 
@@ -18,7 +19,10 @@ object SuperStructure {
     )
 
     val homeCommandFromIntake get() = SequentialCommandGroup(
-        Commands.runOnce({ ShooterSubsystem.stopIntake()}, ShooterSubsystem),
+        Commands.runOnce({
+            ShooterSubsystem.stopIntake()
+            LightingSubsystem.set(BlinkinPattern.GREEN)
+        }, ShooterSubsystem),
         WristPositionCommand({ 0.0 }, { it > -55.0 }),
         ElevatorPositionCommand({ 0.0 }, { it < 5.0 })
     )
@@ -27,7 +31,10 @@ object SuperStructure {
         ArmPositionCommand ({ 0.0 }, { it < 5.0 }),
         ElevatorPositionCommand ({ -48.0 }, { it < -30.0 }),
         WristPositionCommand ({ -125.0 }, { true }),
-        Commands.runOnce ({ ShooterSubsystem.intake()}, ShooterSubsystem),
+        Commands.runOnce ({
+            ShooterSubsystem.intake()
+            LightingSubsystem.set(BlinkinPattern.OFF)
+        }, ShooterSubsystem),
         WaitCommand(0.5),
         waitUntil { ShooterSubsystem.intakeStalling },
         homeCommandFromIntake
