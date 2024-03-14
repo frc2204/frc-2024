@@ -38,9 +38,9 @@ import org.rambots.util.VisionHelpers.TimestampedVisionUpdate
  */
 object RobotContainer {
     // Subsystems
-    private var drive: Drive
+    public var drive: Drive
     private var aprilTagVision: AprilTagVision
-    private val driveController = DriveController()
+    public val driveController = DriveController()
 
     // Controller
     private val controller = CommandPS5Controller(0)

@@ -4,10 +4,9 @@ import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.Commands.waitUntil
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup
 import edu.wpi.first.wpilibj2.command.WaitCommand
-import org.rambots.commands.ArmPositionCommand
-import org.rambots.commands.ElevatorPositionCommand
-import org.rambots.commands.ShooterCommand
-import org.rambots.commands.WristPositionCommand
+import org.rambots.RobotContainer
+import org.rambots.commands.*
+import org.rambots.subsystems.drive.Drive
 import org.rambots.subsystems.lighting.BlinkinPattern
 
 object SuperStructure {
@@ -55,4 +54,16 @@ object SuperStructure {
         WaitCommand(1.0),
         ElevatorPositionCommand { 0.0 }
     )
+
+    val autoShoot get() = SequentialCommandGroup(
+        ArmPositionCommand ({ 0.0 }, { it < 5.0 }),
+        WristPositionCommand({ -25.0 }, { it < -20.0 }),
+        ShooterCommand({2000.0}, {1500.0}, {topVelocity, bottomVelocity -> ShooterSubsystem.topVelocity >= topVelocity && ShooterSubsystem.bottomVelocity >= bottomVelocity}),
+        AutoAimCommand(RobotContainer.drive, RobotContainer.driveController),
+        Commands.runOnce({ ShooterSubsystem.intake() }, ShooterSubsystem),
+        Commands.runOnce({ ShooterSubsystem.stopShooter() }, ShooterSubsystem),
+        Commands.runOnce({ ShooterSubsystem.stopIntake() }, ShooterSubsystem),
+        homeCommand
+    )
+
 }
