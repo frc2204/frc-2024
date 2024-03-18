@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser
+import org.rambots.RobotContainer.driveController
 import org.rambots.commands.*
 import org.rambots.subsystems.*
 import org.rambots.subsystems.drive.*
@@ -173,6 +174,8 @@ object RobotContainer {
             { (-controller.leftX).pow(1.0) },
             { (-controller.rightX).pow(1.0) }
         )
+
+        /* default commands are continuously scheduled after ending, and will continuously move to desired position */
         ArmSubsystem.defaultCommand = ArmPositionCommand { ArmSubsystem.desiredPosition }
         ElevatorSubsystem.defaultCommand = ElevatorPositionCommand { ElevatorSubsystem.desiredPosition }
         WristSubsystem.defaultCommand = WristPositionCommand { WristSubsystem.desiredPosition }
