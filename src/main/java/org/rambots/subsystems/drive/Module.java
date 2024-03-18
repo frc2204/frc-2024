@@ -21,6 +21,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import org.littletonrobotics.junction.Logger;
 import org.rambots.Constants;
 
+import static org.rambots.subsystems.drive.DriveConstants.moduleConstants;
 import static org.rambots.subsystems.drive.DriveConstants.wheelRadius;
 
 public class Module {
@@ -44,6 +45,10 @@ public class Module {
         // separate robot with different tuning)
         switch (Constants.getMode()) {
             case REAL:
+                driveFeedforward = new SimpleMotorFeedforward(0.1, 0.13);
+                driveFeedback = new PIDController(moduleConstants.driveKp(), 0.0, moduleConstants.drivekD());
+                turnFeedback = new PIDController(moduleConstants.turnKp(), 0.0, moduleConstants.turnkD());
+                break;
             case REPLAY:
                 driveFeedforward = new SimpleMotorFeedforward(0.1, 0.13);
                 driveFeedback = new PIDController(0.05, 0.0, 0.0);

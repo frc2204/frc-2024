@@ -42,7 +42,6 @@ object ElevatorSubsystem : SubsystemBase() {
         setSmartCurrentLimit(40)
     }
 
-
     init {
         follower.follow(leader, true)
     }

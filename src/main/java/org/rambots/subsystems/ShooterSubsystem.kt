@@ -28,14 +28,6 @@ object ShooterSubsystem : SubsystemBase() {
 
         idleMode = CANSparkBase.IdleMode.kCoast
 
-        pidController.apply {
-            setSmartMotionMaxVelocity(5700.0, 0)
-            setSmartMotionMaxAccel(7000.0, 0)
-
-            p = SHOOTER_PID.kP
-            i = SHOOTER_PID.kI
-            d = SHOOTER_PID.kD
-        }
     }
 
     val shooterBottom = CANSparkMax(SHOOTER_BOTTOM_ID, CANSparkLowLevel.MotorType.kBrushless).apply {
@@ -43,14 +35,6 @@ object ShooterSubsystem : SubsystemBase() {
 
         idleMode = CANSparkBase.IdleMode.kCoast
 
-        pidController.apply {
-            setSmartMotionMaxVelocity(5700.0, 0)
-            setSmartMotionMaxAccel(7000.0, 0)
-
-            p = SHOOTER_PID.kP
-            i = SHOOTER_PID.kI
-            d = SHOOTER_PID.kD
-        }
     }
 
     private val intakeTopLead = CANSparkMax(INTAKE_TOP_ID, CANSparkLowLevel.MotorType.kBrushless).apply {
@@ -82,7 +66,7 @@ object ShooterSubsystem : SubsystemBase() {
         intakeTopLead.stopMotor()
     }
 
-    fun shoot(topVelocity: Double, bottomVelocity: Double) {
+    fun shoot() {
         shooterTop.set(-1.0)
         shooterBottom.set(-1.0)
     }

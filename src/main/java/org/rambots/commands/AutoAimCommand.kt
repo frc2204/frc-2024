@@ -1,47 +1,57 @@
 package org.rambots.commands
 
-import com.pathplanner.lib.auto.AutoBuilder
-import com.pathplanner.lib.path.PathConstraints
-import edu.wpi.first.math.util.Units
+import edu.wpi.first.math.geometry.Pose2d
+import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap
 import edu.wpi.first.wpilibj2.command.Command
-import edu.wpi.first.wpilibj2.command.Commands
+import org.rambots.auto.AutoConstants.CLOSEST_AUTOAIM_DISTANCE
+import org.rambots.auto.AutoConstants.FURTHEST_AUTOAIM_DISTANCE
 import org.rambots.subsystems.AutoAimSubsystem
-import org.rambots.subsystems.drive.Drive
+import org.rambots.subsystems.LightingSubsystem
+import org.rambots.subsystems.ShooterSubsystem
 import org.rambots.subsystems.drive.DriveController
+import org.rambots.subsystems.lighting.BlinkinPattern
 import org.rambots.util.AllianceFlipUtil
+import org.rambots.util.FieldConstants
 
-class AutoAimCommand(private val drive: Drive, private val dController: DriveController): Command() {
+class AutoAimCommand(private val controller: DriveController, private val pose: () -> Pose2d): Command() {
 
-    private val closestPose
-        get() = AutoAimSubsystem.getNearestShotPose(drive.pose)
 
-    private lateinit var path: Command
+    private val wristAngle = InterpolatingDoubleTreeMap().apply {
+        put(CLOSEST_AUTOAIM_DISTANCE, -75.0)
+        put(2.4, -60.0)
+        put(2.5, -58.14)
+        put(3.98, -42.4)
+        put(FURTHEST_AUTOAIM_DISTANCE, 0.0)
+    }
 
     init {
         addRequirements(AutoAimSubsystem)
     }
 
     override fun initialize() {
-        dController.setDriveMode(DriveController.DriveModeType.SPEAKER)
-        dController.enableHeadingControl()
+//        controller.enableSpeakerHeading()
+//        controller.enableHeadingControl()
+        ShooterSubsystem.shoot()
+    }
 
-        path =
-            AutoBuilder.pathfindToPose(
-                AllianceFlipUtil.apply(closestPose),
-                PathConstraints(4.0, 4.0, Units.degreesToRadians(360.0), Units.degreesToRadians(540.0)),
-                0.0,
-                0.0
-            )
-        val scoreCommand = Commands.sequence(path)
-        scoreCommand.schedule()
+    override fun execute() {
+        val distance = pose.invoke().translation.getDistance(AllianceFlipUtil.apply(FieldConstants.Speaker.centerSpeakerOpening.translation))
+        if (distance in CLOSEST_AUTOAIM_DISTANCE..FURTHEST_AUTOAIM_DISTANCE) {
+            LightingSubsystem.set(BlinkinPattern.DARK_GREEN)
+        } else {
+            LightingSubsystem.set(BlinkinPattern.RED)
+        }
+        WristPositionCommand { wristAngle.get(distance) }.schedule()
     }
 
     override fun isFinished(): Boolean {
-        return path.isFinished
+        return false
     }
 
     override fun end(interrupted: Boolean) {
-        path.cancel()
-        dController.disableHeadingControl()
+//        controller.disableHeadingControl()
+        WristPositionCommand { 0.0 }.schedule()
+        ShooterSubsystem.stopShooter()
     }
+
 }

@@ -40,9 +40,9 @@ public final class DriveConstants {
                 case COMPBOT -> new ModuleConstants(
                         0.1,
                         0.13,
-                        0.1,
+                        0.07,
                         0.0,
-                        10.0,
+                        5.0,
                         0.0,
                         SwerveXReductions.OldGen736.reduction,
                         SwerveXReductions.TURN.reduction);
@@ -100,7 +100,7 @@ public final class DriveConstants {
                                 5,
                                 6,
                                 11,
-                                Rotation2d.fromRotations(-.382).plus(Rotation2d.fromDegrees(180)),
+                                Rotation2d.fromRotations(-.339).plus(Rotation2d.fromDegrees(180)),
                                 true),
                         new ModuleConfig(
                                 7, 8, 12, Rotation2d.fromRotations(.334).plus(Rotation2d.fromDegrees(180)), true)

@@ -39,6 +39,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import org.littletonrobotics.junction.Logger;
+import org.rambots.util.AllianceFlipUtil;
+import org.rambots.util.FieldConstants;
 import org.rambots.util.VisionHelpers;
 
 import java.util.List;
@@ -208,6 +210,8 @@ public class Drive extends SubsystemBase {
         Logger.recordOutput("SwerveStates/Measured", getModuleStates());
         Logger.recordOutput("Odometry/PoseEstimation", getPose());
         Logger.recordOutput("Odometry/Drive", getDrive());
+
+        Logger.recordOutput("Odometry/DistanceToSpeaker", getPose().getTranslation().getDistance(AllianceFlipUtil.apply(FieldConstants.Speaker.centerSpeakerOpening.getTranslation())));
     }
 
     /**

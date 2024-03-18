@@ -6,7 +6,7 @@ object WristConstants {
 
     const val WRIST_ID = 21
 
-    val WRIST_PID = PIDConstants(0.04, 0.0, 0.0)
+    val WRIST_PID = PIDConstants(0.07, 0.0, 0.0)
 
     const val WRIST_INTAKE_POSITION = -116.0
 

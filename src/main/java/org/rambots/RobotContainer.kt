@@ -17,6 +17,7 @@ import edu.wpi.first.math.geometry.*
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser
 import org.rambots.commands.*
@@ -28,6 +29,7 @@ import org.rambots.subsystems.vision.AprilTagVisionIO
 import org.rambots.subsystems.vision.AprilTagVisionIOLimelight
 import org.rambots.subsystems.vision.AprilTagVisionIOPhotonVisionSIM
 import org.rambots.util.VisionHelpers.TimestampedVisionUpdate
+import kotlin.math.pow
 
 
 /**
@@ -44,6 +46,7 @@ object RobotContainer {
 
     // Controller
     private val controller = CommandPS5Controller(0)
+    private val xbox = CommandXboxController(1)
 
     // Dashboard inputs
     private val autoChooser: LoggedDashboardChooser<Command>
@@ -166,17 +169,17 @@ object RobotContainer {
         drive.defaultCommand = DriveCommands.joystickDrive(
             drive,
             driveController,
-            { -controller.leftY },
-            { -controller.leftX },
-            { -controller.rightX }
+            { (-controller.leftY).pow(1.0) },
+            { (-controller.leftX).pow(1.0) },
+            { (-controller.rightX).pow(1.0) }
         )
         ArmSubsystem.defaultCommand = ArmPositionCommand { ArmSubsystem.desiredPosition }
         ElevatorSubsystem.defaultCommand = ElevatorPositionCommand { ElevatorSubsystem.desiredPosition }
         WristSubsystem.defaultCommand = WristPositionCommand { WristSubsystem.desiredPosition }
 
 
-//        controller.L1().whileTrue(AmpScoring())
-//        controller.R2().whileTrue(SourceIntake())
+        controller.L1().whileTrue(AmpScoring())
+        controller.R2().whileTrue(SourceIntake())
 //
 //        controller.square().whileTrue(ArmPositionCommand { -70.0 })
 //        controller.circle().whileTrue(ArmPositionCommand { 0.0 })
@@ -190,18 +193,39 @@ object RobotContainer {
 //        controller.cross().whileTrue(Commands.startEnd({ ShooterSubsystem.intake() }, { ShooterSubsystem.stopIntake()}, ShooterSubsystem ))
 //        controller.circle().whileTrue(Commands.startEnd({ShooterSubsystem.shoot(3000.0, 3000.0)}, {ShooterSubsystem.stopShooter()}, ShooterSubsystem))
 
+        controller.cross().onTrue(SuperStructure.ampCommand)
+        controller.cross().onFalse(SuperStructure.ampHomingCommand)
+
         controller.L2().onTrue(SuperStructure.intakeCommand)
         controller.L2().onFalse(SuperStructure.homeCommandFromIntake)
-
-        controller.circle().onTrue(Commands.runOnce({ ShooterSubsystem.shoot(6000.0, 6000.0) }, ShooterSubsystem))
-        controller.circle().onFalse(Commands.runOnce({ ShooterSubsystem.stopShooter() }, ShooterSubsystem))
 
         controller.square().onTrue(Commands.runOnce({ ShooterSubsystem.intake() }, ShooterSubsystem))
         controller.square().onFalse(Commands.runOnce({ ShooterSubsystem.stopIntake() }, ShooterSubsystem))
 
+        controller.triangle().onTrue(Commands.runOnce({ ShooterSubsystem.reverseIntake() }, ShooterSubsystem))
+        controller.triangle().onFalse(Commands.runOnce({ ShooterSubsystem.stopIntake() }, ShooterSubsystem))
+
+        controller.R1().whileTrue(AutoAimCommand(driveController) { drive.pose })
+
         controller.povUp().whileTrue(Commands.runOnce({ WristSubsystem.desiredPosition++}))
         controller.povDown().whileTrue(Commands.runOnce({ WristSubsystem.desiredPosition--}))
 
+
+        controller.povLeft().onTrue(Commands.runOnce({ ShooterSubsystem.shoot() }, ShooterSubsystem))
+        controller.povLeft().onFalse(Commands.runOnce({ ShooterSubsystem.stopShooter()}, ShooterSubsystem))
+
+
+        xbox.povUp().onTrue(Commands.runOnce({ ShooterSubsystem.intake() }, ShooterSubsystem))
+        xbox.povUp().onFalse(Commands.runOnce({ ShooterSubsystem.stopIntake()}, ShooterSubsystem))
+
+        xbox.povDown().onTrue(Commands.runOnce({ ShooterSubsystem.reverseIntake() }, ShooterSubsystem))
+        xbox.povDown().onFalse(Commands.runOnce({ ShooterSubsystem.stopIntake()}, ShooterSubsystem))
+
+        xbox.povLeft().onTrue(ElevatorPositionCommand { ElevatorSubsystem.desiredPosition + 5 })
+        xbox.povRight().onTrue(ElevatorPositionCommand { ElevatorSubsystem.desiredPosition - 5})
+
+        xbox.leftBumper().onTrue(ArmPositionCommand { -70.0 })
+        xbox.rightBumper().onTrue(ArmPositionCommand { -0.0 })
 
 //        controller.R2().whileTrue(
 //            Commands.startEnd(

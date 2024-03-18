@@ -4,6 +4,8 @@ import com.pathplanner.lib.auto.AutoBuilder
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
 import org.rambots.auto.AutoConstants
+import org.rambots.subsystems.ShooterSubsystem
+import org.rambots.subsystems.SuperStructure
 
 class AmpScoring: Command() {
 
@@ -14,6 +16,13 @@ class AmpScoring: Command() {
         super.initialize()
         scoreCommand = Commands.sequence(pathRun)
         scoreCommand.schedule()
+    }
+
+    override fun execute() {
+        super.execute()
+        if (scoreCommand.isFinished) {
+            SuperStructure.ampCommand.schedule()
+        }
     }
 
     override fun end(interrupted: Boolean) {
