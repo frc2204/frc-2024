@@ -20,8 +20,6 @@ object WristSubsystem : SubsystemBase() {
     var desiredPosition = 0.0 + offset
     var hasBeenHomed = false
 
-    private val limitSwitch = DigitalInput(3)
-
     var position
         get() = motor.encoder.position
         set(value) {
@@ -51,12 +49,6 @@ object WristSubsystem : SubsystemBase() {
         Logger.recordOutput("Wrist/Position", motor.encoder.position)
         Logger.recordOutput("Wrist/Velocity", motor.encoder.velocity)
         Logger.recordOutput("Wrist/Current", motor.outputCurrent)
-
-
-        if(Robot.isDisabled && limitSwitch.get()) {
-            motor.encoder.position = 0.0
-            hasBeenHomed = true
-        }
     }
 
 }
