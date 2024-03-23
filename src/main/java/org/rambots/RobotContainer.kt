@@ -83,7 +83,7 @@ object RobotContainer {
                 // new ModuleIOTalonFX(3));
 //                flywheel = Flywheel(FlywheelIOTalonFX())
                 aprilTagVision = AprilTagVision(AprilTagVisionIOLimelight("limelight-three"))
-                aprilTagVisionTwo = AprilTagVision(AprilTagVisionIOLimelight("limelight"))
+                aprilTagVisionTwo = AprilTagVision(AprilTagVisionIOLimelight("limelight-two"))
             }
 
             Constants.Mode.SIM -> {
