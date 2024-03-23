@@ -103,6 +103,13 @@ object RobotContainer {
                             "photonCamera1",
                             Transform3d(Translation3d(0.5, 0.0, 0.5), Rotation3d(0.0, 0.0, 0.0))
                         ) { drive.drive })
+
+                aprilTagVisionTwo =
+                    AprilTagVision(
+                        AprilTagVisionIOPhotonVisionSIM(
+                            "photonCamera2",
+                            Transform3d(Translation3d(0.5, 0.0, 0.5), Rotation3d(0.0, 0.0, 0.0))
+                        ) { drive.drive })
             }
 
             else -> {
