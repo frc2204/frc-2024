@@ -43,6 +43,7 @@ object RobotContainer {
     // Subsystems
     public var drive: Drive
     private var aprilTagVision: AprilTagVision
+    private lateinit var aprilTagVisionTwo: AprilTagVision
     public val driveController = DriveController()
 
     // Controller
@@ -82,6 +83,7 @@ object RobotContainer {
                 // new ModuleIOTalonFX(3));
 //                flywheel = Flywheel(FlywheelIOTalonFX())
                 aprilTagVision = AprilTagVision(AprilTagVisionIOLimelight("limelight-three"))
+                aprilTagVisionTwo = AprilTagVision(AprilTagVisionIOLimelight("limelight"))
             }
 
             Constants.Mode.SIM -> {
@@ -114,6 +116,7 @@ object RobotContainer {
                         object : ModuleIO {})
 //                flywheel = Flywheel(object : FlywheelIO {})
                 aprilTagVision = AprilTagVision(object : AprilTagVisionIO {})
+                aprilTagVisionTwo = AprilTagVision(object: AprilTagVisionIO{})
             }
         }
         // Set up auto routines
@@ -155,6 +158,9 @@ object RobotContainer {
 
         // Configure the button bindings
         aprilTagVision.setDataInterfaces { visionData: List<TimestampedVisionUpdate?>? ->
+            drive.addVisionData(visionData)
+        }
+        aprilTagVisionTwo.setDataInterfaces { visionData: List<TimestampedVisionUpdate?>? ->
             drive.addVisionData(visionData)
         }
         driveController.setPoseSupplier { drive.pose }
