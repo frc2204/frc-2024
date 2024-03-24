@@ -43,6 +43,7 @@ object RobotContainer {
     // Subsystems
     public var drive: Drive
     private var aprilTagVision: AprilTagVision
+    private lateinit var aprilTagVisionTwo: AprilTagVision
     public val driveController = DriveController()
 
     // Controller
@@ -82,6 +83,7 @@ object RobotContainer {
                 // new ModuleIOTalonFX(3));
 //                flywheel = Flywheel(FlywheelIOTalonFX())
                 aprilTagVision = AprilTagVision(AprilTagVisionIOLimelight("limelight-three"))
+                aprilTagVisionTwo = AprilTagVision(AprilTagVisionIOLimelight("limelight-two"))
             }
 
             Constants.Mode.SIM -> {
@@ -101,6 +103,13 @@ object RobotContainer {
                             "photonCamera1",
                             Transform3d(Translation3d(0.5, 0.0, 0.5), Rotation3d(0.0, 0.0, 0.0))
                         ) { drive.drive })
+
+                aprilTagVisionTwo =
+                    AprilTagVision(
+                        AprilTagVisionIOPhotonVisionSIM(
+                            "photonCamera2",
+                            Transform3d(Translation3d(0.5, 0.0, 0.5), Rotation3d(0.0, 0.0, 0.0))
+                        ) { drive.drive })
             }
 
             else -> {
@@ -114,6 +123,7 @@ object RobotContainer {
                         object : ModuleIO {})
 //                flywheel = Flywheel(object : FlywheelIO {})
                 aprilTagVision = AprilTagVision(object : AprilTagVisionIO {})
+                aprilTagVisionTwo = AprilTagVision(object: AprilTagVisionIO{})
             }
         }
         // Set up auto routines
@@ -155,6 +165,9 @@ object RobotContainer {
 
         // Configure the button bindings
         aprilTagVision.setDataInterfaces { visionData: List<TimestampedVisionUpdate?>? ->
+            drive.addVisionData(visionData)
+        }
+        aprilTagVisionTwo.setDataInterfaces { visionData: List<TimestampedVisionUpdate?>? ->
             drive.addVisionData(visionData)
         }
         driveController.setPoseSupplier { drive.pose }

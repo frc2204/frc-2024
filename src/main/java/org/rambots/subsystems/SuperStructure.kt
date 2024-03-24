@@ -18,7 +18,7 @@ object SuperStructure {
             LightingSubsystem.set(BlinkinPattern.GREEN)
         }, ShooterSubsystem),
         WristPositionCommand({ 0.0 }, { it > -55.0 }),
-        ElevatorPositionCommand({ 0.0 }, { it < 5.0 })
+        ElevatorPositionCommand({ 0.0 }, { it > -5.0 })
     )
 
     val intakeCommand get()  = SequentialCommandGroup(
