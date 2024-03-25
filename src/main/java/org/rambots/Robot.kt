@@ -1,15 +1,20 @@
 package org.rambots
 
+import com.pathplanner.lib.pathfinding.Pathfinding
 import edu.wpi.first.hal.FRCNetComm.tInstances
 import edu.wpi.first.hal.FRCNetComm.tResourceType
 import edu.wpi.first.hal.HAL
-import edu.wpi.first.wpilibj.DriverStation
-import edu.wpi.first.wpilibj.RobotBase
-import edu.wpi.first.wpilibj.TimedRobot
 import edu.wpi.first.wpilibj.util.WPILibVersion
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.CommandScheduler
-import org.rambots.subsystems.SwerveSubsystem
+import org.littletonrobotics.junction.LogFileUtil
+import org.littletonrobotics.junction.LoggedRobot
+import org.littletonrobotics.junction.Logger
+import org.littletonrobotics.junction.networktables.NT4Publisher
+import org.littletonrobotics.junction.wpilog.WPILOGReader
+import org.littletonrobotics.junction.wpilog.WPILOGWriter
+import org.rambots.util.LocalADStarAK
+
 
 /**
  * The VM is configured to automatically run this object (which basically functions as a singleton class),
@@ -21,10 +26,7 @@ import org.rambots.subsystems.SwerveSubsystem
  * the `Main.kt` file in the project. (If you use the IDE's Rename or Move refactorings when renaming the
  * object or package, it will get changed everywhere.)
  */
-object Robot : TimedRobot() {
-
-    val real = RobotBase.isReal()
-    val simulation = !real
+object Robot : LoggedRobot() {
 
     private var autonomousCommand: Command? = null
 
@@ -32,6 +34,42 @@ object Robot : TimedRobot() {
     override fun robotInit() {
         // Report the use of the Kotlin Language for "FRC Usage Report" statistics
         HAL.report(tResourceType.kResourceType_Language, tInstances.kLanguage_Kotlin, 0, WPILibVersion.Version)
+
+
+        Pathfinding.setPathfinder(LocalADStarAK());
+        // Record metadata
+        Logger.recordMetadata("ProjectName", BuildConstants.MAVEN_NAME);
+        Logger.recordMetadata("BuildDate", BuildConstants.BUILD_DATE);
+        Logger.recordMetadata("GitSHA", BuildConstants.GIT_SHA);
+        Logger.recordMetadata("GitDate", BuildConstants.GIT_DATE);
+        Logger.recordMetadata("GitBranch", BuildConstants.GIT_BRANCH);
+
+        when (BuildConstants.DIRTY) {
+            0 -> Logger.recordMetadata("GitDirty", "All changes committed")
+            1 -> Logger.recordMetadata("GitDirty", "Uncomitted changes")
+            else -> Logger.recordMetadata("GitDirty", "Unknown")
+        }
+
+        when (Constants.getMode()) {
+            Constants.Mode.REAL -> {
+                Logger.addDataReceiver(WPILOGWriter())
+                Logger.addDataReceiver(NT4Publisher())
+            }
+
+            Constants.Mode.SIM -> {
+                Logger.addDataReceiver(NT4Publisher())
+            }
+
+            Constants.Mode.REPLAY -> {
+                setUseTiming(false) // Run as fast as possible
+                val logPath = LogFileUtil.findReplayLog()
+                Logger.setReplaySource(WPILOGReader(logPath))
+                Logger.addDataReceiver(WPILOGWriter(LogFileUtil.addPathSuffix(logPath, "_sim")))
+            }
+        }
+
+        Logger.start()
+
         // Access the RobotContainer object so that it is initialized. This will perform all our
         // button bindings, and put our autonomous chooser on the dashboard.
         RobotContainer
@@ -51,10 +89,7 @@ object Robot : TimedRobot() {
     }
 
     override fun autonomousInit() {
-        val alliance = DriverStation.getAlliance().get()
-        SwerveSubsystem.setAlliance(alliance)
-
-        autonomousCommand = RobotContainer.getAutonomousCommand()
+        autonomousCommand = RobotContainer.autonomousCommand
         autonomousCommand?.schedule()
     }
 
@@ -63,9 +98,6 @@ object Robot : TimedRobot() {
     }
 
     override fun teleopInit() {
-        val alliance = DriverStation.getAlliance().get()
-        SwerveSubsystem.setAlliance(alliance)
-
         autonomousCommand?.cancel()
     }
 
