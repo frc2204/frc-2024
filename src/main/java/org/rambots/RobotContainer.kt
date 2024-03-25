@@ -130,7 +130,11 @@ object RobotContainer {
         // Registering named commands
         NamedCommands.registerCommand("aim", AutoAimCommand(driveController) {drive.pose} )
         NamedCommands.registerCommand("startShooter", Commands.runOnce({ ShooterSubsystem.shoot() }, ShooterSubsystem))
-        NamedCommands.registerCommand("feedToShooter", Commands.runOnce({ShooterSubsystem.intake()}, ShooterSubsystem))
+        NamedCommands.registerCommand("intakeToShooter", Commands.runOnce({ShooterSubsystem.intake()}, ShooterSubsystem))
+        NamedCommands.registerCommand("stopShooter", Commands.runOnce({ShooterSubsystem.stopShooter()}, ShooterSubsystem))
+        NamedCommands.registerCommand("stopIntake", Commands.runOnce({ShooterSubsystem.stopIntake()}, ShooterSubsystem))
+        NamedCommands.registerCommand("groundIntake", SuperStructure.intakeCommand)
+        NamedCommands.registerCommand("homeFromIntake", SuperStructure.homeCommandFromIntake)
 
         // Set up auto routines
         // NamedCommands.registerCommand(
