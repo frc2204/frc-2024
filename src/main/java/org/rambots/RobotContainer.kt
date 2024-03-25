@@ -13,6 +13,7 @@
 package org.rambots
 
 import com.pathplanner.lib.auto.AutoBuilder
+import com.pathplanner.lib.auto.NamedCommands
 import edu.wpi.first.math.geometry.*
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
@@ -20,7 +21,6 @@ import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser
-import org.rambots.RobotContainer.driveController
 import org.rambots.commands.*
 import org.rambots.subsystems.*
 import org.rambots.subsystems.drive.*
@@ -126,6 +126,12 @@ object RobotContainer {
                 aprilTagVisionTwo = AprilTagVision(object: AprilTagVisionIO{})
             }
         }
+
+        // Registering named commands
+        NamedCommands.registerCommand("aim", AutoAimCommand(driveController) {drive.pose} )
+        NamedCommands.registerCommand("startShooter", Commands.runOnce({ ShooterSubsystem.shoot() }, ShooterSubsystem))
+        NamedCommands.registerCommand("feedToShooter", Commands.runOnce({ShooterSubsystem.intake()}, ShooterSubsystem))
+
         // Set up auto routines
         // NamedCommands.registerCommand(
         //     "Run Flywheel",
