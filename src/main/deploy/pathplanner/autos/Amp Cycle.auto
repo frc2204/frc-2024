@@ -18,9 +18,34 @@
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "Right Note"
+            "name": "ampScore"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Right Note"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "homeFromAmp"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "groundIntake"
           }
         },
         {
@@ -30,9 +55,28 @@
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "Left Park"
+            "name": "ampScore"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Left Park"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "homeFromAmp"
+                }
+              }
+            ]
           }
         }
       ]
