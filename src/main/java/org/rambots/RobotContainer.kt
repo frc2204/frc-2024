@@ -135,6 +135,8 @@ object RobotContainer {
         NamedCommands.registerCommand("stopIntake", Commands.runOnce({ShooterSubsystem.stopIntake()}, ShooterSubsystem))
         NamedCommands.registerCommand("groundIntake", SuperStructure.intakeCommand)
         NamedCommands.registerCommand("homeFromIntake", SuperStructure.homeCommandFromIntake)
+        NamedCommands.registerCommand("ampScore", SuperStructure.ampCommand)
+        NamedCommands.registerCommand("homeFromAmp", SuperStructure.ampHomingCommand)
 
         // Set up auto routines
         // NamedCommands.registerCommand(
