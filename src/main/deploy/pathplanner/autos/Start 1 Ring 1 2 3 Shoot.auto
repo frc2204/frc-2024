@@ -1,0 +1,61 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 2,
+      "y": 2
+    },
+    "rotation": 0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "1start - speaker"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Ring 3 Pickup"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ring#3-speaker"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ring#2pickup"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ring#2-speaker"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Ring 1 pickup"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ring#1-speaker"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}
