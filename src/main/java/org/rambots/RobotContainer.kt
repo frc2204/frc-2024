@@ -137,6 +137,7 @@ object RobotContainer {
         NamedCommands.registerCommand("homeFromIntake", SuperStructure.homeCommandFromIntake)
         NamedCommands.registerCommand("ampScore", SuperStructure.ampCommand)
         NamedCommands.registerCommand("homeFromAmp", SuperStructure.ampHomingCommand)
+        NamedCommands.registerCommand("closeToSpeakerWristPosition", Commands.runOnce({WristPositionCommand({-75.0}, {it < -70.0})}))
 
         // Set up auto routines
         // NamedCommands.registerCommand(
