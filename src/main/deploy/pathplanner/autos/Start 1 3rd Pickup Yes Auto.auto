@@ -24,21 +24,28 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "3 start shoot"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "3 start shoot"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "aim"
+                }
+              }
+            ]
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "aim"
-          }
-        },
-        {
           "type": "path",
           "data": {
-            "pathName": "Ring 3 Shoot"
+            "pathName": "ring#3-speaker"
           }
         },
         {
@@ -54,21 +61,28 @@
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "stopShooter"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "stopIntake"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Ring 8 Pickup"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Ring 8 Pickup"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "stopShooter"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "stopIntake"
+                }
+              }
+            ]
           }
         },
         {

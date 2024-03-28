@@ -24,7 +24,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "3 start shoot"
+                  "pathName": "ring#3-speaker"
                 }
               },
               {
@@ -73,7 +73,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Ring 1 shoot"
+                  "pathName": "ring#1-speaker"
                 }
               },
               {
