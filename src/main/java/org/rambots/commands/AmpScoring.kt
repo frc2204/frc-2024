@@ -18,14 +18,8 @@ class AmpScoring: Command() {
         scoreCommand.schedule()
     }
 
-    override fun execute() {
-        super.execute()
-        if (scoreCommand.isFinished) {
-            SuperStructure.ampCommand.schedule()
-        }
-    }
-
     override fun end(interrupted: Boolean) {
+        if(!interrupted) SuperStructure.ampCommand.schedule()
         super.end(interrupted)
         scoreCommand.cancel()
     }
