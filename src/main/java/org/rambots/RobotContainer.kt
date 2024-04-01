@@ -13,6 +13,7 @@
 package org.rambots
 
 import com.pathplanner.lib.auto.AutoBuilder
+import com.pathplanner.lib.auto.NamedCommands
 import edu.wpi.first.math.geometry.*
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
@@ -20,7 +21,6 @@ import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser
-import org.rambots.RobotContainer.driveController
 import org.rambots.commands.*
 import org.rambots.subsystems.*
 import org.rambots.subsystems.drive.*
@@ -126,6 +126,19 @@ object RobotContainer {
                 aprilTagVisionTwo = AprilTagVision(object: AprilTagVisionIO{})
             }
         }
+
+        // Registering named commands
+        NamedCommands.registerCommand("aim", AutoAimCommand(driveController) {drive.pose} )
+        NamedCommands.registerCommand("startShooter", Commands.runOnce({ ShooterSubsystem.shoot() }, ShooterSubsystem))
+        NamedCommands.registerCommand("intakeToShooter", Commands.runOnce({ShooterSubsystem.intake()}, ShooterSubsystem))
+        NamedCommands.registerCommand("stopShooter", Commands.runOnce({ShooterSubsystem.stopShooter()}, ShooterSubsystem))
+        NamedCommands.registerCommand("stopIntake", Commands.runOnce({ShooterSubsystem.stopIntake()}, ShooterSubsystem))
+        NamedCommands.registerCommand("groundIntake", SuperStructure.intakeCommand)
+        NamedCommands.registerCommand("homeFromIntake", SuperStructure.homeCommandFromIntake)
+        NamedCommands.registerCommand("ampScore", SuperStructure.ampCommand)
+        NamedCommands.registerCommand("homeFromAmp", SuperStructure.ampHomingCommand)
+        NamedCommands.registerCommand("closeToSpeakerWristPosition", Commands.runOnce({WristPositionCommand({-75.0}, {it < -70.0})}))
+
         // Set up auto routines
         // NamedCommands.registerCommand(
         //     "Run Flywheel",
