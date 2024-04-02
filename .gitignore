@@ -205,7 +205,8 @@ replay_pid*
 .LSOverride
 
 # Icon must end with two \r
-Icon
+Icon
+
 
 # Thumbnails
 ._*
@@ -334,3 +335,6 @@ bin/
 
 # Project exclude paths
 /.vscode/
+
+# Exclude BuildConstants
+src/main/java/org/rambots/BuildConstants.java
