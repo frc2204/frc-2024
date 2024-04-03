@@ -1,7 +1,7 @@
-package org.rambots.commands
+package org.rambots.commands.superstructure.primitive
 
 import edu.wpi.first.wpilibj2.command.Command
-import org.rambots.subsystems.ArmSubsystem
+import org.rambots.subsystems.superstructure.ArmSubsystem
 
 class ArmPositionCommand(private val angle: () -> Double, private val finishCondition: (position: Double) -> Boolean) : Command() {
 
@@ -11,16 +11,12 @@ class ArmPositionCommand(private val angle: () -> Double, private val finishCond
         addRequirements(ArmSubsystem)
     }
 
-    override fun initialize() {
+    override fun execute() {
         ArmSubsystem.desiredPosition = angle.invoke()
     }
 
-    override fun execute() {
-        ArmSubsystem.position = angle.invoke()
-    }
-
     override fun isFinished(): Boolean {
-        return finishCondition.invoke(ArmSubsystem.position)
+        return finishCondition.invoke(ArmSubsystem.currentPosition)
     }
 
 }

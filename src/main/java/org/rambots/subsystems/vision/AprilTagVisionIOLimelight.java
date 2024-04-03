@@ -57,7 +57,7 @@ public class AprilTagVisionIOLimelight implements AprilTagVisionIO {
             double timestamp = timestampedString.timestamp / 1e6;
 
             // Parses the JSON dump and retrieves the targeting results
-            LimelightHelpers.Results results = LimelightHelpers.parseJsonDump(timestampedString.value).targetingResults;
+            LimelightHelpers.Results results = LimelightHelpers.parseJSONDump(timestampedString.value).targetingResults;
 
             // Retrieves the alliance information from the DriverStation
             Optional<Alliance> allianceOptional = DriverStation.getAlliance();
@@ -69,6 +69,7 @@ public class AprilTagVisionIOLimelight implements AprilTagVisionIO {
 
             double latencyMS = results.latency_capture + results.latency_pipeline; // Calculates the total latency in milliseconds
             Pose3d poseEstimation = results.getBotPose3d_wpiBlue(); // Retrieves the pose estimation for the robot
+
             double averageTagDistance = 0.0; // Initializes the average tag distance to 0.0
             timestamp -= (latencyMS / 1e3); // Adjusts the timestamp by subtracting the latency in seconds
 

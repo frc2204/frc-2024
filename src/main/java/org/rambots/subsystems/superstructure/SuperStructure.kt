@@ -1,21 +1,19 @@
-package org.rambots.subsystems
+package org.rambots.subsystems.superstructure
 
 import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.Commands.waitUntil
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup
 import edu.wpi.first.wpilibj2.command.WaitCommand
-import org.rambots.RobotContainer
-import org.rambots.commands.*
-import org.rambots.subsystems.drive.Drive
-import org.rambots.subsystems.lighting.BlinkinPattern
+import org.rambots.commands.superstructure.primitive.ArmPositionCommand
+import org.rambots.commands.superstructure.primitive.ElevatorPositionCommand
+import org.rambots.commands.superstructure.primitive.WristPositionCommand
+import org.rambots.subsystems.LightingSubsystem
 
 object SuperStructure {
 
     val homeCommandFromIntake get() = SequentialCommandGroup(
         Commands.runOnce({
             ShooterSubsystem.stopIntake()
-            LightingSubsystem.set(BlinkinPattern.GREEN)
         }, ShooterSubsystem),
         WristPositionCommand({ 0.0 }, { it > -55.0 }),
         ElevatorPositionCommand({ 0.0 }, { it > -5.0 })
@@ -27,7 +25,6 @@ object SuperStructure {
         WristPositionCommand ({ -125.0 }, { true }),
         Commands.runOnce ({
             ShooterSubsystem.intake()
-            LightingSubsystem.set(BlinkinPattern.OFF)
         }, ShooterSubsystem),
         WaitCommand(0.5),
         waitUntil { ShooterSubsystem.intakeStalling },
@@ -42,7 +39,7 @@ object SuperStructure {
     )
 
     val ampHomingCommand get() = SequentialCommandGroup(
-        Commands.runOnce({ ShooterSubsystem.stopIntake()}, ShooterSubsystem),
+        Commands.runOnce({ ShooterSubsystem.stopIntake() }, ShooterSubsystem),
         WristPositionCommand( { 0.0 }, { it > -10.0 }),
         ElevatorPositionCommand ({ 0.0 }, { it > -10.0 }),
         ArmPositionCommand ({ 0.0 }, { true }),

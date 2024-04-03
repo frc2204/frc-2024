@@ -8,6 +8,6 @@ object WristConstants {
 
     val WRIST_PID = PIDConstants(0.07, 0.0, 0.0)
 
-    const val WRIST_INTAKE_POSITION = -116.0
+    const val ABSOLUTE_WRIST_OFFSET = 78
 
 }

@@ -13,7 +13,6 @@
 package org.rambots
 
 import com.pathplanner.lib.auto.AutoBuilder
-import com.pathplanner.lib.auto.NamedCommands
 import edu.wpi.first.math.geometry.*
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
@@ -22,9 +21,13 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser
 import org.rambots.commands.*
+import org.rambots.commands.superstructure.actions.*
+import org.rambots.commands.superstructure.primitive.*
+import org.rambots.commands.superstructure.actions.AutoShootCommand
 import org.rambots.subsystems.*
 import org.rambots.subsystems.drive.*
 import org.rambots.subsystems.drive.DriveConstants.moduleConfigs
+import org.rambots.subsystems.superstructure.*
 import org.rambots.subsystems.vision.AprilTagVision
 import org.rambots.subsystems.vision.AprilTagVisionIO
 import org.rambots.subsystems.vision.AprilTagVisionIOLimelight
@@ -41,10 +44,10 @@ import kotlin.math.pow
  */
 object RobotContainer {
     // Subsystems
-    public var drive: Drive
+    var drive: Drive
+    val driveController = DriveController()
+
     private var aprilTagVision: AprilTagVision
-    private lateinit var aprilTagVisionTwo: AprilTagVision
-    public val driveController = DriveController()
 
     // Controller
     private val controller = CommandPS5Controller(0)
@@ -74,16 +77,7 @@ object RobotContainer {
                     ModuleIOTalonFX(moduleConfigs[3])
                 )
 
-                // flywheel = new Flywheel(new FlywheelIOSparkMax());
-                // drive = new Drive(
-                // new GyroIOPigeon2(true),
-                // new ModuleIOTalonFX(0),
-                // new ModuleIOTalonFX(1),
-                // new ModuleIOTalonFX(2),
-                // new ModuleIOTalonFX(3));
-//                flywheel = Flywheel(FlywheelIOTalonFX())
                 aprilTagVision = AprilTagVision(AprilTagVisionIOLimelight("limelight-three"))
-                aprilTagVisionTwo = AprilTagVision(AprilTagVisionIOLimelight("limelight-two"))
             }
 
             Constants.Mode.SIM -> {
@@ -96,18 +90,10 @@ object RobotContainer {
                         ModuleIOSim(),
                         ModuleIOSim()
                     )
-//                flywheel = Flywheel(FlywheelIOSim())
                 aprilTagVision =
                     AprilTagVision(
                         AprilTagVisionIOPhotonVisionSIM(
                             "photonCamera1",
-                            Transform3d(Translation3d(0.5, 0.0, 0.5), Rotation3d(0.0, 0.0, 0.0))
-                        ) { drive.drive })
-
-                aprilTagVisionTwo =
-                    AprilTagVision(
-                        AprilTagVisionIOPhotonVisionSIM(
-                            "photonCamera2",
                             Transform3d(Translation3d(0.5, 0.0, 0.5), Rotation3d(0.0, 0.0, 0.0))
                         ) { drive.drive })
             }
@@ -121,23 +107,21 @@ object RobotContainer {
                         object : ModuleIO {},
                         object : ModuleIO {},
                         object : ModuleIO {})
-//                flywheel = Flywheel(object : FlywheelIO {})
                 aprilTagVision = AprilTagVision(object : AprilTagVisionIO {})
-                aprilTagVisionTwo = AprilTagVision(object: AprilTagVisionIO{})
             }
         }
-
-        // Registering named commands
-        NamedCommands.registerCommand("aim", AutoAimCommand(driveController) {drive.pose} )
-        NamedCommands.registerCommand("startShooter", Commands.runOnce({ ShooterSubsystem.shoot() }, ShooterSubsystem))
-        NamedCommands.registerCommand("intakeToShooter", Commands.runOnce({ShooterSubsystem.intake()}, ShooterSubsystem))
-        NamedCommands.registerCommand("stopShooter", Commands.runOnce({ShooterSubsystem.stopShooter()}, ShooterSubsystem))
-        NamedCommands.registerCommand("stopIntake", Commands.runOnce({ShooterSubsystem.stopIntake()}, ShooterSubsystem))
-        NamedCommands.registerCommand("groundIntake", SuperStructure.intakeCommand)
-        NamedCommands.registerCommand("homeFromIntake", SuperStructure.homeCommandFromIntake)
-        NamedCommands.registerCommand("ampScore", SuperStructure.ampCommand)
-        NamedCommands.registerCommand("homeFromAmp", SuperStructure.ampHomingCommand)
-        NamedCommands.registerCommand("closeToSpeakerWristPosition", Commands.runOnce({WristPositionCommand({-75.0}, {it < -70.0})}))
+//
+//        // Registering named commands
+//        NamedCommands.registerCommand("aim", AutoAimCommand(driveController) {drive.pose} )
+//        NamedCommands.registerCommand("startShooter", Commands.runOnce({ ShooterSubsystem.shoot() }, ShooterSubsystem))
+//        NamedCommands.registerCommand("intakeToShooter", Commands.runOnce({ ShooterSubsystem.intake()}, ShooterSubsystem))
+//        NamedCommands.registerCommand("stopShooter", Commands.runOnce({ ShooterSubsystem.stopShooter()}, ShooterSubsystem))
+//        NamedCommands.registerCommand("stopIntake", Commands.runOnce({ ShooterSubsystem.stopIntake()}, ShooterSubsystem))
+//        NamedCommands.registerCommand("groundIntake", SuperStructure.intakeCommand)
+//        NamedCommands.registerCommand("homeFromIntake", SuperStructure.homeCommandFromIntake)
+//        NamedCommands.registerCommand("ampScore", SuperStructure.ampCommand)
+//        NamedCommands.registerCommand("homeFromAmp", SuperStructure.ampHomingCommand)
+//        NamedCommands.registerCommand("closeToSpeakerWristPosition", Commands.runOnce({ WristPositionCommand({-75.0}, {it < -70.0}) }))
 
         // Set up auto routines
         // NamedCommands.registerCommand(
@@ -148,10 +132,7 @@ object RobotContainer {
         autoChooser = LoggedDashboardChooser("Auto Choices", AutoBuilder.buildAutoChooser())
 
         // Set up SysId routines
-        autoChooser.addOption(
-            "Drive SysId (Quasistatic Forward)",
-            drive.sysIdQuasistatic(SysIdRoutine.Direction.kForward)
-        )
+        autoChooser.addOption("Drive SysId (Quasistatic Forward)", drive.sysIdQuasistatic(SysIdRoutine.Direction.kForward))
         autoChooser.addOption(
             "Drive SysId (Quasistatic Reverse)",
             drive.sysIdQuasistatic(SysIdRoutine.Direction.kReverse)
@@ -180,12 +161,24 @@ object RobotContainer {
         aprilTagVision.setDataInterfaces { visionData: List<TimestampedVisionUpdate?>? ->
             drive.addVisionData(visionData)
         }
-        aprilTagVisionTwo.setDataInterfaces { visionData: List<TimestampedVisionUpdate?>? ->
-            drive.addVisionData(visionData)
-        }
+
         driveController.setPoseSupplier { drive.pose }
         driveController.disableHeadingControl()
         configureButtonBindings()
+    }
+
+    fun unlockAllMotors() {
+        drive.setBrakeMode(false)
+
+        ArmSubsystem.setBrakeMode(false)
+        ElevatorSubsystem.setBrakeMode(false)
+    }
+
+    fun lockAllMotors() {
+        drive.setBrakeMode(true)
+
+        ArmSubsystem.setBrakeMode(true)
+        ElevatorSubsystem.setBrakeMode(true)
     }
 
     /**
@@ -206,55 +199,56 @@ object RobotContainer {
         ElevatorSubsystem.defaultCommand = ElevatorPositionCommand { ElevatorSubsystem.desiredPosition }
         WristSubsystem.defaultCommand = WristPositionCommand { WristSubsystem.desiredPosition }
 
+        controller.L1().onTrue(AmpScoreCommandGroup())
+        controller.L1().onFalse(AmpScoreHomeCommandGroup())
 
-        controller.L1().whileTrue(AmpScoring())
-        controller.R2().whileTrue(SourceIntake())
+        controller.L2().onTrue(IntakeCommandGroup())
+        controller.L2().onFalse(IntakeHomeCommandGroup())
+
+        controller.R2().whileTrue(AutoShootCommand(driveController) { drive.pose })
+
+        controller.square().whileTrue(IntakeCommand())
+        controller.triangle().whileTrue(ReverseIntakeCommand())
+
+
+
+        controller.povUp().whileTrue(Commands.runOnce({ WristSubsystem.desiredPosition--}))
+        controller.povDown().whileTrue(Commands.runOnce({ WristSubsystem.desiredPosition++}))
+
+        xbox.a().onTrue(FullHomeCommandGroup())
+        xbox.x().onTrue(ExtendClimberCommandGroup())
+
 //
-//        controller.square().whileTrue(ArmPositionCommand { -70.0 })
-//        controller.circle().whileTrue(ArmPositionCommand { 0.0 })
-
-//        controller.povUp().whileTrue(ElevatorPositionCommand { 0.0 })
-//        controller.povDown().whileTrue(ElevatorPositionCommand { -48.0 })
+//        controller.cross().onTrue(SuperStructure.ampCommand)
+//        controller.cross().onFalse(SuperStructure.ampHomingCommand)
 //
-//        controller.povLeft().whileTrue(WristPositionCommand { -125.0 })
-//        controller.povRight().whileTrue(WristPositionCommand { 0.0 })
-
-//        controller.cross().whileTrue(Commands.startEnd({ ShooterSubsystem.intake() }, { ShooterSubsystem.stopIntake()}, ShooterSubsystem ))
-//        controller.circle().whileTrue(Commands.startEnd({ShooterSubsystem.shoot(3000.0, 3000.0)}, {ShooterSubsystem.stopShooter()}, ShooterSubsystem))
-
-        controller.cross().onTrue(SuperStructure.ampCommand)
-        controller.cross().onFalse(SuperStructure.ampHomingCommand)
-
-        controller.L2().onTrue(SuperStructure.intakeCommand)
-        controller.L2().onFalse(SuperStructure.homeCommandFromIntake)
-
-        controller.square().onTrue(Commands.runOnce({ ShooterSubsystem.intake() }, ShooterSubsystem))
-        controller.square().onFalse(Commands.runOnce({ ShooterSubsystem.stopIntake() }, ShooterSubsystem))
-
-        controller.triangle().onTrue(Commands.runOnce({ ShooterSubsystem.reverseIntake() }, ShooterSubsystem))
-        controller.triangle().onFalse(Commands.runOnce({ ShooterSubsystem.stopIntake() }, ShooterSubsystem))
-
-        controller.R1().whileTrue(AutoAimCommand(driveController) { drive.pose })
-
-        controller.povUp().whileTrue(Commands.runOnce({ WristSubsystem.desiredPosition++}))
-        controller.povDown().whileTrue(Commands.runOnce({ WristSubsystem.desiredPosition--}))
-
-
-        controller.povLeft().onTrue(Commands.runOnce({ ShooterSubsystem.shoot() }, ShooterSubsystem))
-        controller.povLeft().onFalse(Commands.runOnce({ ShooterSubsystem.stopShooter()}, ShooterSubsystem))
-
-
-        xbox.povUp().onTrue(Commands.runOnce({ ShooterSubsystem.intake() }, ShooterSubsystem))
-        xbox.povUp().onFalse(Commands.runOnce({ ShooterSubsystem.stopIntake()}, ShooterSubsystem))
-
-        xbox.povDown().onTrue(Commands.runOnce({ ShooterSubsystem.reverseIntake() }, ShooterSubsystem))
-        xbox.povDown().onFalse(Commands.runOnce({ ShooterSubsystem.stopIntake()}, ShooterSubsystem))
-
-        xbox.povLeft().onTrue(ElevatorPositionCommand { ElevatorSubsystem.desiredPosition + 5 })
-        xbox.povRight().onTrue(ElevatorPositionCommand { ElevatorSubsystem.desiredPosition - 5})
-
-        xbox.leftBumper().onTrue(ArmPositionCommand { -70.0 })
-        xbox.rightBumper().onTrue(ArmPositionCommand { -0.0 })
+//        controller.L2().onTrue(SuperStructure.intakeCommand)
+//        controller.L2().onFalse(SuperStructure.homeCommandFromIntake)
+//
+//        controller.square().onTrue(Commands.runOnce({ ShooterSubsystem.intake() }, ShooterSubsystem))
+//        controller.square().onFalse(Commands.runOnce({ ShooterSubsystem.stopIntake() }, ShooterSubsystem))
+//
+//        controller.triangle().onTrue(Commands.runOnce({ ShooterSubsystem.reverseIntake() }, ShooterSubsystem))
+//        controller.triangle().onFalse(Commands.runOnce({ ShooterSubsystem.stopIntake() }, ShooterSubsystem))
+//
+//        controller.R1().whileTrue(AutoAimCommand(driveController) { drive.pose })
+//
+//
+//        controller.povLeft().onTrue(Commands.runOnce({ ShooterSubsystem.shoot() }, ShooterSubsystem))
+//        controller.povLeft().onFalse(Commands.runOnce({ ShooterSubsystem.stopShooter()}, ShooterSubsystem))
+//
+//
+//        xbox.povUp().onTrue(Commands.runOnce({ ShooterSubsystem.intake() }, ShooterSubsystem))
+//        xbox.povUp().onFalse(Commands.runOnce({ ShooterSubsystem.stopIntake()}, ShooterSubsystem))
+//
+//        xbox.povDown().onTrue(Commands.runOnce({ ShooterSubsystem.reverseIntake() }, ShooterSubsystem))
+//        xbox.povDown().onFalse(Commands.runOnce({ ShooterSubsystem.stopIntake()}, ShooterSubsystem))
+//
+//        xbox.povLeft().onTrue(ElevatorPositionCommand { ElevatorSubsystem.desiredPosition + 5 })
+//        xbox.povRight().onTrue(ElevatorPositionCommand { ElevatorSubsystem.desiredPosition - 5})
+//
+//        xbox.leftBumper().onTrue(ArmPositionCommand { -70.0 })
+//        xbox.rightBumper().onTrue(ArmPositionCommand { -0.0 })
 
 //        controller.R2().whileTrue(
 //            Commands.startEnd(
@@ -305,20 +299,6 @@ object RobotContainer {
 //                )
 //            )
 
-        // controller
-        //     .b()
-        //     .onTrue(
-        //         Commands.runOnce(
-        //                 () ->
-        //                     drive.setPose(
-        //                         new Pose2d(drive.getPose().getTranslation(), new Rotation2d())),
-        //                 drive)
-        //             .ignoringDisable(true));
-        // controller
-        //     .a()
-        //     .whileTrue(
-        //         Commands.startEnd(
-        //             () -> flywheel.runVelocity(flywheelSpeedInput.get()), flywheel::stop, flywheel));
     }
 
     val autonomousCommand: Command

@@ -359,4 +359,10 @@ public class Drive extends SubsystemBase {
                         addVisionMeasurement(
                                 visionUpdate.pose(), visionUpdate.timestamp(), visionUpdate.stdDevs()));
     }
+
+    public void setBrakeMode(boolean brakeMode) {
+        for (var module : modules) {
+            module.setBrakeMode(brakeMode);
+        }
+    }
 }

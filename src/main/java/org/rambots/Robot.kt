@@ -1,5 +1,6 @@
 package org.rambots
 
+import com.pathplanner.lib.commands.PathfindingCommand
 import com.pathplanner.lib.pathfinding.Pathfinding
 import edu.wpi.first.hal.FRCNetComm.tInstances
 import edu.wpi.first.hal.FRCNetComm.tResourceType
@@ -13,6 +14,7 @@ import org.littletonrobotics.junction.Logger
 import org.littletonrobotics.junction.networktables.NT4Publisher
 import org.littletonrobotics.junction.wpilog.WPILOGReader
 import org.littletonrobotics.junction.wpilog.WPILOGWriter
+import org.rambots.subsystems.LightingSubsystem
 import org.rambots.util.LocalADStarAK
 
 
@@ -30,13 +32,12 @@ object Robot : LoggedRobot() {
 
     private var autonomousCommand: Command? = null
 
-
     override fun robotInit() {
         // Report the use of the Kotlin Language for "FRC Usage Report" statistics
         HAL.report(tResourceType.kResourceType_Language, tInstances.kLanguage_Kotlin, 0, WPILibVersion.Version)
 
-
-        Pathfinding.setPathfinder(LocalADStarAK());
+        Pathfinding.setPathfinder(LocalADStarAK())
+        PathfindingCommand.warmupCommand().schedule()
         // Record metadata
         Logger.recordMetadata("ProjectName", BuildConstants.MAVEN_NAME);
         Logger.recordMetadata("BuildDate", BuildConstants.BUILD_DATE);
@@ -76,16 +77,23 @@ object Robot : LoggedRobot() {
     }
 
 
+
     override fun robotPeriodic() {
         CommandScheduler.getInstance().run()
     }
 
     override fun disabledInit() {
-
+        RobotContainer.unlockAllMotors()
+        LightingSubsystem.clearLL()
     }
 
     override fun disabledPeriodic() {
 
+    }
+
+    override fun disabledExit() {
+        RobotContainer.lockAllMotors()
+        LightingSubsystem.clearLL()
     }
 
     override fun autonomousInit() {
@@ -122,4 +130,5 @@ object Robot : LoggedRobot() {
     override fun simulationPeriodic() {
 
     }
+
 }

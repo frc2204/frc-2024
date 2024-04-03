@@ -1,19 +1,16 @@
-package org.rambots.subsystems
+package org.rambots.subsystems.superstructure
 
 import com.revrobotics.CANSparkBase
 import com.revrobotics.CANSparkLowLevel
 import com.revrobotics.CANSparkMax
-import com.revrobotics.SparkMaxPIDController
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger
 import org.rambots.config.ShooterConstants.INTAKE_BOTTOM_ID
 import org.rambots.config.ShooterConstants.INTAKE_OUTPUT
 import org.rambots.config.ShooterConstants.INTAKE_TOP_ID
 import org.rambots.config.ShooterConstants.SHOOTER_BOTTOM_ID
-import org.rambots.config.ShooterConstants.SHOOTER_DEFAULT_VELOCITY
-import org.rambots.config.ShooterConstants.SHOOTER_PID
 import org.rambots.config.ShooterConstants.SHOOTER_TOP_ID
-import org.rambots.config.ShooterConstants.INTAKE_STALL_CURRENT
+import org.rambots.config.ShooterConstants.INTAKE_SPIKE_LIMIT
 
 object ShooterSubsystem : SubsystemBase() {
 
@@ -48,7 +45,7 @@ object ShooterSubsystem : SubsystemBase() {
 
     private val intakeCurrent get() = intakeTopLead.outputCurrent
 
-    val intakeStalling get() = intakeCurrent > INTAKE_STALL_CURRENT
+    val intakeStalling get() = intakeCurrent > INTAKE_SPIKE_LIMIT
 
     init {
         intakeBottomFollower.follow(intakeTopLead, false)

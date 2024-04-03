@@ -27,7 +27,7 @@ public final class DriveConstants {
             };
     public static final double xyStdDevCoefficient =
             switch (Constants.getRobot()) {
-                default -> 0.01;
+                default -> 0.005;
             };
     public static final double thetaStdDevCoefficient =
             switch (Constants.getRobot()) {
@@ -88,22 +88,10 @@ public final class DriveConstants {
     public static ModuleConfig[] moduleConfigs =
             switch (Constants.getRobot()) {
                 case COMPBOT -> new ModuleConfig[]{
-                        new ModuleConfig(
-                                1, 2, 9, Rotation2d.fromRotations(-.247).plus(Rotation2d.fromDegrees(180)), true),
-                        new ModuleConfig(
-                                3,
-                                4,
-                                10,
-                                Rotation2d.fromRotations(-.188).plus(Rotation2d.fromDegrees(180)),
-                                true),
-                        new ModuleConfig(
-                                5,
-                                6,
-                                11,
-                                Rotation2d.fromRotations(-.339).plus(Rotation2d.fromDegrees(180)),
-                                true),
-                        new ModuleConfig(
-                                7, 8, 12, Rotation2d.fromRotations(.334).plus(Rotation2d.fromDegrees(180)), true)
+                        new ModuleConfig(1, 2, 9, Rotation2d.fromRotations(.223).plus(Rotation2d.fromDegrees(180)), true),
+                        new ModuleConfig(3, 4, 10, Rotation2d.fromRotations(-.039).plus(Rotation2d.fromDegrees(180)), true),
+                        new ModuleConfig(5, 6, 11, Rotation2d.fromRotations(-.394).plus(Rotation2d.fromDegrees(180)), true),
+                        new ModuleConfig(7, 8, 12, Rotation2d.fromRotations(-0.15).plus(Rotation2d.fromDegrees(180)), true)
                 };
                 case SIMBOT -> {
                     ModuleConfig[] configs = new ModuleConfig[4];
@@ -114,8 +102,8 @@ public final class DriveConstants {
             };
     public static HeadingControllerConstants headingControllerConstants =
             switch (Constants.getRobot()) {
-                case COMPBOT -> new HeadingControllerConstants(3.0, 0.0);
-                case SIMBOT -> new HeadingControllerConstants(3.0, 0.0);
+                case COMPBOT -> new HeadingControllerConstants(1.7, 0.0);
+                case SIMBOT -> new HeadingControllerConstants(2.0, 0.0);
             };
 
     private enum SwerveXReductions {

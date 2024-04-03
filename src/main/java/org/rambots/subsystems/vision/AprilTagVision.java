@@ -37,8 +37,7 @@ public class AprilTagVision extends SubsystemBase {
     private final AprilTagVisionIO[] io;
     private final AprilTagVisionIO.AprilTagVisionIOInputs[] inputs;
     private boolean enableVisionUpdates = true;
-    private Consumer<List<VisionHelpers.TimestampedVisionUpdate>> visionConsumer = x -> {
-    };
+    private Consumer<List<VisionHelpers.TimestampedVisionUpdate>> visionConsumer = x -> {};
     private Map<Integer, Double> lastFrameTimes = new HashMap<>();
     private Map<Integer, Double> lastTagDetectionTimes = new HashMap<>();
     private boolean hasSeenTarget = false;
@@ -61,8 +60,7 @@ public class AprilTagVision extends SubsystemBase {
         FieldConstants.aprilTags.getTags().forEach(tag -> lastTagDetectionTimes.put(tag.ID, 0.0));
     }
 
-    public void setDataInterfaces(
-            Consumer<List<VisionHelpers.TimestampedVisionUpdate>> visionConsumer) {
+    public void setDataInterfaces(Consumer<List<VisionHelpers.TimestampedVisionUpdate>> visionConsumer) {
         this.visionConsumer = visionConsumer;
     }
 
@@ -193,13 +191,13 @@ public class AprilTagVision extends SubsystemBase {
     private void logData(
             int instanceIndex, double timestamp, Pose3d robotPose, List<Pose3d> tagPoses) {
         Logger.recordOutput(
-                VISION_PATH + Integer.toString(instanceIndex) + "/LatencySecs",
+                VISION_PATH + instanceIndex + "/LatencySecs",
                 Timer.getFPGATimestamp() - timestamp);
         Logger.recordOutput(
-                VISION_PATH + Integer.toString(instanceIndex) + "/RobotPose", robotPose.toPose2d());
-        Logger.recordOutput(VISION_PATH + Integer.toString(instanceIndex) + "/RobotPose3D", robotPose);
+                VISION_PATH + instanceIndex + "/RobotPose", robotPose.toPose2d());
+        Logger.recordOutput(VISION_PATH + instanceIndex + "/RobotPose3D", robotPose);
         Logger.recordOutput(
-                VISION_PATH + Integer.toString(instanceIndex) + "/TagPoses",
+                VISION_PATH + instanceIndex + "/TagPoses",
                 tagPoses.toArray(new Pose3d[tagPoses.size()]));
         logTagPoses();
     }
@@ -217,8 +215,7 @@ public class AprilTagVision extends SubsystemBase {
                 }
             }
         }
-        Logger.recordOutput(
-                "AprilTagVision/TagPoses", allTagPoses.toArray(new Pose3d[allTagPoses.size()]));
+        Logger.recordOutput("AprilTagVision/TagPoses", allTagPoses.toArray(new Pose3d[allTagPoses.size()]));
     }
 
     /**
