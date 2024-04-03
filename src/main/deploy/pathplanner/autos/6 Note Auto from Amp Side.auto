@@ -1,0 +1,55 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.7365015087811937,
+      "y": 6.652614092348042
+    },
+    "rotation": -118.88658176691072
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "#1 Note from Amp Side"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "#2 Note"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "#3 Note"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "#4 Note"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Long Shot Speaker Amp Side"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "#5 Note"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}

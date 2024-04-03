@@ -1,0 +1,43 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.323928801703758,
+      "y": 5.595244965087426
+    },
+    "rotation": 180.0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "#1 Note from Speaker"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "#2 Note"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "#3 Note"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "#4 Note"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}
