@@ -23,9 +23,9 @@ class WristPositionCommand(
 
     override fun end(interrupted: Boolean) {
         if (!interrupted && angle.invoke() == 0.0) {
-            SequentialCommandGroup(WaitCommand(2.0), Commands.runOnce({
+            SequentialCommandGroup(WaitCommand(1.0), Commands.runOnce({
                 if (WristSubsystem.desiredPosition == 0.0) WristSubsystem.resetEncoder()
-            }))
+            })).schedule()
         }
     }
 

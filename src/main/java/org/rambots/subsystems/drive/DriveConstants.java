@@ -27,7 +27,7 @@ public final class DriveConstants {
             };
     public static final double xyStdDevCoefficient =
             switch (Constants.getRobot()) {
-                default -> 0.005;
+                default -> 0.065;
             };
     public static final double thetaStdDevCoefficient =
             switch (Constants.getRobot()) {

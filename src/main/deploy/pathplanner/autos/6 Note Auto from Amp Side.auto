@@ -46,6 +46,12 @@
           "data": {
             "pathName": "#5 Note"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Long Shot Speaker Amp Side"
+          }
         }
       ]
     }

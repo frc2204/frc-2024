@@ -12,7 +12,9 @@
 // GNU General Public License for more details.
 package org.rambots
 
+import com.fasterxml.jackson.databind.util.Named
 import com.pathplanner.lib.auto.AutoBuilder
+import com.pathplanner.lib.auto.NamedCommands
 import edu.wpi.first.math.geometry.*
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
@@ -110,6 +112,12 @@ object RobotContainer {
                 aprilTagVision = AprilTagVision(object : AprilTagVisionIO {})
             }
         }
+
+        NamedCommands.registerCommand("Intake", IntakeCommandGroup())
+        NamedCommands.registerCommand("IntakeHome", IntakeHomeCommandGroup())
+        NamedCommands.registerCommand("Stop", StopShooterCommand())
+        NamedCommands.registerCommand("Shoot", AutoShootCommand(driveController) { drive.pose })
+        NamedCommands.registerCommand("ConfirmShoot", IntakeCommand())
 //
 //        // Registering named commands
 //        NamedCommands.registerCommand("aim", AutoAimCommand(driveController) {drive.pose} )
@@ -171,14 +179,12 @@ object RobotContainer {
         drive.setBrakeMode(false)
 
         ArmSubsystem.setBrakeMode(false)
-        ElevatorSubsystem.setBrakeMode(false)
     }
 
     fun lockAllMotors() {
         drive.setBrakeMode(true)
 
         ArmSubsystem.setBrakeMode(true)
-        ElevatorSubsystem.setBrakeMode(true)
     }
 
     /**
@@ -194,29 +200,28 @@ object RobotContainer {
             { (-controller.rightX).pow(1.0) }
         )
 
-        /* default commands are continuously scheduled after ending, and will continuously move to desired position */
-        ArmSubsystem.defaultCommand = ArmPositionCommand { ArmSubsystem.desiredPosition }
-        ElevatorSubsystem.defaultCommand = ElevatorPositionCommand { ElevatorSubsystem.desiredPosition }
-        WristSubsystem.defaultCommand = WristPositionCommand { WristSubsystem.desiredPosition }
-
         controller.L1().onTrue(AmpScoreCommandGroup())
         controller.L1().onFalse(AmpScoreHomeCommandGroup())
 
         controller.L2().onTrue(IntakeCommandGroup())
         controller.L2().onFalse(IntakeHomeCommandGroup())
 
+        controller.povUp().onTrue(BackAmpCommandGroup())
+
         controller.R2().whileTrue(AutoShootCommand(driveController) { drive.pose })
 
         controller.square().whileTrue(IntakeCommand())
         controller.triangle().whileTrue(ReverseIntakeCommand())
+        controller.circle().whileTrue(ReverseSlowIntakeCommand())
 
-
-
-        controller.povUp().whileTrue(Commands.runOnce({ WristSubsystem.desiredPosition--}))
-        controller.povDown().whileTrue(Commands.runOnce({ WristSubsystem.desiredPosition++}))
+        xbox.povUp().whileTrue(Commands.runOnce({ WristSubsystem.desiredPosition--}))
+        xbox.povDown().whileTrue(Commands.runOnce({ WristSubsystem.desiredPosition++}))
 
         xbox.a().onTrue(FullHomeCommandGroup())
         xbox.x().onTrue(ExtendClimberCommandGroup())
+        xbox.y().whileTrue(RetractClimberCommand())
+
+        xbox.rightTrigger().whileTrue(ShootCommand())
 
 //
 //        controller.cross().onTrue(SuperStructure.ampCommand)

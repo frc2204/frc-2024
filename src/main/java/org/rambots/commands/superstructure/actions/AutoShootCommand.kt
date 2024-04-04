@@ -18,10 +18,11 @@ class AutoShootCommand(private val controller: DriveController, private val pose
     }
 
     private val wristAngle = InterpolatingDoubleTreeMap().apply {
-        put(AutoConstants.CLOSEST_AUTOAIM_DISTANCE, 68.0)
-        put(1.9, 66.5)
-        put(2.5, 63.14)
-        put(3.98, 42.4)
+        put(AutoConstants.CLOSEST_AUTOAIM_DISTANCE, 79.0)
+        put(1.9, 73.5)
+        put(2.5, 67.14)
+        put(3.35, 53.0)
+        put(4.5, 45.4)
         put(AutoConstants.FURTHEST_AUTOAIM_DISTANCE, 0.0)
     }
 

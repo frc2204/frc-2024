@@ -25,7 +25,7 @@ object AutoConstants {
         AllianceFlipUtil.apply(Pose2d(Translation2d(1.82, 7.7), Rotation2d.fromDegrees(120.0)))
     )
 
-    const val CLOSEST_AUTOAIM_DISTANCE = 1.6
+    const val CLOSEST_AUTOAIM_DISTANCE = 1.68
     const val FURTHEST_AUTOAIM_DISTANCE = 6.0
 
 }

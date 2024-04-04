@@ -59,6 +59,10 @@ object ShooterSubsystem : SubsystemBase() {
         intakeTopLead.set(-INTAKE_OUTPUT)
     }
 
+    fun reverseIntakeSlow() {
+        intakeTopLead.set(-INTAKE_OUTPUT * 0.5)
+    }
+
     fun stopIntake() {
         intakeTopLead.stopMotor()
     }

@@ -7,13 +7,19 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger
 import org.rambots.config.ElevatorConstants.ELEVATOR_FOLLOWER_ID
 import org.rambots.config.ElevatorConstants.ELEVATOR_LEADER_ID
+import org.rambots.config.ElevatorConstants.ELEVATOR_MAX_HEIGHT
+import org.rambots.config.ElevatorConstants.ELEVATOR_MIN_HEIGHT
 import org.rambots.config.ElevatorConstants.ELEVATOR_PID
+import org.rambots.util.MathUtil
 import org.rambots.util.SparkMaxUtil
 
 object ElevatorSubsystem : SubsystemBase() {
 
     var offset = 0.0
     var desiredPosition = 0.0
+        set(value) {
+            field = MathUtil.bound(value, ELEVATOR_MIN_HEIGHT, ELEVATOR_MAX_HEIGHT)
+        }
 
     val position get() = leader.encoder.position
 
