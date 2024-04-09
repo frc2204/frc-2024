@@ -12,14 +12,14 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger;
+import org.rambots.RobotContainer;
 import org.rambots.util.FieldConstants;
 import org.rambots.util.VisionHelpers;
 
 import java.util.*;
 import java.util.function.Consumer;
 
-import static org.rambots.subsystems.drive.DriveConstants.thetaStdDevCoefficient;
-import static org.rambots.subsystems.drive.DriveConstants.xyStdDevCoefficient;
+import static org.rambots.subsystems.drive.DriveConstants.*;
 
 public class AprilTagVision extends SubsystemBase {
 
@@ -175,9 +175,7 @@ public class AprilTagVision extends SubsystemBase {
      * @return The standard deviation of the theta coordinate
      */
     private double calculateThetaStdDev(VisionHelpers.PoseEstimate poseEstimates, int tagPosesSize) {
-        return thetaStdDevCoefficient
-                * Math.pow(poseEstimates.averageTagDistance(), 2.0)
-                / tagPosesSize;
+        return thetaStdDevCoefficient * Math.pow(poseEstimates.averageTagDistance(), 2.0) / tagPosesSize;
     }
 
     /**

@@ -15,6 +15,7 @@ import org.littletonrobotics.junction.networktables.NT4Publisher
 import org.littletonrobotics.junction.wpilog.WPILOGReader
 import org.littletonrobotics.junction.wpilog.WPILOGWriter
 import org.rambots.subsystems.LightingSubsystem
+import org.rambots.subsystems.superstructure.WristSubsystem
 import org.rambots.util.LocalADStarAK
 
 
@@ -74,9 +75,8 @@ object Robot : LoggedRobot() {
         // Access the RobotContainer object so that it is initialized. This will perform all our
         // button bindings, and put our autonomous chooser on the dashboard.
         RobotContainer
+
     }
-
-
 
     override fun robotPeriodic() {
         CommandScheduler.getInstance().run()

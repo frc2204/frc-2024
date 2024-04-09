@@ -6,6 +6,7 @@ import org.rambots.subsystems.superstructure.ShooterSubsystem
 class ReverseIntakeCommand : Command() {
 
     override fun initialize() {
+        ShooterSubsystem.reverseShooter()
         ShooterSubsystem.reverseIntake()
     }
 
@@ -15,6 +16,7 @@ class ReverseIntakeCommand : Command() {
 
     override fun end(interrupted: Boolean) {
         ShooterSubsystem.stopIntake()
+        ShooterSubsystem.stopShooter()
     }
 
 }

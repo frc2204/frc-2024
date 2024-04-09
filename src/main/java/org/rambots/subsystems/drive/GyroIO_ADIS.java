@@ -8,19 +8,19 @@ import java.util.OptionalDouble;
 import java.util.Queue;
 
 public class GyroIO_ADIS implements GyroIO {
-    private final ADIS16470_IMU navx = new ADIS16470_IMU();
+    private final ADIS16470_IMU gyro = new ADIS16470_IMU();
     private final Queue<Double> yawPositionQueue;
 
     public GyroIO_ADIS() {
-        navx.reset();
+        gyro.reset();
 
         yawPositionQueue =
                 PhoenixOdometryThread.getInstance()
                         .registerSignal(
                                 () -> {
-                                    boolean valid = navx.isConnected();
+                                    boolean valid = gyro.isConnected();
                                     if (valid) {
-                                        return OptionalDouble.of(navx.getAngle());
+                                        return OptionalDouble.of(gyro.getAngle());
                                     } else {
                                         return OptionalDouble.empty();
                                     }
@@ -29,12 +29,13 @@ public class GyroIO_ADIS implements GyroIO {
 
     @Override
     public void updateInputs(GyroIOInputs inputs) {
-        inputs.connected = navx.isConnected();
-        inputs.yawPosition = Rotation2d.fromDegrees(navx.getAngle());
-        inputs.yawVelocityRadPerSec = Units.degreesToRadians(navx.getRate());
+        inputs.connected = gyro.isConnected();
+        inputs.yawPosition = Rotation2d.fromDegrees(gyro.getAngle());
+        inputs.yawVelocityRadPerSec = Units.degreesToRadians(gyro.getRate());
         inputs.odometryYawPositions =
                 yawPositionQueue.stream().map(Rotation2d::fromDegrees).toArray(Rotation2d[]::new);
 
         yawPositionQueue.clear();
     }
+
 }

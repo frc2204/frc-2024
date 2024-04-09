@@ -8,6 +8,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase
 import org.littletonrobotics.junction.Logger
 import org.rambots.config.WristConstants.WRIST_ID
 import org.rambots.config.WristConstants.WRIST_PID
+import org.rambots.subsystems.superstructure.WristSubsystem.absoluteEncoderPosition
+import org.rambots.subsystems.superstructure.WristSubsystem.dutyCycleEncoder
 
 object WristSubsystem : SubsystemBase() {
 
@@ -17,11 +19,16 @@ object WristSubsystem : SubsystemBase() {
     val position get() = motor.encoder.position
 
     private val dutyCycleEncoder = DutyCycleEncoder(0).apply {
-        positionOffset = 0.5
+        positionOffset = 0.081
     }
-    private val absoluteEncoderPosition get() = dutyCycleEncoder.absolutePosition - dutyCycleEncoder.positionOffset
+    private val absoluteEncoderPosition get() = if ((dutyCycleEncoder.absolutePosition - dutyCycleEncoder.positionOffset) < 0) 0.0 else dutyCycleEncoder.absolutePosition - dutyCycleEncoder.positionOffset
+
     private val relativeEncoderPosition get() = (position / 75.0) * (15.0 / 36.0)
     private val absoluteMotorPosition get() = absoluteEncoderPosition * 75.0 * (36.0 / 15.0)
+
+    fun sync() {
+        dutyCycleEncoder.positionOffset = position
+    }
 
     private val motor = CANSparkMax(WRIST_ID, CANSparkLowLevel.MotorType.kBrushless).apply {
         restoreFactoryDefaults()
@@ -38,6 +45,9 @@ object WristSubsystem : SubsystemBase() {
     }
 
     fun resetEncoder() {
+        if (!dutyCycleEncoder.isConnected) {
+            return
+        }
         motor.encoder.position = absoluteMotorPosition
     }
 
@@ -46,6 +56,7 @@ object WristSubsystem : SubsystemBase() {
 
         Logger.recordOutput("Wrist/DesiredPosition", desiredPosition)
         Logger.recordOutput("Wrist/Offset", offset)
+        Logger.recordOutput("Wrist/RawPosition", dutyCycleEncoder.absolutePosition)
         Logger.recordOutput("Wrist/Position", motor.encoder.position)
         Logger.recordOutput("Wrist/PositionThroughEncoder", absoluteMotorPosition)
         Logger.recordOutput("Wrist/ShaftPosition", relativeEncoderPosition)

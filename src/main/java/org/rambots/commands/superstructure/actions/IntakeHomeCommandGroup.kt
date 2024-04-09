@@ -12,6 +12,6 @@ import org.rambots.subsystems.superstructure.ShooterSubsystem
 
 class IntakeHomeCommandGroup : SequentialCommandGroup(
     Commands.runOnce({ ShooterSubsystem.stopIntake() }, ShooterSubsystem),
-    WristPositionCommand({ 0.0 }, { it < 65.0 }),
+    WristPositionCommand({ 0.0 }, { it < 115.0 }),
     ElevatorPositionCommand({ 0.0 }, { it < 5.0 }),
 )

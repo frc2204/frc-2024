@@ -10,6 +10,8 @@ object ElevatorConstants {
     val ELEVATOR_PID = PIDConstants(0.2, 0.0, 0.0)
 
     const val ELEVATOR_MIN_HEIGHT = 0.0
-    const val ELEVATOR_MAX_HEIGHT = 69.0
+    const val ELEVATOR_MAX_HEIGHT = 70.0
+
+    const val EXTENSION_RATE = 0.75
 
 }

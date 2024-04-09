@@ -7,10 +7,16 @@
 
 package org.rambots.subsystems.vision;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.networktables.*;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import org.littletonrobotics.junction.Logger;
+import org.rambots.Robot;
+import org.rambots.subsystems.drive.Drive;
 import org.rambots.util.LimelightHelpers;
 import org.rambots.util.VisionHelpers;
 
@@ -24,14 +30,16 @@ public class AprilTagVisionIOLimelight implements AprilTagVisionIO {
 
     private final StringSubscriber observationSubscriber;
     String limelightName;
+    Drive drive;
 
     /**
      * Constructs a new AprilTagVisionIOLimelight instance.
      *
      * @param identifier The identifier of the Limelight camera.
      */
-    public AprilTagVisionIOLimelight(String identifier) {
+    public AprilTagVisionIOLimelight(String identifier, Drive drive) {
         limelightName = identifier;
+        this.drive = drive;
 
         NetworkTable limelightTable = NetworkTableInstance.getDefault().getTable(identifier);
         LimelightHelpers.setPipelineIndex(limelightName, 0);

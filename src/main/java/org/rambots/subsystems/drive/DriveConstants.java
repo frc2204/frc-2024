@@ -10,12 +10,13 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
 import org.rambots.Constants;
+import org.rambots.Robot;
 
 /**
  * All Constants Measured in Meters and Radians (m/s, m/s^2, rad/s, rad/s^2)
  */
 public final class DriveConstants {
-    public static final double wheelRadius = Units.inchesToMeters(2.0);
+    public static final double wheelRadius = Units.inchesToMeters(3.89/2);
     public static final double odometryFrequency =
             switch (Constants.getRobot()) {
                 case SIMBOT -> 50.0;
@@ -25,10 +26,26 @@ public final class DriveConstants {
             switch (Constants.getRobot()) {
                 default -> new Matrix<>(VecBuilder.fill(0.003, 0.003, 0.0002));
             };
+
+    public static double getXyStdDevCoefficient() {
+        if (Robot.INSTANCE.isDisabled()) {
+            return 0.005;
+        }
+        else return xyStdDevCoefficient;
+    }
+
     public static final double xyStdDevCoefficient =
             switch (Constants.getRobot()) {
-                default -> 0.065;
+                default -> 0.015;
             };
+
+    public static double getThetaStdDevCoefficient() {
+        if (Robot.INSTANCE.isDisabled()) {
+            return 0.0005;
+        }
+        else return thetaStdDevCoefficient;
+    }
+
     public static final double thetaStdDevCoefficient =
             switch (Constants.getRobot()) {
                 default -> 0.01;

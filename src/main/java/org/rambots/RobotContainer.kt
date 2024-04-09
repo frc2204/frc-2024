@@ -52,8 +52,8 @@ object RobotContainer {
     private var aprilTagVision: AprilTagVision
 
     // Controller
-    private val controller = CommandPS5Controller(0)
-    private val xbox = CommandXboxController(1)
+    val controller = CommandPS5Controller(0)
+    val xbox = CommandXboxController(1)
 
     // Dashboard inputs
     private val autoChooser: LoggedDashboardChooser<Command>
@@ -61,8 +61,7 @@ object RobotContainer {
     val hasLocalized get() = aprilTagVision.hasSeenTarget()
     val hasActiveTag get() = aprilTagVision.isTargetVisible
 
-    //   private final LoggedTunableNumber flywheelSpeedInput =
-    //       new LoggedTunableNumber("Flywheel Speed", 1500.0);
+    //   private final LoggedTunableNumber flywheelSpeedInput = new LoggedTunableNumber("Flywheel Speed", 1500.0);
     /** The container for the robot. Contains subsystems, OI devices, and commands.  */
     init {
 
@@ -79,7 +78,7 @@ object RobotContainer {
                     ModuleIOTalonFX(moduleConfigs[3])
                 )
 
-                aprilTagVision = AprilTagVision(AprilTagVisionIOLimelight("limelight-three"))
+                aprilTagVision = AprilTagVision(AprilTagVisionIOLimelight("limelight-three", drive))
             }
 
             Constants.Mode.SIM -> {
@@ -206,8 +205,7 @@ object RobotContainer {
         controller.L2().onTrue(IntakeCommandGroup())
         controller.L2().onFalse(IntakeHomeCommandGroup())
 
-        controller.povUp().onTrue(BackAmpCommandGroup())
-
+        controller.R1().onTrue(BackAmpCommandGroup())
         controller.R2().whileTrue(AutoShootCommand(driveController) { drive.pose })
 
         controller.square().whileTrue(IntakeCommand())
@@ -216,10 +214,13 @@ object RobotContainer {
 
         xbox.povUp().whileTrue(Commands.runOnce({ WristSubsystem.desiredPosition--}))
         xbox.povDown().whileTrue(Commands.runOnce({ WristSubsystem.desiredPosition++}))
+        xbox.povLeft().whileTrue(ReverseIntakeCommand())
+        xbox.povRight().whileTrue(IntakeCommand())
 
         xbox.a().onTrue(FullHomeCommandGroup())
         xbox.x().onTrue(ExtendClimberCommandGroup())
         xbox.y().whileTrue(RetractClimberCommand())
+        xbox.b().whileTrue(ExtendClimberCommand())
 
         xbox.rightTrigger().whileTrue(ShootCommand())
 

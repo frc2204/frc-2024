@@ -17,6 +17,9 @@ class WristPositionCommand(
         addRequirements(WristSubsystem)
     }
 
+    override fun initialize() {
+    }
+
     override fun execute() {
         WristSubsystem.desiredPosition = angle.invoke()
     }
