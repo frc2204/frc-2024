@@ -19,7 +19,7 @@ object WristSubsystem : SubsystemBase() {
     val position get() = motor.encoder.position
 
     private val dutyCycleEncoder = DutyCycleEncoder(0).apply {
-        positionOffset = 0.081
+        positionOffset = 0.328
     }
     private val absoluteEncoderPosition get() = if ((dutyCycleEncoder.absolutePosition - dutyCycleEncoder.positionOffset) < 0) 0.0 else dutyCycleEncoder.absolutePosition - dutyCycleEncoder.positionOffset
 
