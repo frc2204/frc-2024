@@ -4,16 +4,15 @@ import com.revrobotics.CANSparkBase
 import com.revrobotics.CANSparkLowLevel
 import com.revrobotics.CANSparkMax
 import edu.wpi.first.wpilibj.GenericHID
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.SubsystemBase
 import org.littletonrobotics.junction.Logger
 import org.rambots.RobotContainer
 import org.rambots.config.ShooterConstants.INTAKE_BOTTOM_ID
 import org.rambots.config.ShooterConstants.INTAKE_OUTPUT
+import org.rambots.config.ShooterConstants.INTAKE_SPIKE_LIMIT
 import org.rambots.config.ShooterConstants.INTAKE_TOP_ID
 import org.rambots.config.ShooterConstants.SHOOTER_BOTTOM_ID
 import org.rambots.config.ShooterConstants.SHOOTER_TOP_ID
-import org.rambots.config.ShooterConstants.INTAKE_SPIKE_LIMIT
-import java.awt.Robot
 import kotlin.math.abs
 
 object ShooterSubsystem : SubsystemBase() {
@@ -108,7 +107,7 @@ object ShooterSubsystem : SubsystemBase() {
 
         Logger.recordOutput("Shooter/Top/Output", shooterTop.appliedOutput)
         Logger.recordOutput("Shooter/Top/Velocity", shooterTop.encoder.velocity)
-        Logger.recordOutput("Shooter/Top/Current", shooterTop.outputCurrent )
+        Logger.recordOutput("Shooter/Top/Current", shooterTop.outputCurrent)
         Logger.recordOutput("Shooter/Top/Temperature", shooterTop.motorTemperature)
 
         Logger.recordOutput("Shooter/Bottom/Output", shooterBottom.appliedOutput)

@@ -10,7 +10,7 @@ import org.rambots.subsystems.superstructure.ShooterSubsystem
 
 class AmpScoreHomeCommandGroup : SequentialCommandGroup(
     Commands.runOnce({ ShooterSubsystem.stopIntake() }, ShooterSubsystem),
-    WristPositionCommand( { 0.0 }, { it < 70.0 }),
-    ElevatorPositionCommand ({ 0.0 }, { it < 30.0 }),
-    ArmPositionCommand ({ 0.0 }, { true }),
+    WristPositionCommand({ 0.0 }, { it < 70.0 }),
+    ElevatorPositionCommand({ 0.0 }, { it < 30.0 }),
+    ArmPositionCommand({ 0.0 }, { true }),
 )

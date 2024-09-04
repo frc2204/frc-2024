@@ -4,7 +4,6 @@ import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap
 import edu.wpi.first.wpilibj2.command.Command
 import org.rambots.auto.AutoConstants
-import org.rambots.commands.superstructure.primitive.WristPositionCommand
 import org.rambots.subsystems.drive.DriveController
 import org.rambots.subsystems.superstructure.ShooterSubsystem
 import org.rambots.subsystems.superstructure.WristSubsystem
@@ -33,7 +32,8 @@ class AutoShootCommand(private val controller: DriveController, private val pose
     }
 
     override fun execute() {
-        val distance = pose.invoke().translation.getDistance(AllianceFlipUtil.apply(FieldConstants.Speaker.centerSpeakerOpening.translation))
+        val distance =
+            pose.invoke().translation.getDistance(AllianceFlipUtil.apply(FieldConstants.Speaker.centerSpeakerOpening.translation))
         WristSubsystem.desiredPosition = wristAngle.get(distance)
     }
 

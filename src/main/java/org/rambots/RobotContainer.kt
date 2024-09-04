@@ -12,7 +12,6 @@
 // GNU General Public License for more details.
 package org.rambots
 
-import com.fasterxml.jackson.databind.util.Named
 import com.pathplanner.lib.auto.AutoBuilder
 import com.pathplanner.lib.auto.NamedCommands
 import edu.wpi.first.math.geometry.*
@@ -24,8 +23,8 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser
 import org.rambots.commands.*
 import org.rambots.commands.superstructure.actions.*
-import org.rambots.commands.superstructure.primitive.*
 import org.rambots.commands.superstructure.actions.AutoShootCommand
+import org.rambots.commands.superstructure.primitive.*
 import org.rambots.subsystems.*
 import org.rambots.subsystems.drive.*
 import org.rambots.subsystems.drive.DriveConstants.moduleConfigs
@@ -139,7 +138,10 @@ object RobotContainer {
         autoChooser = LoggedDashboardChooser("Auto Choices", AutoBuilder.buildAutoChooser())
 
         // Set up SysId routines
-        autoChooser.addOption("Drive SysId (Quasistatic Forward)", drive.sysIdQuasistatic(SysIdRoutine.Direction.kForward))
+        autoChooser.addOption(
+            "Drive SysId (Quasistatic Forward)",
+            drive.sysIdQuasistatic(SysIdRoutine.Direction.kForward)
+        )
         autoChooser.addOption(
             "Drive SysId (Quasistatic Reverse)",
             drive.sysIdQuasistatic(SysIdRoutine.Direction.kReverse)
@@ -212,8 +214,8 @@ object RobotContainer {
         controller.triangle().whileTrue(ReverseIntakeCommand())
         controller.circle().whileTrue(ReverseSlowIntakeCommand())
 
-        xbox.povUp().whileTrue(Commands.runOnce({ WristSubsystem.desiredPosition--}))
-        xbox.povDown().whileTrue(Commands.runOnce({ WristSubsystem.desiredPosition++}))
+        xbox.povUp().whileTrue(Commands.runOnce({ WristSubsystem.desiredPosition-- }))
+        xbox.povDown().whileTrue(Commands.runOnce({ WristSubsystem.desiredPosition++ }))
         xbox.povLeft().whileTrue(ReverseIntakeCommand())
         xbox.povRight().whileTrue(IntakeCommand())
 

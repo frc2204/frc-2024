@@ -9,8 +9,8 @@ import org.rambots.commands.superstructure.primitive.WristPositionCommand
 import org.rambots.subsystems.superstructure.ShooterSubsystem
 
 class AmpScoreCommandGroup : SequentialCommandGroup(
-    ArmPositionCommand( { 50.0 }, { it > 35.0}),
-    ElevatorPositionCommand({ 68.0 }, { it > 5.0}),
+    ArmPositionCommand({ 50.0 }, { it > 35.0 }),
+    ElevatorPositionCommand({ 68.0 }, { it > 5.0 }),
     WristPositionCommand({ 170.0 }, { it > 165.0 }),
     Commands.runOnce({ ShooterSubsystem.reverseIntake() }, ShooterSubsystem)
 )

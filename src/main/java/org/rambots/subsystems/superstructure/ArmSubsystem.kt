@@ -3,7 +3,6 @@ package org.rambots.subsystems.superstructure
 import com.revrobotics.CANSparkBase
 import com.revrobotics.CANSparkLowLevel
 import com.revrobotics.CANSparkMax
-import edu.wpi.first.wpilibj.motorcontrol.Spark
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import org.littletonrobotics.junction.Logger
 import org.rambots.config.ArmConstants.ARM_NEO_FOLLOWER_ID

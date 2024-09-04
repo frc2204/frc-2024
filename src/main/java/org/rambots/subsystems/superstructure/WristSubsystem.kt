@@ -8,8 +8,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase
 import org.littletonrobotics.junction.Logger
 import org.rambots.config.WristConstants.WRIST_ID
 import org.rambots.config.WristConstants.WRIST_PID
-import org.rambots.subsystems.superstructure.WristSubsystem.absoluteEncoderPosition
-import org.rambots.subsystems.superstructure.WristSubsystem.dutyCycleEncoder
 
 object WristSubsystem : SubsystemBase() {
 

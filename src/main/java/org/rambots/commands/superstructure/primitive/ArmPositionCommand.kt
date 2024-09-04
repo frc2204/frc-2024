@@ -3,7 +3,8 @@ package org.rambots.commands.superstructure.primitive
 import edu.wpi.first.wpilibj2.command.Command
 import org.rambots.subsystems.superstructure.ArmSubsystem
 
-class ArmPositionCommand(private val angle: () -> Double, private val finishCondition: (position: Double) -> Boolean) : Command() {
+class ArmPositionCommand(private val angle: () -> Double, private val finishCondition: (position: Double) -> Boolean) :
+    Command() {
 
     constructor(angle: () -> Double) : this(angle, { true })
 

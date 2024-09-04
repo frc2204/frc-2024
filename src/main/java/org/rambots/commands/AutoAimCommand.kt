@@ -7,13 +7,12 @@ import org.rambots.auto.AutoConstants.CLOSEST_AUTOAIM_DISTANCE
 import org.rambots.auto.AutoConstants.FURTHEST_AUTOAIM_DISTANCE
 import org.rambots.commands.superstructure.primitive.WristPositionCommand
 import org.rambots.subsystems.AutoAimSubsystem
-import org.rambots.subsystems.LightingSubsystem
-import org.rambots.subsystems.superstructure.ShooterSubsystem
 import org.rambots.subsystems.drive.DriveController
+import org.rambots.subsystems.superstructure.ShooterSubsystem
 import org.rambots.util.AllianceFlipUtil
 import org.rambots.util.FieldConstants
 
-class AutoAimCommand(private val controller: DriveController, private val pose: () -> Pose2d): Command() {
+class AutoAimCommand(private val controller: DriveController, private val pose: () -> Pose2d) : Command() {
 
 
     private val wristAngle = InterpolatingDoubleTreeMap().apply {
@@ -35,7 +34,8 @@ class AutoAimCommand(private val controller: DriveController, private val pose: 
     }
 
     override fun execute() {
-        val distance = pose.invoke().translation.getDistance(AllianceFlipUtil.apply(FieldConstants.Speaker.centerSpeakerOpening.translation))
+        val distance =
+            pose.invoke().translation.getDistance(AllianceFlipUtil.apply(FieldConstants.Speaker.centerSpeakerOpening.translation))
         WristPositionCommand { wristAngle.get(distance) }.schedule()
     }
 

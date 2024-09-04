@@ -3,7 +3,7 @@ package org.rambots.subsystems.superstructure
 import com.revrobotics.CANSparkBase
 import com.revrobotics.CANSparkLowLevel
 import com.revrobotics.CANSparkMax
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.SubsystemBase
 import org.littletonrobotics.junction.Logger
 import org.rambots.config.ElevatorConstants.ELEVATOR_FOLLOWER_ID
 import org.rambots.config.ElevatorConstants.ELEVATOR_LEADER_ID
